@@ -17,10 +17,6 @@ export default function Nav() {
     setupProviders();
   }, []);
 
-  console.log("session: ", session);
-  console.log("providers: ", providers);
-  console.log("status: ", status);
-
   return (
     <nav className="flex-between w-full mb-16 pt-3">
       <Link href="/" className="flex gap-2 flex-center">
@@ -34,7 +30,7 @@ export default function Nav() {
         <p className="logo_text"> Promptopia</p>
       </Link>
       {/* Desktop Navigation */}
-      <div className="sm:flex hidden">
+      <div className="hidden sm:flex ">
         {session?.user ? (
           <div className="flex gap-3 md:gap-5">
             <Link href="/create-prompt" className="black_btn">
