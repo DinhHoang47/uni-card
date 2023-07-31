@@ -1,13 +1,18 @@
+import Prompt from "@models/prompt";
 import { connectToDB } from "@utils/database";
 
 export const POST = async (req) => {
-  const { userId, prompt, tag } = await JSON.parse(req);
-  console.log(userId, prompt, tag);
+  const { userId, prompt, tag } = await req.json();
   try {
     await connectToDB();
-  } catch (error) {}
-};
-
-export const GET = async (req, res) => {
-  console.log("get");
+    const newPrompt = new Prompt({
+      creator: userId,
+      prompt,
+      tag,
+    });
+    await newPrompt.save();
+    return new Response(JSON.stringify(newPrompt), { status: 201 });
+  } catch (error) {
+    return new Response("Failed to create a new prompt", { status: 500 });
+  }
 };

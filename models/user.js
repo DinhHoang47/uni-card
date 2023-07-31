@@ -19,9 +19,6 @@ const UserSchema = new Schema({
   },
 });
 
-// Because this script is executed every time user accesses an api endpoints so that before created new model
-// It not like in express server
-
 const User = models.User || model("User", UserSchema);
 
 export default User;
