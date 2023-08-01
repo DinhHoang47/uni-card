@@ -17,15 +17,43 @@ const PromptCardList = ({ data, handleTagClick }) => {
 };
 
 export default function Feed() {
-  const [searchText, setSearchText] = useState();
+  const [searchText, setSearchText] = useState("");
+  const [filterPosts, setFilterPosts] = useState([]);
+  const [filterTimeout, setFilterTimeout] = useState(null);
   const [posts, setPosts] = useState([]);
-  const handleSearchChange = (e) => {};
+  //Define object that storage the reference to filterTimeout
+
+  // In filter function let assign filter function to filter timeout
+  const filterData = () => {
+    setFilterTimeout(
+      setTimeout(() => {
+        // filter posts data theo searchString nếu khớp thì sẽ trả về các post đó
+        const regex = new RegExp(searchText, "i");
+        const newPosts = posts.filter((post) => {
+          return (
+            regex.test(post.creator.username) ||
+            regex.test(post.prompt) ||
+            regex.test(post.tag)
+          );
+        });
+        setFilterPosts(newPosts);
+      }, 1000)
+    );
+  };
+
+  const handleSearchChange = async (e) => {
+    // Clear previous timeout object
+    clearTimeout(filterTimeout);
+    // Get search string from input
+    setSearchText(e.target.value);
+    filterData();
+  };
   useEffect(() => {
     const fetchPost = async () => {
       const response = await fetch("./api/prompt");
-
       const data = await response.json();
       setPosts(data);
+      console.log(data);
     };
     fetchPost();
   }, []);
@@ -41,7 +69,18 @@ export default function Feed() {
           onChange={handleSearchChange}
         />
       </form>
-      <PromptCardList data={posts} handleOnClick={() => {}} />
+      {searchText ? (
+        filterPosts.length === 0 ? (
+          <div className="w-full text-center text-gray-500 mt-10">
+            {" "}
+            Not found
+          </div>
+        ) : (
+          <PromptCardList data={filterPosts} handleOnClick={() => {}} />
+        )
+      ) : (
+        <PromptCardList data={posts} handleOnClick={() => {}} />
+      )}
     </section>
   );
 }

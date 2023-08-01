@@ -3,6 +3,7 @@ import Link from "next/link";
 export default function Form({
   type,
   post,
+  setPost,
   submitting,
   handleSubmit,
   handleChange,

@@ -30,6 +30,9 @@ export default function CreatePrompt() {
       setSubmitting(false);
     }
   };
+  const handleChange = async (e) => {
+    setPost({ ...post, [e.target.name]: [e.target.value] });
+  };
   return (
     <Form
       type="Create"
