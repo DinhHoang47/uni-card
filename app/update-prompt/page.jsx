@@ -2,9 +2,9 @@
 import Form from "@components/Form";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function CreatePrompt() {
+export default function UpdatePrompt() {
   const { data: session } = useSession();
   const [post, setPost] = useState({ prompt: "", tag: "" });
   const [submitting, setSubmitting] = useState(false);
@@ -16,8 +16,8 @@ export default function CreatePrompt() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      const response = await fetch("./api/prompt/new", {
-        method: "POST",
+      const response = await fetch(`./api/prompt/${editPostId}`, {
+        method: "PATCH",
         body: JSON.stringify({
           prompt: post.prompt,
           tag: post.tag,
@@ -36,9 +36,22 @@ export default function CreatePrompt() {
   const handleChange = async (e) => {
     setPost({ ...post, [e.target.name]: [e.target.value] });
   };
+
+  useEffect(() => {
+    const getPost = async () => {
+      try {
+        const response = await fetch(`./api/prompt/${editPostId}`);
+        const { prompt, tag } = await response.json();
+        setPost({ prompt, tag });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getPost();
+  }, []);
   return (
     <Form
-      type="Create"
+      type="Update"
       post={post}
       setPost={setPost}
       submitting={submitting}

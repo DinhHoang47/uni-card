@@ -5,7 +5,13 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 
-const PromptCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
+const PromptCard = ({
+  post,
+  handleEdit,
+  handleDelete,
+  handleTagClick,
+  test,
+}) => {
   const { data: session } = useSession();
   const pathName = usePathname();
   const router = useRouter();
@@ -14,7 +20,7 @@ const PromptCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
 
   const handleProfileClick = () => {
     if (post.creator._id === session?.user.id) return router.push("/profile");
-    router.push(`/profile/${post.creator.id}?name=${post.creator.username}`);
+    router.push(`/profile/${post.creator._id}?name=${post.creator.username}`);
   };
 
   const handleCopy = () => {
@@ -69,17 +75,21 @@ const PromptCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
         #{post.tag}
       </p>
 
-      {session?.user.id === post.creator?.id && pathName === "/profile" && (
+      {session?.user.id === post.creator?._id && pathName === "/profile" && (
         <div className="mt-5 flex-center gap-4 border-t border-gray-100 pt-3">
           <p
-            className="font-inter text-sm green_gradient cursor-pointer"
-            onClick={handleEdit}
+            className="font-inter text-sm green_gradient cursor-pointer select-none"
+            onClick={() => {
+              handleEdit && handleEdit(post._id);
+            }}
           >
             Edit
           </p>
           <p
-            className="font-inter text-sm orange_gradient cursor-pointer"
-            onClick={handleDelete}
+            className="font-inter text-sm orange_gradient cursor-pointer select-none"
+            onClick={() => {
+              handleDelete && handleDelete(post._id);
+            }}
           >
             Delete
           </p>

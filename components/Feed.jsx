@@ -25,20 +25,15 @@ export default function Feed() {
 
   // In filter function let assign filter function to filter timeout
   const filterData = () => {
-    setFilterTimeout(
-      setTimeout(() => {
-        // filter posts data theo searchString nếu khớp thì sẽ trả về các post đó
-        const regex = new RegExp(searchText, "i");
-        const newPosts = posts.filter((post) => {
-          return (
-            regex.test(post.creator.username) ||
-            regex.test(post.prompt) ||
-            regex.test(post.tag)
-          );
-        });
-        setFilterPosts(newPosts);
-      }, 1000)
-    );
+    // filter posts data theo searchString nếu khớp thì sẽ trả về các post đó
+    const regex = new RegExp(searchText, "i");
+    return posts.filter((post) => {
+      return (
+        regex.test(post.creator.username) ||
+        regex.test(post.prompt) ||
+        regex.test(post.tag)
+      );
+    });
   };
 
   const handleSearchChange = async (e) => {
@@ -46,14 +41,22 @@ export default function Feed() {
     clearTimeout(filterTimeout);
     // Get search string from input
     setSearchText(e.target.value);
-    filterData();
+    setFilterTimeout(
+      setTimeout(() => {
+        const searchResult = filterData();
+        setFilterPosts(searchResult);
+      }, 1000)
+    );
   };
   useEffect(() => {
     const fetchPost = async () => {
-      const response = await fetch("./api/prompt");
-      const data = await response.json();
-      setPosts(data);
-      console.log(data);
+      try {
+        const response = await fetch("./api/prompt");
+        const data = await response.json();
+        setPosts(data);
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchPost();
   }, []);
