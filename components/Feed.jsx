@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import PromptCard from "./PromptCard";
+import { useRouter } from "next/navigation";
 
 const PromptCardList = ({ data, handleTagClick }) => {
   return (
@@ -21,6 +22,7 @@ export default function Feed() {
   const [filterPosts, setFilterPosts] = useState([]);
   const [filterTimeout, setFilterTimeout] = useState(null);
   const [posts, setPosts] = useState([]);
+
   //Define object that storage the reference to filterTimeout
 
   // In filter function let assign filter function to filter timeout

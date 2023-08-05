@@ -8,6 +8,9 @@
   Note: The styles for this gradient grid background is heavily inspired by the creator of this amazing site (https://dub.sh) – all credits go to them! 
 */
 
+html {
+  @apply text-slate-700;
+}
 .main {
   width: 100vw;
   min-height: 100vh;
@@ -38,6 +41,15 @@
   top: 0;
   opacity: 0.4;
   filter: invert(1);
+}
+
+.nav_bar {
+  width: 100vw;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  background-color: white;
 }
 
 .gradient {
@@ -79,6 +91,14 @@
 
 .black_btn {
   @apply rounded-full border border-black bg-black py-1.5 px-5 text-white transition-all hover:bg-white hover:text-black text-center text-sm font-inter flex items-center justify-center;
+}
+
+.gray_btn {
+  @apply rounded-lg border border-gray-300 py-1.5 px-5 font-semibold text-gray-400 hover:bg-gray-100 hover:text-gray-400;
+}
+
+.amber_btn {
+  @apply rounded-lg  bg-amber-400 py-1.5 px-5 font-semibold hover:bg-amber-300;
 }
 
 .outline_btn {
@@ -137,7 +157,7 @@
 
 /* Nav Component */
 .logo_text {
-  @apply max-sm:hidden font-satoshi font-semibold text-lg text-black tracking-wide;
+  @apply max-sm:hidden font-satoshi font-semibold text-2xl text-button-primary tracking-wide;
 }
 
 .dropdown {
@@ -146,6 +166,44 @@
 
 .dropdown_link {
   @apply text-sm font-inter text-gray-700 hover:text-gray-500 font-medium;
+}
+
+.menu_item,
+.menu_item:after,
+.menu_item:before {
+  transition: all 0.5s;
+  color: #9ca3af;
+}
+
+.menu_item:after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 100%;
+  content: ".";
+  color: transparent;
+  background: #93c5fd;
+  height: 0%;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+.menu_item {
+  position: relative;
+}
+
+.menu_item:hover {
+  color: #334155;
+}
+
+.menu_item.active {
+  color: #334155;
+}
+
+.menu_item.active:after {
+  height: 6px;
 }
 
 /* PromptCard Component */
@@ -167,4 +225,10 @@
 
 .flex-between {
   @apply flex justify-between items-center;
+}
+
+/* Auth Component */
+
+.auth_modal {
+  @apply absolute bg-red-300 w-full h-full;
 }

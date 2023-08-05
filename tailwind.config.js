@@ -13,6 +13,14 @@ module.exports = {
       },
       colors: {
         "primary-orange": "#FF5722",
+        "bg-primary": "#eff6ff",
+        "outline-primary": "#d1d5db",
+        "button-primary": "#2563eb",
+        "button-secondary": "#fbbf24",
+        "text-primary": "#334155",
+        "text-secondary": "#9ca3af",
+        "hover-primary": "#93c5fd",
+        "text-secondary": "9CA3AF",
       },
     },
     screens: {
