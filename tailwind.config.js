@@ -10,6 +10,7 @@ module.exports = {
       fontFamily: {
         satoshi: ["Satoshi", "sans-serif"],
         inter: ["Inter", "sans-serif"],
+        vina: ["Vina Sans", "cursive"],
       },
       colors: {
         "primary-orange": "#FF5722",
@@ -20,7 +21,8 @@ module.exports = {
         "text-primary": "#334155",
         "text-secondary": "#9ca3af",
         "hover-primary": "#93c5fd",
-        "text-secondary": "9CA3AF",
+        "text-secondary": "#9CA3AF",
+        "primary-light-bg": "#EFF6FF",
       },
     },
     screens: {

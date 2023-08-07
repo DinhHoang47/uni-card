@@ -1,5 +1,7 @@
 import Nav from "@components/Nav";
-import Provider from "@components/Provider";
+import AuthProvider from "@components/Provider";
+import store from "../redux/store";
+import { Provider as ReduxProvider } from "react-redux";
 
 import "@styles/globals.css";
 
@@ -12,16 +14,18 @@ export default async function RootLayout(props) {
   return (
     <html lang="en">
       <body>
-        <Provider>
-          <div className="main">
-            <div className="gradient"></div>
-          </div>
-          <main className="app mt-16">
-            <Nav />
-            {props.auth}
-            {props.children}
-          </main>
-        </Provider>
+        <ReduxProvider store={store}>
+          <AuthProvider>
+            <div className="main">
+              <div className="gradient"></div>
+            </div>
+            <main className="app mt-16">
+              <Nav />
+              {props.auth}
+              {props.children}
+            </main>
+          </AuthProvider>
+        </ReduxProvider>
       </body>
     </html>
   );
