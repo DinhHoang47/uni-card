@@ -11,18 +11,20 @@ import { Bars4Icon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { BellIcon } from "@heroicons/react/24/outline";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { open, close } from "@redux/authModalSlice";
+import Auth from "./Auth";
 
 export default function Nav() {
+  // States
   const { data: session, status } = useSession();
   const [providers, setProviders] = useState(null);
   const [mobileNotiDropdown, setMobileNotiDropdown] = useState(false);
   const [currentPath, setCurrentPath] = useState("");
   const [searchValue, setSearchValue] = useState("");
-
-  const authModal = useSelector((state) => state.authModal.value);
-
-  console.log(authModal);
+  // Redux store
+  const dispatch = useDispatch();
+  const isOpen = useSelector((state) => state.authModal.isOpen);
 
   // Ref for menu sidebar
   const containerRef = useRef();
@@ -99,7 +101,7 @@ export default function Nav() {
 
   return (
     <div className="fixed flex items-center justify-center w-full  top-0 left-0 right-0 z-10 bg-white border-b border-b-outline-primary">
-      <nav className="flex-between h-16 w-full md:px-16 ">
+      <nav className="flex-between h-16 w-full md:px-8">
         {/* Destop Menu */}
         <div className="hidden lg:flex h-full ">
           <Link href="/" className="flex gap-2 items-center">
@@ -178,7 +180,8 @@ export default function Nav() {
               <button
                 type="button"
                 onClick={() => {
-                  toggleAuthModal();
+                  // signIn();
+                  dispatch(open());
                 }}
                 className="amber_btn"
               >
@@ -230,7 +233,7 @@ export default function Nav() {
                 <button
                   type="button"
                   onClick={() => {
-                    toggleAuthModal();
+                    dispatch(open());
                   }}
                   className="amber_btn"
                 >
@@ -242,8 +245,8 @@ export default function Nav() {
         </div>
       </nav>
       {/* Right Sidebar */}
-      {/* Background */}
       <div className="mobile_side_bar invisible inset-0" ref={containerRef}>
+        {/* Background */}
         <div
           onClick={toggleSidebar}
           ref={bgRef}
@@ -297,6 +300,7 @@ export default function Nav() {
               <div className="">
                 <div className="user_profile w-full mt-4 flex items-center space-x-2 ">
                   <Image
+                    alt="profile-picture"
                     width={40}
                     height={40}
                     className="rounded-full"
@@ -350,7 +354,13 @@ export default function Nav() {
                 </li>
               </ul>
               <div className="">
-                <button className="w-full h-10 mt-4 rounded bg-amber-400 border-gray-300 font-semibold">
+                <button
+                  onClick={() => {
+                    toggleSidebar();
+                    dispatch(open());
+                  }}
+                  className="w-full h-10 mt-4 rounded bg-amber-400 border-gray-300 font-semibold"
+                >
                   Sign In
                 </button>
               </div>
@@ -389,19 +399,24 @@ export default function Nav() {
         </div>
       </div>
       {/* Auth */}
-      <div className="invisible" ref={authContainerRef}>
+      <div className={isOpen ? `` : "invisible"} ref={authContainerRef}>
         <div
-          onClick={toggleAuthModal}
-          className="absolute top-0 left-0 w-screen h-screen flex items-center justify-center bg-red-400 opacity-0 transition-all duration-200 ease-in "
+          onClick={() => dispatch(close())}
+          className={`${
+            isOpen ? "opacity-50" : "opacity-0"
+          } absolute top-0 left-0 w-screen bg-slate-400 h-screen flex items-center justify-center transition-opacity duration-200 ease-in `}
           ref={authBgRef}
+        ></div>
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          className={`${
+            isOpen ? "" : "scale-0"
+          } fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ease-in`}
+          ref={authRef}
         >
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-            className="h-48 w-80 bg-green-400 scale-0 transition-all duration-300 ease-in"
-            ref={authRef}
-          ></div>
+          <Auth />
         </div>
       </div>
     </div>

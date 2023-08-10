@@ -9,8 +9,6 @@ module.exports = {
     extend: {
       fontFamily: {
         satoshi: ["Satoshi", "sans-serif"],
-        inter: ["Inter", "sans-serif"],
-        vina: ["Vina Sans", "cursive"],
       },
       colors: {
         "primary-orange": "#FF5722",
@@ -39,5 +37,4 @@ module.exports = {
       // => @media (min-width: 1280px) { ... }
     },
   },
-  plugins: [],
 };
