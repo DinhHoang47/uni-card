@@ -1,15 +1,52 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import styled from "@emotion/styled";
 import Image from "next/image";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
-import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/24/outline";
-import { PencilIcon } from "@heroicons/react/24/outline";
 import EditIcon from "@public/assets/icons/EditIcon";
+import { TextareaAutosize } from "@mui/base";
+import { MuiChipsInput } from "mui-chips-input";
+import TermsTable from "@components/TermsTable";
+const MuiChipsInputStyled = styled(MuiChipsInput)`
+  & div.MuiInputBase-root {
+    margin: 0;
+    padding: 0;
+    border-bottom: 2px solid #d1d5db;
+    border-radius: 0;
+    &:focus-within {
+      border-bottom: 2px solid #93c5fd;
+    }
+  }
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  & fieldset {
+    border: none;
+  }
+`;
 
 export default function CollectionDetail() {
-  const descRef = useRef();
+  const [tags, setTags] = useState([]);
+  const [chips, setChips] = useState([]);
 
+  const handleAddChip = (chipValue) => {
+    if (!chips.includes(chipValue)) {
+      setChips([...chips, chipValue]);
+    } else {
+    }
+  };
+  const handleDeleteChip = (chipValue) => {
+    const newChips = [...chips].filter((value) => value !== chipValue);
+    setChips(newChips);
+  };
+  useEffect(() => {
+    // Remove the server-side injected CSS.
+    const jssStyles = document.querySelector("#jss-server-side");
+    if (jssStyles) {
+      jssStyles.parentElement.removeChild(jssStyles);
+    }
+  }, []);
   return (
     <div className="w-full mt-8 space-y-8  sm:px-8 px-6">
       {/* Section */}
@@ -22,7 +59,7 @@ export default function CollectionDetail() {
           </button>
         </div>
         {/* Container */}
-        <div className="flex px-2">
+        <div className="grid grid-cols-1 gap-8">
           {/* Collection Info */}
           <div className="flex items-center space-x-2">
             {/* Collection Image */}
@@ -63,26 +100,63 @@ export default function CollectionDetail() {
           </div>
           {/* Action Button */}
           <div className="flex items-end">
-            <button className="px-4 h-9 rounded-md bg-blue-600 text-white">
+            <button className="px-4 h-9 w-full sm:w-24 rounded-md bg-blue-600 text-white">
               Study
             </button>
           </div>
         </div>
       </div>
       {/* Section */}
-      <div className="w-full grid grid-cols-2">
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-8">
         {/* Description */}
-        <div className="">
+        <div className="flex flex-col">
           <div className="flex items-center space-x-2">
             <p className="font-semibold">Description</p>
           </div>
-          <div className="">
-            <textarea
-              placeholder="About this collections"
-              rows={2}
-              className="resize-none p-2 border-b"
-            ></textarea>
+          <div className="grow">
+            <TextareaAutosize
+              maxRows={8}
+              maxLength={500}
+              wrap="hard"
+              className="w-full border-b-2 p-2 resize-none focus:border-blue-300 focus:outline-none bg-transparent border-gray-300"
+            ></TextareaAutosize>
           </div>
+        </div>
+        {/* Tags */}
+        <div className="">
+          <div className="flex items-center space-x-2">
+            <p className="font-semibold">Tags</p>
+          </div>
+          <div className="">
+            {/* <MuiChipsInputStyled
+              id="my-mui-chipsinput"
+              hideClearAll={true}
+              value={chips}
+              validate={() => {
+                return {
+                  isError: chips.length >= 5,
+                  textError: "Input max 5 tags",
+                };
+              }}
+              clearInputOnBlur={true}
+              onAddChip={handleAddChip}
+              onDeleteChip={handleDeleteChip}
+            ></MuiChipsInputStyled> */}
+          </div>
+        </div>
+      </div>
+      {/* Section */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h4 className="font-semibold">Terms</h4>
+          <div className="">
+            <button className="px-8 rounded-md bg-blue-600 text-white h-9">
+              Save
+            </button>
+          </div>
+        </div>
+        <div className=" px-8">
+          <TermsTable />
         </div>
       </div>
     </div>
