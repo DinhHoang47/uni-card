@@ -44,7 +44,8 @@ html {
 /* Tailwind Styles */
 
 .app {
-  @apply relative z-10 flex justify-center items-center flex-col max-w-[1440px] mx-auto;
+  @apply relative z-10 flex justify-between items-center flex-col max-w-[1440px] mx-auto;
+  min-height: calc(100vh - 64px);
 }
 
 .black_btn {

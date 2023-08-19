@@ -8,6 +8,8 @@ import EditIcon from "@public/assets/icons/EditIcon";
 import { TextareaAutosize } from "@mui/base";
 import { MuiChipsInput } from "mui-chips-input";
 import TermsTable from "@components/TermsTable";
+import Link from "next/link";
+
 const MuiChipsInputStyled = styled(MuiChipsInput)`
   & div.MuiInputBase-root {
     margin: 0;
@@ -26,7 +28,7 @@ const MuiChipsInputStyled = styled(MuiChipsInput)`
   }
 `;
 
-export default function CollectionDetail() {
+export default function CollectionDetail({ params }) {
   const [tags, setTags] = useState([]);
   const [chips, setChips] = useState([]);
 
@@ -48,7 +50,7 @@ export default function CollectionDetail() {
     }
   }, []);
   return (
-    <div className="w-full mt-8 space-y-8  sm:px-8 px-6">
+    <div className="w-full mt-4 space-y-8 px-2 sm:px-8  relative">
       {/* Section */}
       <div className="w-full space-y-4">
         {/* Title */}
@@ -100,9 +102,12 @@ export default function CollectionDetail() {
           </div>
           {/* Action Button */}
           <div className="flex items-end">
-            <button className="px-4 h-9 w-full sm:w-24 rounded-md bg-blue-600 text-white">
-              Study
-            </button>
+            <Link
+              href={`/collections/${params.id}/study`}
+              className="px-4 h-9 w-full sm:w-24 rounded-md bg-blue-600 text-white flex items-center justify-center"
+            >
+              <p>Study</p>
+            </Link>
           </div>
         </div>
       </div>
@@ -128,7 +133,7 @@ export default function CollectionDetail() {
             <p className="font-semibold">Tags</p>
           </div>
           <div className="">
-            {/* <MuiChipsInputStyled
+            <MuiChipsInputStyled
               id="my-mui-chipsinput"
               hideClearAll={true}
               value={chips}
@@ -141,7 +146,7 @@ export default function CollectionDetail() {
               clearInputOnBlur={true}
               onAddChip={handleAddChip}
               onDeleteChip={handleDeleteChip}
-            ></MuiChipsInputStyled> */}
+            ></MuiChipsInputStyled>
           </div>
         </div>
       </div>
@@ -155,7 +160,7 @@ export default function CollectionDetail() {
             </button>
           </div>
         </div>
-        <div className=" px-8">
+        <div className=" px-0 sm:px-8">
           <TermsTable />
         </div>
       </div>

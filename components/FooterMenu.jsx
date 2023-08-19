@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function FooterMenu() {
   return (
     <div className=" border-t-gray-300 border-t">
-      <div className="mt-8 relative grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="my-8 relative grid grid-cols-2 md:grid-cols-3 gap-4">
         <div className="flex flex-col space-y-2">
           <div className="h-9 flex items-center">
             <h3 className="text_primary font-semibold select-none">UniCard</h3>

@@ -92,15 +92,11 @@ export default function Nav() {
     searchContainerRef.current.classList.toggle("invisible");
   };
 
-  const toggleAuthModal = () => {
-    authContainerRef.current.classList.toggle("invisible");
-    authBgRef.current.classList.toggle("opacity-0");
-    authBgRef.current.classList.toggle("opacity-50");
-    authRef.current.classList.toggle("scale-0");
-  };
-
   return (
-    <div className="fixed flex items-center justify-center w-full  top-0 left-0 right-0 z-10 bg-white border-b border-b-outline-primary">
+    <div
+      id="primary-nav"
+      className="fixed flex items-center justify-center w-full  top-0 left-0 right-0 z-10 bg-white border-b border-b-outline-primary"
+    >
       <nav className="flex-between h-16 w-full md:px-8">
         {/* Destop Menu */}
         <div className="hidden lg:flex h-full ">

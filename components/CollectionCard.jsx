@@ -4,7 +4,7 @@ import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
 import Link from "next/link";
 export default function CollectionCard() {
   return (
-    <Link href={"/collections/id"}>
+    <Link href={"/collections/1"}>
       <div className="h-40 p-4 flex flex-col justify-between bg-white rounded-lg border-gray-300 border hover:shadow-[0px_2px_5px_1px_#90cdf4] transition-all duration-300">
         <div className="flex justify-between">
           <div className="flex flex-col">
