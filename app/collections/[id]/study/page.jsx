@@ -31,7 +31,8 @@ export default function CollectionStudy() {
         </div>
       </div>
       {/* Section */}
-      <div className="w-full space-y-2 sm:space-y-4">
+      {/* Desktop Selection */}
+      <div className="hidden sm:block w-full space-y-2 sm:space-y-4">
         {/* Title */}
         <div className="flex space-x-2 cursor-pointer">
           <p
@@ -54,7 +55,7 @@ export default function CollectionStudy() {
             />
           </button>
         </div>
-        {/* Section selection */}
+        {/*Section Selection */}
         <div
           onTransitionEnd={(e) => {
             if (!openSelect) {
@@ -88,8 +89,23 @@ export default function CollectionStudy() {
           </ul>
         </div>
       </div>
+      {/* Mobile Selection */}
+      <div className="block sm:hidden w-full space-y-2 sm:space-y-4">
+        <div className="flex justify-between">
+          {/* Title */}
+          <div className="flex space-x-2 cursor-pointer">
+            <p className="font-semibold select-none">
+              Select section to study mobile
+            </p>
+          </div>
+          {/* Dropdown to select */}
+          <div className="bg-blue-500">
+            <div className="border-2 border-red-500">1~10</div>
+          </div>
+        </div>
+      </div>
       {/* Section */}
-      <div className={`w-full space-y-4 ${openSelect ? "" : "!mt-0"}`}>
+      <div className={`w-full space-y-4 ${openSelect ? "" : "sm:!mt-0"}`}>
         {/* Setting & button */}
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 justify-between items-center">
           {/* Setting */}

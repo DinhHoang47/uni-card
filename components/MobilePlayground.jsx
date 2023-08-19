@@ -90,6 +90,70 @@ export default function MobilePlayground() {
           })}
         </div>
       )}
+      <div className="card_selection p-2">
+        <ul className="grid grid-cols-5 gap-2">
+          <li
+            onClick={() => {}}
+            className="bg-white h-9 cursor-pointer rounded flex items-center px-1 border border-slate-400 "
+          >
+            <p className="truncate text-xs w-full text-center">漢字</p>
+          </li>
+          <li
+            onClick={() => {}}
+            className="bg-white h-9 cursor-pointer rounded flex items-center px-1 border border-slate-400 "
+          >
+            <p className="truncate text-xs w-full text-center">漢字</p>
+          </li>
+          <li
+            onClick={() => {}}
+            className="bg-white h-9 cursor-pointer rounded flex items-center px-1 border border-slate-400 "
+          >
+            <p className="truncate text-xs w-full text-center">漢字</p>
+          </li>
+          <li
+            onClick={() => {}}
+            className="bg-white h-9 cursor-pointer rounded flex items-center px-1 border border-slate-400 "
+          >
+            <p className="truncate text-xs w-full text-center">漢字</p>
+          </li>
+          <li
+            onClick={() => {}}
+            className="bg-white h-9 cursor-pointer rounded flex items-center px-1 border border-slate-400 "
+          >
+            <p className="truncate text-xs w-full text-center">漢字</p>
+          </li>
+          <li
+            onClick={() => {}}
+            className="bg-white h-9 cursor-pointer rounded flex items-center px-1 border border-slate-400 "
+          >
+            <p className="truncate text-xs w-full text-center">漢字</p>
+          </li>
+          <li
+            onClick={() => {}}
+            className="bg-white h-9 cursor-pointer rounded flex items-center px-1 border border-slate-400 "
+          >
+            <p className="truncate text-xs w-full text-center">漢字</p>
+          </li>
+          <li
+            onClick={() => {}}
+            className="bg-white h-9 cursor-pointer rounded flex items-center px-1 border border-slate-400 "
+          >
+            <p className="truncate text-xs w-full text-center">漢字</p>
+          </li>
+          <li
+            onClick={() => {}}
+            className="bg-white h-9 cursor-pointer rounded flex items-center px-1 border border-slate-400 "
+          >
+            <p className="truncate text-xs w-full text-center">漢字</p>
+          </li>
+          <li
+            onClick={() => {}}
+            className="bg-white h-9 cursor-pointer rounded flex items-center px-1 border border-slate-400 "
+          >
+            <p className="truncate text-xs w-full text-center">漢字</p>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }
