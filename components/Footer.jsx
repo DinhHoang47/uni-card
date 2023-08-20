@@ -8,7 +8,7 @@ export default function Footer() {
           href="https://www.facebook.com/dinhhoang0407"
           target="_blank"
         >
-          Dinh Hoang
+          me
         </a>
       </p>
     </div>

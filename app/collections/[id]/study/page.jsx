@@ -10,10 +10,14 @@ import CardStudy from "@components/CardStudy";
 import { useKeenSlider } from "keen-slider/react";
 import MobileCardStudy from "@components/MobileCardStudy";
 import MobilePlayground from "@components/MobilePlayground";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-export default function CollectionStudy() {
+export default function CollectionStudy({ params }) {
   const [openSelect, setOpenSelect] = useState(true);
   const SelectSectionRef = useRef();
+  const [openMenu, setOpenMenu] = useState();
+  const router = useRouter();
 
   return (
     <div className="w-full mt-2 sm:mt-4 space-y-2 sm:space-y-4 px-2 sm:px-8 ">
@@ -90,18 +94,50 @@ export default function CollectionStudy() {
         </div>
       </div>
       {/* Mobile Selection */}
-      <div className="block sm:hidden w-full space-y-2 sm:space-y-4">
-        <div className="flex justify-between">
+      <div className="relative block sm:hidden w-full space-y-2 sm:space-y-4">
+        <div className="flex justify-between items-center">
           {/* Title */}
-          <div className="flex space-x-2 cursor-pointer">
-            <p className="font-semibold select-none">
-              Select section to study mobile
-            </p>
-          </div>
+          <p className="font-semibold select-none">
+            Select section to study mobile
+          </p>
           {/* Dropdown to select */}
-          <div className="bg-blue-500">
-            <div className="border-2 border-red-500">1~10</div>
-          </div>
+          <button
+            onClick={() => {
+              setOpenMenu((pre) => !pre);
+            }}
+            className={`border-2 border-blue-500 w-32 h-10 items-center justify-center flex space-x-2 rounded-t-md ${
+              openMenu ? "border-b-0" : "rounded-b-md"
+            }`}
+          >
+            <div className=" font-semibold font-satoshi">1 ~ 10</div>
+            <ChevronDownIcon className="h-5 w-5 stroke-2" />
+          </button>
+          <ul
+            className={`absolute z-10 right-0 top-0 translate-y-10 w-32 overflow-hidden ${
+              openMenu ? "max-h-44 border-b-2" : "max-h-0"
+            } transition-all divide-y-2 px-2 divide-gray-300 border-x-2  rounded-b-md border-blue-500 bg-white overflow-y-scroll`}
+          >
+            <li className="text-center font-satoshi font-semibold flex justify-center py-2 space-x-2 cursor-pointer">
+              111 ~ 222
+              <div className="h-5 w-5"></div>
+            </li>
+            <li className="text-center font-satoshi font-semibold flex justify-center py-2 space-x-2 cursor-pointer">
+              111 ~ 222
+              <div className="h-5 w-5"></div>
+            </li>
+            <li className="text-center font-satoshi font-semibold flex justify-center py-2 space-x-2 cursor-pointer">
+              111 ~ 222
+              <div className="h-5 w-5"></div>
+            </li>
+            <li className="text-center font-satoshi font-semibold flex justify-center py-2 space-x-2 cursor-pointer">
+              111 ~ 222
+              <div className="h-5 w-5"></div>
+            </li>
+            <li className="text-center font-satoshi font-semibold flex justify-center py-2 space-x-2 cursor-pointer">
+              111 ~ 222
+              <div className="h-5 w-5"></div>
+            </li>
+          </ul>
         </div>
       </div>
       {/* Section */}
@@ -141,7 +177,12 @@ export default function CollectionStudy() {
           </div>
           {/* Actions */}
           <div className="flex space-x-2 justify-end">
-            <button className="w-28 px-4 bg-teal-500 text-white h-9 rounded-md">
+            <button
+              onClick={() => {
+                router.push(`/collections/${params.id}/test`);
+              }}
+              className="w-28 bg-teal-500 text-white h-10 rounded-md font-semibold"
+            >
               Test
             </button>
           </div>
