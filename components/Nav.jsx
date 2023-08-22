@@ -179,7 +179,7 @@ export default function Nav() {
                   // signIn();
                   dispatch(open());
                 }}
-                className="amber_btn"
+                className="amber_btn h-10"
               >
                 Sign In
               </button>

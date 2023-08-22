@@ -1,23 +1,27 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import styled from "@emotion/styled";
 
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 import SelectSectionButton from "@components/SelectSectionButton";
-import CardStudy from "@components/CardStudy";
-import { useKeenSlider } from "keen-slider/react";
-import MobileCardStudy from "@components/MobileCardStudy";
-import MobilePlayground from "@components/MobilePlayground";
-import Link from "next/link";
+import CardStudy from "@app/collections/[id]/study/CardStudy";
+import MobilePlayground from "@app/collections/[id]/study/MobilePlayground";
 import { useRouter } from "next/navigation";
+import { createPortal } from "react-dom";
+import SettingModal from "./components/SettingModal";
 
 export default function CollectionStudy({ params }) {
   const [openSelect, setOpenSelect] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const SelectSectionRef = useRef();
   const [openMenu, setOpenMenu] = useState();
   const router = useRouter();
+
+  const handleTest = () => {
+    setIsOpen(true);
+    // router.push(`/collections/${params.id}/test?mode=choice&show=front`);
+  };
 
   return (
     <div className="w-full mt-2 sm:mt-4 space-y-2 sm:space-y-4 px-2 sm:px-8 ">
@@ -179,7 +183,7 @@ export default function CollectionStudy({ params }) {
           <div className="flex space-x-2 justify-end">
             <button
               onClick={() => {
-                router.push(`/collections/${params.id}/test`);
+                handleTest();
               }}
               className="w-28 bg-teal-500 text-white h-10 rounded-md font-semibold"
             >
@@ -212,6 +216,11 @@ export default function CollectionStudy({ params }) {
           {/* Select Card Button */}
         </div>
       </div>
+      {isOpen &&
+        createPortal(
+          <SettingModal isOpen={isOpen} setIsOpen={setIsOpen} />,
+          document.getElementById("primary-nav")
+        )}
     </div>
   );
 }

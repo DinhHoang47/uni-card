@@ -1,9 +1,10 @@
 "use client";
 import { useKeenSlider } from "keen-slider/react";
 import { useState } from "react";
-import MobileCardStudy from "../../../../components/MobileCardStudy";
+import MobileCardStudy from "./MobileCardStudy";
+import SelectCardSection from "./SelectCardSection";
 
-export default function MobileTestingGround() {
+export default function MobilePlayground() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [sliderRef, instanceRef] = useKeenSlider({
@@ -90,29 +91,9 @@ export default function MobileTestingGround() {
           })}
         </div>
       )}
-      {/* Input Anwser */}
-      <div className="px-2 py-4">
-        <div className="bg-white rounded-md border border-slate-400 px-2 py-2">
-          <input
-            className="w-full text-center h-10 text-xl outline-none"
-            placeholder="KANJI"
-            type="text"
-          />
-          <div className="flex justify-center">
-            <div className="w-40 h-[2px] bg-gray-300"></div>
-          </div>
-          <input
-            className="w-full text-center h-10 text-xl"
-            placeholder="Meaning"
-            type="text"
-          />
-        </div>
-      </div>
-      {/* Actions Button */}
-      <div className="px-2 mt-4">
-        <button className="h-10 bg-blue-500 w-full font-semibold text-white rounded-md">
-          Next
-        </button>
+      {/* Card Select List */}
+      <div className="card_selection p-2">
+        <SelectCardSection />
       </div>
     </div>
   );

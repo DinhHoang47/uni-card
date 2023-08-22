@@ -1,0 +1,7 @@
+.active {
+  border-color: #3b82f6 !important;
+}
+
+.selected {
+  background-color: #93c5fd !important;
+}
