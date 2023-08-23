@@ -20,7 +20,6 @@ export default function CollectionStudy({ params }) {
 
   const handleTest = () => {
     setIsOpen(true);
-    // router.push(`/collections/${params.id}/test?mode=choice&show=front`);
   };
 
   return (
@@ -218,7 +217,11 @@ export default function CollectionStudy({ params }) {
       </div>
       {isOpen &&
         createPortal(
-          <SettingModal isOpen={isOpen} setIsOpen={setIsOpen} />,
+          <SettingModal
+            collectionId={params.id}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+          />,
           document.getElementById("primary-nav")
         )}
     </div>

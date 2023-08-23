@@ -40,7 +40,7 @@ export default function MobilePlayground() {
 
   return (
     <div className="relative  w-full">
-      <div className="relative">
+      <div className="relative py-1">
         <div ref={sliderRef} className="keen-slider">
           <div className="keen-slider__slide">
             <MobileCardStudy />
