@@ -25,12 +25,12 @@ export default function CollectionTest({ params }) {
         <div className="">
           <button
             onClick={() => {
-              router.push(`/collections/${params.id}/study`);
+              router.push(`/collections/${params.id}/learn`);
             }}
             className="flex items-center"
           >
             <ChevronLeftIcon className="h-4 w-4 text-sm" />
-            <span className="">Back to study</span>
+            <span className="">Back to learn</span>
           </button>
         </div>
         <div className="flex items-center justify-between">

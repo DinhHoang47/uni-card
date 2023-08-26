@@ -7,8 +7,12 @@ import { StarIcon } from "@heroicons/react/24/outline";
 import EditIcon from "@public/assets/icons/EditIcon";
 import { TextareaAutosize } from "@mui/base";
 import { MuiChipsInput } from "mui-chips-input";
-import TermsTable from "@components/TermsTable";
 import Link from "next/link";
+import DesktopTermTable from "./components/DesktopTermTable";
+import MobileTermTable from "./components/MobileTermTable";
+import { CSSTransition } from "react-transition-group";
+import AddTermModal from "./components/AddTermModal";
+import EditCollectionModal from "./components/EditCollectionModal";
 
 const MuiChipsInputStyled = styled(MuiChipsInput)`
   & div.MuiInputBase-root {
@@ -29,8 +33,11 @@ const MuiChipsInputStyled = styled(MuiChipsInput)`
 `;
 
 export default function CollectionDetail({ params }) {
-  const [tags, setTags] = useState([]);
+  // Tags and modal state
   const [chips, setChips] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
+  const [editCardId, setEditCardId] = useState(null);
 
   const handleAddChip = (chipValue) => {
     if (!chips.includes(chipValue)) {
@@ -57,11 +64,11 @@ export default function CollectionDetail({ params }) {
         <div className="">
           <button className="flex items-center">
             <ChevronLeftIcon className="h-4 w-4 text-sm" />
-            <span className="font-semibold">Back to all collections</span>
+            <span className="">All collections</span>
           </button>
         </div>
         {/* Container */}
-        <div className="grid grid-cols-1 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           {/* Collection Info */}
           <div className="flex items-center space-x-2">
             {/* Collection Image */}
@@ -79,7 +86,12 @@ export default function CollectionDetail({ params }) {
               {/* Title */}
               <div className="flex items-center space-x-2">
                 <h4 className="font-semibold">Collection title here</h4>
-                <button className="">
+                <button
+                  onClick={() => {
+                    setIsCollectionModalOpen(true);
+                  }}
+                  className=""
+                >
                   <EditIcon className="fill-indigo-500" />
                 </button>
               </div>
@@ -101,12 +113,12 @@ export default function CollectionDetail({ params }) {
             </div>
           </div>
           {/* Action Button */}
-          <div className="flex items-end">
+          <div className="flex justify-end items-end">
             <Link
-              href={`/collections/${params.id}/study`}
-              className="px-4 h-9 w-full sm:w-24 rounded-md bg-blue-600 text-white flex items-center justify-center"
+              href={`/collections/${params.id}/learn`}
+              className="px-4 h-10 w-full sm:w-24 rounded-md bg-blue-600 text-white flex items-center justify-center"
             >
-              <p>Study</p>
+              <p>Learn</p>
             </Link>
           </div>
         </div>
@@ -117,53 +129,88 @@ export default function CollectionDetail({ params }) {
         <div className="flex flex-col">
           <div className="flex items-center space-x-2">
             <p className="font-semibold">Description</p>
+            <button
+              onClick={() => {
+                setIsCollectionModalOpen(true);
+              }}
+              className=""
+            >
+              <EditIcon className="fill-indigo-500" />
+            </button>
           </div>
           <div className="grow">
-            <TextareaAutosize
-              maxRows={8}
-              maxLength={500}
-              wrap="hard"
-              className="w-full border-b-2 p-2 resize-none focus:border-blue-300 focus:outline-none bg-transparent border-gray-300"
-            ></TextareaAutosize>
+            <p>
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+              Consectetur, voluptas.
+            </p>
           </div>
         </div>
         {/* Tags */}
         <div className="">
           <div className="flex items-center space-x-2">
             <p className="font-semibold">Tags</p>
-          </div>
-          <div className="">
-            <MuiChipsInputStyled
-              id="my-mui-chipsinput"
-              hideClearAll={true}
-              value={chips}
-              validate={() => {
-                return {
-                  isError: chips.length >= 5,
-                  textError: "Input max 5 tags",
-                };
+            <button
+              onClick={() => {
+                setIsCollectionModalOpen(true);
               }}
-              clearInputOnBlur={true}
-              onAddChip={handleAddChip}
-              onDeleteChip={handleDeleteChip}
-            ></MuiChipsInputStyled>
+              className=""
+            >
+              <EditIcon className="fill-indigo-500" />
+            </button>
           </div>
+          <ul className="flex space-x-2">
+            <li className="bg-white px-2 rounded shadow-sm bg-blue-100">
+              #Tag1
+            </li>
+            <li className="bg-white px-2 rounded shadow-sm bg-blue-100">
+              #Tag2
+            </li>
+          </ul>
         </div>
       </div>
       {/* Section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h4 className="font-semibold">Terms</h4>
-          <div className="">
-            <button className="px-8 rounded-md bg-blue-600 text-white h-9">
-              Save
-            </button>
-          </div>
         </div>
-        <div className=" px-0 sm:px-8">
-          <TermsTable />
+        <div className="hidden sm:block">
+          <DesktopTermTable
+            setEditCardId={setEditCardId}
+            setIsModalOpen={setIsModalOpen}
+          />
+        </div>
+        <div className="block sm:hidden">
+          <MobileTermTable
+            setEditCardId={setEditCardId}
+            setIsModalOpen={setIsModalOpen}
+          />
         </div>
       </div>
+      {/* Add Modal */}
+      <CSSTransition
+        classNames={"modal"}
+        in={isModalOpen}
+        timeout={200}
+        unmountOnExit
+      >
+        <AddTermModal
+          editCardId={editCardId}
+          setEditCardId={setEditCardId}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
+      </CSSTransition>
+      {/* Edit collection detail modal */}
+      <CSSTransition
+        classNames={"modal"}
+        in={isCollectionModalOpen}
+        timeout={200}
+        unmountOnExit
+      >
+        <EditCollectionModal
+          setIsCollectionModalOpen={setIsCollectionModalOpen}
+        />
+      </CSSTransition>
     </div>
   );
 }

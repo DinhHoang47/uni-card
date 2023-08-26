@@ -53,7 +53,7 @@ export default function Nav() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    router.push(`/search?${searchValue}`);
+    router.push(`/search?query=${searchValue}`);
   };
 
   const toggleMobileNotification = () => {
@@ -63,7 +63,8 @@ export default function Nav() {
   useEffect(() => {
     const collection = "/collections";
     const mypage = "/mypage";
-    if (pathname.startsWith(collection)) {
+    const search = "/search";
+    if (pathname.startsWith(collection) || pathname.startsWith(search)) {
       setCurrentPath(collection);
     } else if (pathname.startsWith(mypage)) {
       setCurrentPath(mypage);

@@ -2,13 +2,14 @@
 import { useState } from "react";
 import ReactCardFlip from "react-card-flip";
 
-export default function CardStudy() {
+export default function MobileCardLearn() {
   const [isFlipped, setIsFlipped] = useState(false);
   const haveDefine2 = true;
+  const haveImage = false;
   return (
-    <div className="h-40 rounded-lg cursor-pointer">
+    <div className="h-60 mx-2 rounded-lg cursor-pointer">
       <ReactCardFlip
-        flipDirection="vertical"
+        flipDirection="horizontal"
         isFlipped={isFlipped}
         containerStyle={{ height: "100%", borderRadius: "8px" }}
       >
@@ -32,20 +33,25 @@ export default function CardStudy() {
           className="relative w-full h-full rounded bg-white p-2 border border-slate-400"
         >
           {/* Back side background */}
-          <div
-            style={{
-              backgroundImage: `url(${``})`,
-              backgroundSize: `160px 160px`,
-              backgroundRepeat: `no-repeat`,
-              backgroundPosition: `center`,
-            }}
-            className={`h-full opacity-70 flex items-center`}
-          ></div>
+          {haveImage ? (
+            <div
+              style={{
+                backgroundImage: `url(${`/assets/images/samurai_cartoon.jpg`})`,
+                backgroundSize: `160px 160px`,
+                backgroundRepeat: `no-repeat`,
+                backgroundPosition: `center`,
+              }}
+              className={`h-full opacity-70 flex items-center`}
+            ></div>
+          ) : (
+            <></>
+          )}
+
           {/* Absolute container */}
           <div
-            className={`absolute top-0 left-0 h-full w-full flex flex-col ${
-              haveDefine2 ? "justify-between" : "justify-center"
-            } rounded p-2`}
+            className={`absolute top-0 left-0 h-full w-full flex flex-col rounded p-2 ${
+              haveImage ? "justify-between" : ""
+            }`}
           >
             {haveDefine2 ? (
               <div className=" text-gray-700 bg-white bg-opacity-90">
@@ -54,11 +60,10 @@ export default function CardStudy() {
             ) : (
               <></>
             )}
-
             <div
               className={`text-gray-950  bg-white bg-opacity-70 space-y-1 ${
                 haveDefine2 ? "pb-4" : ""
-              } `}
+              } ${!haveImage ? "flex flex-col h-full justify-center" : ""} `}
             >
               <p className="text-center text-2xl font-semibold">Meaning</p>
               <p className="text-center text-sm">Example</p>

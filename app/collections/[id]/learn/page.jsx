@@ -5,13 +5,13 @@ import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 import SelectSectionButton from "@components/SelectSectionButton";
-import CardStudy from "@app/collections/[id]/study/CardStudy";
-import MobilePlayground from "@app/collections/[id]/study/MobilePlayground";
+import CardLearn from "@app/collections/[id]/learn/CardLearn";
+import MobilePlayground from "@app/collections/[id]/learn/MobilePlayground";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import SettingModal from "./components/SettingModal";
 
-export default function CollectionStudy({ params }) {
+export default function CollectionLearn({ params }) {
   const [openSelect, setOpenSelect] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const SelectSectionRef = useRef();
@@ -48,7 +48,7 @@ export default function CollectionStudy({ params }) {
             }}
             className="font-semibold select-none"
           >
-            Select section to study
+            Select section to learn
           </p>
           <button
             onClick={() => {
@@ -101,7 +101,7 @@ export default function CollectionStudy({ params }) {
         <div className="flex justify-between items-center">
           {/* Title */}
           <p className="font-semibold select-none">
-            Select section to study mobile
+            Select section to learn mobile
           </p>
           {/* Dropdown to select */}
           <button
@@ -195,18 +195,18 @@ export default function CollectionStudy({ params }) {
       <div className="w-full">
         {/* Desktop playground */}
         <div className=" hidden sm:grid grid-cols-3 lg:grid-cols-4 gap-6 lg:px-5 xl:px-20">
-          <CardStudy />
-          <CardStudy />
-          <CardStudy />
-          <CardStudy />
-          <CardStudy />
-          <CardStudy />
-          <CardStudy />
-          <CardStudy />
-          <CardStudy />
-          <CardStudy />
-          <CardStudy />
-          <CardStudy />
+          <CardLearn />
+          <CardLearn />
+          <CardLearn />
+          <CardLearn />
+          <CardLearn />
+          <CardLearn />
+          <CardLearn />
+          <CardLearn />
+          <CardLearn />
+          <CardLearn />
+          <CardLearn />
+          <CardLearn />
         </div>
         {/* Mobile Playground  */}
         <div className="flex sm:hidden mt-4 overflow-hidden">

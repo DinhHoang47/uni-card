@@ -1,7 +1,7 @@
 "use client";
 import { useKeenSlider } from "keen-slider/react";
 import { useState } from "react";
-import MobileCardStudy from "./MobileCardStudy";
+import MobileCardLearn from "./MobileCardLearn";
 import SelectCardSection from "./SelectCardSection";
 
 export default function MobilePlayground() {
@@ -43,13 +43,13 @@ export default function MobilePlayground() {
       <div className="relative py-1">
         <div ref={sliderRef} className="keen-slider">
           <div className="keen-slider__slide">
-            <MobileCardStudy />
+            <MobileCardLearn />
           </div>
           <div className="keen-slider__slide">
-            <MobileCardStudy />
+            <MobileCardLearn />
           </div>
           <div className="keen-slider__slide">
-            <MobileCardStudy />
+            <MobileCardLearn />
           </div>
         </div>
         {loaded && instanceRef.current && (
