@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/24/outline";
+import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import EditIcon from "@public/assets/icons/EditIcon";
 import { TextareaAutosize } from "@mui/base";
 import { MuiChipsInput } from "mui-chips-input";
@@ -68,7 +69,7 @@ export default function CollectionDetail({ params }) {
           </button>
         </div>
         {/* Container */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-8">
           {/* Collection Info */}
           <div className="flex items-center space-x-2">
             {/* Collection Image */}
@@ -120,6 +121,13 @@ export default function CollectionDetail({ params }) {
             >
               <p>Learn</p>
             </Link>
+          </div>
+          {/* Delete action */}
+          <div className="absolute top-0 right-0">
+            <button onClick={() => {}}>
+              <EllipsisHorizontalIcon className="h-8 w-8 text-gray-500" />
+            </button>
+            <div className="bg-green-500 h-20 w-20 absolute bottom-0 right-0"></div>
           </div>
         </div>
       </div>

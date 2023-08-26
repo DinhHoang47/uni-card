@@ -105,7 +105,7 @@ export default function EditCollectionModal({ setIsCollectionModalOpen }) {
             className="!mt-8 w-full h-10 bg-blue-600 text-white font-semibold rounded-md"
             type="submit"
           >
-            Add
+            Save
           </button>
         </form>
 
