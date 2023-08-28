@@ -21,6 +21,7 @@ module.exports = {
         "hover-primary": "#93c5fd",
         "text-secondary": "#9CA3AF",
         "primary-light-bg": "#EFF6FF",
+        "transparent-04": "rgba(0, 0, 0, 0.4)",
       },
     },
     screens: {

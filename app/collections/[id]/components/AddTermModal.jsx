@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { TextareaAutosize } from "@mui/base";
 
-export default function AddTermModal({ setIsModalOpen }) {
+export default function AddTermModal({ setIsModalOpen, isModalOpen }) {
   // Handle dynamic size for modal start
   const childrenRef = useRef(null);
   const [childHeight, setChildHeight] = useState();
@@ -22,6 +22,14 @@ export default function AddTermModal({ setIsModalOpen }) {
     example: "",
   };
   const [cardData, setCardData] = useState(cardDataSchema);
+
+  // Disable scrollbar after render modal
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isModalOpen]);
 
   return (
     <PortalModalWrapper childrenHeight={childHeight} childrenWidth={childWidth}>

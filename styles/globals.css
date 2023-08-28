@@ -301,29 +301,25 @@ html {
 
 /* Background transition to create animation */
 
-.modal-enter .modalBackground {
-  opacity: 0;
+.modal-enter {
+  background-color: rgba(0, 0, 0, 0);
 }
 
-.modal-enter-active .modalBackground {
+.modal-enter-active {
   transition: all 0.5s;
-  opacity: 0.5;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modal-end .modalBackground {
-  opacity: 0.5;
+.modal-end {
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modal-end-active .modalBackground {
+.modal-end-active {
   transition: all 0.5s;
-  opacity: 0.5;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 /* Transform container to create animation */
-
-.modalContent {
-  position: fixed;
-}
 
 .modal-enter .modalContent {
   opacity: 0;

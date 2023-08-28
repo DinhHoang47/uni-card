@@ -34,22 +34,15 @@ const MuiChipsInputStyled = styled(MuiChipsInput)`
 `;
 
 export default function CollectionDetail({ params }) {
-  // Tags and modal state
-  const [chips, setChips] = useState([]);
+  // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
   const [editCardId, setEditCardId] = useState(null);
 
-  const handleAddChip = (chipValue) => {
-    if (!chips.includes(chipValue)) {
-      setChips([...chips, chipValue]);
-    } else {
-    }
-  };
-  const handleDeleteChip = (chipValue) => {
-    const newChips = [...chips].filter((value) => value !== chipValue);
-    setChips(newChips);
-  };
+  // Handle modal close
+  const popupRef = useRef(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
   useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector("#jss-server-side");
@@ -57,6 +50,7 @@ export default function CollectionDetail({ params }) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }, []);
+  useEffect(() => {});
   return (
     <div className="w-full mt-4 space-y-8 px-2 sm:px-8  relative">
       {/* Section */}
@@ -83,9 +77,9 @@ export default function CollectionDetail({ params }) {
               />
             </div>
             {/* Title & Star & Creator */}
-            <div className="flex flex-col space-y-1 justify-between">
+            <div className=" flex flex-col space-y-1 justify-between">
               {/* Title */}
-              <div className="flex items-center space-x-2">
+              <div className="relative flex items-center space-x-2">
                 <h4 className="font-semibold">Collection title here</h4>
                 <button
                   onClick={() => {
@@ -95,6 +89,24 @@ export default function CollectionDetail({ params }) {
                 >
                   <EditIcon className="fill-indigo-500" />
                 </button>
+                {/* Actions */}
+                <div className="absolute right-0 top-0 translate-x-10 -translate-y-1">
+                  <button
+                    className=" border rounded bg-white"
+                    onClick={() => {
+                      // console.log([popupRef.current]);
+                      popupRef.current.classList.toggle("hidden");
+                    }}
+                  >
+                    <EllipsisHorizontalIcon className="h-8 w-8 text-gray-500" />
+                  </button>
+                  <div
+                    ref={popupRef}
+                    className="hidden absolute bg-white h-10 w-40"
+                  >
+                    Close
+                  </div>
+                </div>
               </div>
               {/* Star*/}
               <button className="flex space-x-1">
@@ -121,13 +133,6 @@ export default function CollectionDetail({ params }) {
             >
               <p>Learn</p>
             </Link>
-          </div>
-          {/* Delete action */}
-          <div className="absolute top-0 right-0">
-            <button onClick={() => {}}>
-              <EllipsisHorizontalIcon className="h-8 w-8 text-gray-500" />
-            </button>
-            <div className="bg-green-500 h-20 w-20 absolute bottom-0 right-0"></div>
           </div>
         </div>
       </div>
