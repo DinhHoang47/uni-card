@@ -7,7 +7,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { TextareaAutosize } from "@mui/base";
 import { MuiChipsInput } from "mui-chips-input";
 
-export default function EditCollectionModal({ setIsOpen }) {
+export default function AddNewCollectionModal({ setIsOpen, handleAddNew }) {
   // Handle dynamic size for modal start
   const childrenRef = useRef(null);
   const [childHeight, setChildHeight] = useState();
@@ -102,17 +102,21 @@ export default function EditCollectionModal({ setIsOpen }) {
           </div>
           {/* Submit button */}
           <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleAddNew();
+            }}
             className="!mt-8 w-full h-10 bg-blue-600 text-white font-semibold rounded-md"
             type="submit"
           >
-            Save
+            Create
           </button>
         </form>
 
         {/* Close btn */}
         <button
-          onClick={() => {
-            console.log("clicked");
+          onClick={(e) => {
+            e.stopPropagation();
             setIsOpen(false);
           }}
           className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-1 border border-gray-300"

@@ -17,7 +17,7 @@ const nextConfig = {
       {
         source: "/",
         destination: "/collections",
-        permanent: true,
+        permanent: true, // this will  tell the browser to cache the default path to /collections
       },
     ];
   },

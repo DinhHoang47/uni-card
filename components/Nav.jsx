@@ -13,7 +13,8 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { BellIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import { open, close } from "@redux/authModalSlice";
-import Auth from "./Auth";
+import AuthModal from "./AuthModal";
+import { CSSTransition } from "react-transition-group";
 
 export default function Nav() {
   // States
@@ -183,6 +184,19 @@ export default function Nav() {
                 className="amber_btn h-10"
               >
                 Sign In
+              </button>
+              <button
+                className="text-blue-500"
+                onClick={() => {
+                  fetch("http://localhost:8080/users/logout", {
+                    method: "GET",
+                    credentials: "include",
+                  })
+                    .then((res) => console.log(res))
+                    .catch((err) => console.log(err));
+                }}
+              >
+                Sign Out (temporary)
               </button>
             </div>
           )}
@@ -396,26 +410,14 @@ export default function Nav() {
         </div>
       </div>
       {/* Auth */}
-      <div className={isOpen ? `` : "invisible"} ref={authContainerRef}>
-        <div
-          onClick={() => dispatch(close())}
-          className={`${
-            isOpen ? "opacity-50" : "opacity-0"
-          } absolute top-0 left-0 w-screen bg-slate-400 h-screen flex items-center justify-center transition-opacity duration-200 ease-in `}
-          ref={authBgRef}
-        ></div>
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-          className={`${
-            isOpen ? "" : "scale-0"
-          } fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ease-in`}
-          ref={authRef}
-        >
-          <Auth />
-        </div>
-      </div>
+      <CSSTransition
+        classNames={"modal"}
+        in={isOpen}
+        timeout={200}
+        unmountOnExit
+      >
+        <AuthModal isOpen={isOpen} />
+      </CSSTransition>
     </div>
   );
 }

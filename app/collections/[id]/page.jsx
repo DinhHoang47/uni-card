@@ -6,7 +6,6 @@ import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/24/outline";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import EditIcon from "@public/assets/icons/EditIcon";
-import { TextareaAutosize } from "@mui/base";
 import { MuiChipsInput } from "mui-chips-input";
 import Link from "next/link";
 import DesktopTermTable from "./components/DesktopTermTable";
@@ -14,6 +13,9 @@ import MobileTermTable from "./components/MobileTermTable";
 import { CSSTransition } from "react-transition-group";
 import AddTermModal from "./components/AddTermModal";
 import EditCollectionModal from "./components/EditCollectionModal";
+import { useRouter } from "next/navigation";
+import { TrashIcon } from "@heroicons/react/24/outline";
+import SettingTooltip from "@components/SettingTooltip";
 
 const MuiChipsInputStyled = styled(MuiChipsInput)`
   & div.MuiInputBase-root {
@@ -38,19 +40,24 @@ export default function CollectionDetail({ params }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
   const [editCardId, setEditCardId] = useState(null);
-
+  const [isOpenPopup, setIsOpenPopup] = useState(false);
   // Handle modal close
   const popupRef = useRef(null);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  useEffect(() => {
-    // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector("#jss-server-side");
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
-    }
-  }, []);
-  useEffect(() => {});
+  // useEffect(() => {
+  //   const closeModal = () => {
+  //     popupRef.current.classList.add("hidden");
+  //     console.log("clicked");
+  //   };
+  //   console.log("rerender");
+  //   window.addEventListener("click", closeModal, false);
+  //   return () => window.removeEventListener("click", closeModal);
+  // }, []);
+
+  // Handle delete collection
+  const handleDelete = () => {
+    window.confirm("Are you sure to delete this collection.");
+  };
   return (
     <div className="w-full mt-4 space-y-8 px-2 sm:px-8  relative">
       {/* Section */}
@@ -92,20 +99,20 @@ export default function CollectionDetail({ params }) {
                 {/* Actions */}
                 <div className="absolute right-0 top-0 translate-x-10 -translate-y-1">
                   <button
-                    className=" border rounded bg-white"
-                    onClick={() => {
-                      // console.log([popupRef.current]);
-                      popupRef.current.classList.toggle("hidden");
+                    className=""
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsOpenPopup((pre) => !pre);
                     }}
                   >
-                    <EllipsisHorizontalIcon className="h-8 w-8 text-gray-500" />
+                    <EllipsisHorizontalIcon className="h-8 w-8 text-gray-500 hover:text-gray-700" />
                   </button>
-                  <div
-                    ref={popupRef}
-                    className="hidden absolute bg-white h-10 w-40"
-                  >
-                    Close
-                  </div>
+                  {isOpenPopup && (
+                    <SettingTooltip
+                      setIsOpenPopup={setIsOpenPopup}
+                      handleDelete={handleDelete}
+                    />
+                  )}
                 </div>
               </div>
               {/* Star*/}
@@ -144,7 +151,7 @@ export default function CollectionDetail({ params }) {
             <p className="font-semibold">Description</p>
             <button
               onClick={() => {
-                setIsCollectionModalOpen(true);
+                isModalOpen(true);
               }}
               className=""
             >
@@ -220,9 +227,7 @@ export default function CollectionDetail({ params }) {
         timeout={200}
         unmountOnExit
       >
-        <EditCollectionModal
-          setIsCollectionModalOpen={setIsCollectionModalOpen}
-        />
+        <EditCollectionModal setIsOpen={setIsCollectionModalOpen} />
       </CSSTransition>
     </div>
   );
