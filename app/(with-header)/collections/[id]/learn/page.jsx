@@ -5,8 +5,8 @@ import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 import SelectSectionButton from "@components/SelectSectionButton";
-import CardLearn from "@app/collections/[id]/learn/CardLearn";
-import MobilePlayground from "@app/collections/[id]/learn/MobilePlayground";
+import CardLearn from "./CardLearn";
+import MobilePlayground from "./MobilePlayground";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import SettingModal from "./components/SettingModal";

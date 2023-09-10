@@ -1,4 +1,5 @@
 import { connectToDB } from "@utils/database";
+import * as api from "@app/api/index.js";
 import User from "@models/user";
 import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
@@ -18,60 +19,30 @@ const handler = NextAuth({
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
-        password: { label: "Password", type: "password" },
+        email: { label: "Email", type: "email", placeholder: "Email" },
+        password: {
+          label: "Password",
+          type: "password",
+          placeholder: "Password",
+        },
       },
       async authorize(credentials, req) {
-        // You need to provide your own logic here that takes the credentials
-        // submitted and returns either a object representing a user or value
-        // that is false/null if the credentials are invalid.
-        // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
-        // You can also use the `req` object to obtain additional parameters
-        // (i.e., the request IP address)
-        const res = await fetch("/your/endpoint", {
-          method: "POST",
-          body: JSON.stringify(credentials),
-          headers: { "Content-Type": "application/json" },
-        });
-        const user = await res.json();
-
-        // If no error and we have user data, return it
-        if (res.ok && user) {
+        const { email, password } = credentials;
+        if (!email || !password) return null;
+        console.log("credentials: ", credentials);
+        const result = await api.SignIn({ email, password });
+        const user = result?.data;
+        console.log("user: ", user);
+        if (user) {
           return user;
+        } else {
+          return null;
         }
-        // Return null if user data could not be retrieved
-        return null;
       },
     }),
   ],
-  callbacks: {
-    async session({ session }) {
-      // store the user id from MongoDB to session
-      const sessionUser = await User.findOne({ email: session.user.email });
-      session.user.id = sessionUser._id.toString();
-
-      return session;
-    },
-    async signIn({ account, profile, user, credentials }) {
-      try {
-        await connectToDB();
-
-        // Check if user already exists
-        const userExists = await User.findOne({ email: profile.email });
-        // If not, create a new document and save user in MongoDB
-        if (!userExists) {
-          await User.create({
-            email: profile.email,
-            username: profile.name.replace(/\s/g, "").toLowerCase(),
-            image: profile.picture,
-          });
-        }
-        return true;
-      } catch (error) {
-        console.log("Error checking if user exists: ", error.message);
-        return false;
-      }
-    },
+  session: {
+    strategy: "jwt",
   },
 });
 

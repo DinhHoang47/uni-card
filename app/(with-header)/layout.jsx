@@ -1,7 +1,7 @@
 import Footer from "@components/Footer";
 import Nav from "@components/Nav";
-import AuthProvider from "@components/Provider";
 import { Providers } from "@redux/provider";
+import { ClerkProvider } from "@clerk/nextjs";
 
 import "@styles/globals.css";
 
@@ -15,7 +15,7 @@ export default async function RootLayout(props) {
     <html lang="en">
       <body>
         <Providers>
-          <AuthProvider>
+          <ClerkProvider>
             <div className="main">
               <div className="primary-blue-bg"></div>
             </div>
@@ -25,7 +25,7 @@ export default async function RootLayout(props) {
               {props.children}
               <Footer />
             </main>
-          </AuthProvider>
+          </ClerkProvider>
         </Providers>
       </body>
     </html>

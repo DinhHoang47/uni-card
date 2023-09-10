@@ -135,7 +135,7 @@ export default function CollectionDetail({ params }) {
           {/* Action Button */}
           <div className="flex justify-end items-end">
             <Link
-              href={`/collections/${params.id}/learn`}
+              href={`/learning/${params.id}`}
               className="px-4 h-10 w-full sm:w-24 rounded-md bg-blue-600 text-white flex items-center justify-center"
             >
               <p>Learn</p>

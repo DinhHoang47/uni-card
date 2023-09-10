@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { logIn } from "@actions/user";
+
 import {
   ExclamationCircleIcon,
   EyeIcon,
@@ -8,14 +11,13 @@ import {
 } from "@heroicons/react/24/outline";
 import Spinner from "@public/assets/icons/spinner";
 
-import * as api from "../app/api";
-
 const EMAIL_REGEX = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/;
 
 export default function SignInForm({ mode, setAuthMode }) {
   const [showPassword, setShowPassword] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   // State for input element
 
@@ -42,26 +44,8 @@ export default function SignInForm({ mode, setAuthMode }) {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    setLoading(true);
     const credential = { email, password: pwd };
-    try {
-      const response = await api.SignIn(credential);
-      console.log(response);
-      setLoading(false);
-    } catch (error) {
-      if (!error?.response) {
-        setErrMsg("No server response");
-      } else if (
-        error.response?.status === 400 ||
-        error.response?.status === 404 ||
-        error.response?.status === 401
-      ) {
-        setErrMsg(error.response?.data.message);
-      } else {
-        setErrMsg("Sign in failed");
-      }
-      setLoading(false);
-    }
+    dispatch(logIn(credential, setLoading, setErrMsg));
   };
 
   return (
@@ -117,6 +101,7 @@ export default function SignInForm({ mode, setAuthMode }) {
             name="password"
             aria-label="Password"
             required
+            autoComplete="on"
           />
           <div
             onClick={() => {

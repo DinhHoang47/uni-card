@@ -15,16 +15,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { open, close } from "@redux/authModalSlice";
 import AuthModal from "./AuthModal";
 import { CSSTransition } from "react-transition-group";
+import { useClerk, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export default function Nav() {
   // States
-  const { data: session, status } = useSession();
-  const [providers, setProviders] = useState(null);
-  const [mobileNotiDropdown, setMobileNotiDropdown] = useState(false);
   const [currentPath, setCurrentPath] = useState("");
   const [searchValue, setSearchValue] = useState("");
   // Redux store
-  const dispatch = useDispatch();
   const isOpen = useSelector((state) => state.authModal.isOpen);
 
   // Ref for menu sidebar
@@ -74,14 +71,6 @@ export default function Nav() {
     }
   }, [pathname]);
 
-  useEffect(() => {
-    const setupProviders = async () => {
-      const response = await getProviders();
-      setProviders(response);
-    };
-    setupProviders();
-  }, []);
-
   // Open Menu
 
   const toggleSidebar = () => {
@@ -93,6 +82,10 @@ export default function Nav() {
   const toggleSearchModal = () => {
     searchContainerRef.current.classList.toggle("invisible");
   };
+
+  // Clerk authenticate
+
+  const { openSignIn } = useClerk();
 
   return (
     <div
@@ -155,51 +148,17 @@ export default function Nav() {
         </div>
         {/* Desktop Navigation */}
         <div className="hidden sm:flex mr-2 ">
-          {session?.user ? (
-            <div className="flex space-x-2">
-              <button className="create_btn text-blue-700 hover:text-white ">
-                <PlusIcon className="h-7 w-7 " />
-              </button>
-              <Link href={"/profile"}>
-                <Image
-                  alt="profile"
-                  src={session?.user?.image}
-                  width={37}
-                  height={37}
-                  className="rounded-full"
-                />
-              </Link>
-              <button className="gray_btn" onClick={signOut}>
-                Log out
-              </button>
-            </div>
-          ) : (
-            <div className="flex space-x-4">
-              <button
-                type="button"
-                onClick={() => {
-                  // signIn();
-                  dispatch(open());
-                }}
-                className="amber_btn h-10"
-              >
-                Sign In
-              </button>
-              <button
-                className="text-blue-500"
-                onClick={() => {
-                  fetch("http://localhost:8080/users/logout", {
-                    method: "GET",
-                    credentials: "include",
-                  })
-                    .then((res) => console.log(res))
-                    .catch((err) => console.log(err));
-                }}
-              >
-                Sign Out (temporary)
-              </button>
-            </div>
-          )}
+          <SignedIn>
+            <UserButton afterSignOutUrl="/collections" />
+          </SignedIn>
+          <SignedOut>
+            <button
+              onClick={() => openSignIn({})}
+              className="px-5 font-semibold bg-amber-400 h-10 rounded"
+            >
+              Sign In
+            </button>
+          </SignedOut>
         </div>
         {/* Mobile Navigation */}
         <div className="sm:hidden flex relative space-x-2 mr-2">
@@ -209,50 +168,6 @@ export default function Nav() {
           >
             <MagnifyingGlassIcon className="h-6 w-6  " />
           </div>
-          {session?.user ? (
-            <div className="flex space-x-2 relative">
-              <button className="create_btn text-blue-700 hover:text-white">
-                <PlusIcon className="h-7 w-7" />
-              </button>
-              <button
-                onClick={toggleMobileNotification}
-                className="create_btn text-blue-700 hover:text-white"
-              >
-                <BellIcon className="h-6 w-6" />
-              </button>
-              {/* Mobile Notification */}
-              {/* Background */}
-              {mobileNotiDropdown && (
-                <div
-                  onClick={toggleMobileNotification}
-                  className="fixed top-16 left-0 w-screen h-screen bg-transparent"
-                ></div>
-              )}
-              {mobileNotiDropdown && (
-                <div className="absolute top-14 -left-64 rounded w-80 px-4 pt-2 pb-4  bg-white drop-shadow">
-                  {/* Triangle */}
-                  <div className="absolute -top-3 right-0  border-b-white w-0 h-0  border-l-[8px] border-l-transparent border-r-transparent border-r-[8px] border-b-[16px] "></div>
-                  <ul className="">
-                    <li className="py-2 text-center">No notifications yet </li>
-                  </ul>
-                </div>
-              )}
-            </div>
-          ) : (
-            <>
-              {providers && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    dispatch(open());
-                  }}
-                  className="amber_btn"
-                >
-                  Sign In
-                </button>
-              )}
-            </>
-          )}
         </div>
       </nav>
       {/* Right Sidebar */}
@@ -276,107 +191,6 @@ export default function Nav() {
               <XMarkIcon className="h-6 w-6 text-gray-500" />
             </button>
           </div>
-          {session?.user ? (
-            <>
-              <ul className="space-y-5 font-semibold text-gray-400">
-                <li
-                  className={`flex items-center mobile_menu_item h-10 ${
-                    currentPath === "/collections" ? "active" : ""
-                  }`}
-                >
-                  <button
-                    onClick={() => {
-                      toggleSidebar();
-                      router.push("/collections");
-                    }}
-                  >
-                    Collections
-                  </button>
-                </li>
-                <li
-                  className={`flex items-center mobile_menu_item h-10 ${
-                    currentPath === "/mypage" ? "active" : ""
-                  }`}
-                >
-                  <button
-                    onClick={() => {
-                      toggleSidebar();
-                      router.push("/mypage");
-                    }}
-                  >
-                    My Page
-                  </button>
-                </li>
-              </ul>
-              <div className="">
-                <div className="user_profile w-full mt-4 flex items-center space-x-2 ">
-                  <Image
-                    alt="profile-picture"
-                    width={40}
-                    height={40}
-                    className="rounded-full"
-                    src={session?.user?.image}
-                  />
-                  <div className="w-full">
-                    <p className="break-words w-full">{session?.user?.email}</p>
-                    <p className="break-words w-full text-gray-400">
-                      {session?.user?.name}
-                    </p>
-                  </div>
-                </div>
-                <button
-                  className="mt-4 w-full h-10 border rounded font-semibold text-gray-400"
-                  onClick={signOut}
-                >
-                  Logout
-                </button>
-              </div>
-            </>
-          ) : (
-            <>
-              <ul className=" space-y-5 font-semibold text-gray-400">
-                <li
-                  className={`mt-4 flex items-center mobile_menu_item h-10 ${
-                    currentPath === "/collections" ? "active" : ""
-                  }`}
-                >
-                  <button
-                    onClick={() => {
-                      toggleSidebar();
-                      router.push("/collections");
-                    }}
-                  >
-                    Collections
-                  </button>
-                </li>
-                <li
-                  className={`flex items-center mobile_menu_item h-10 ${
-                    currentPath === "/mypage" ? "active" : ""
-                  }`}
-                >
-                  <button
-                    onClick={() => {
-                      toggleSidebar();
-                      router.push("/mypage");
-                    }}
-                  >
-                    My Page
-                  </button>
-                </li>
-              </ul>
-              <div className="">
-                <button
-                  onClick={() => {
-                    toggleSidebar();
-                    dispatch(open());
-                  }}
-                  className="w-full h-10 mt-4 rounded bg-amber-400 border-gray-300 font-semibold"
-                >
-                  Sign In
-                </button>
-              </div>
-            </>
-          )}
         </div>
       </div>
       {/* Search Modal*/}
