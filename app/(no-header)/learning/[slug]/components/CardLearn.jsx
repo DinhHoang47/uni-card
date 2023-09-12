@@ -1,12 +1,13 @@
 "use client";
 import { useState } from "react";
 import ReactCardFlip from "react-card-flip";
+import styles from "./styles.module.css";
 
 export default function CardLearn() {
   const [isFlipped, setIsFlipped] = useState(false);
   const haveDefine2 = true;
   return (
-    <div className="h-40 rounded-lg cursor-pointer">
+    <div className="h-40 rounded-lg cursor-pointer ">
       <ReactCardFlip
         flipDirection="vertical"
         isFlipped={isFlipped}
@@ -17,19 +18,21 @@ export default function CardLearn() {
           onClick={() => {
             setIsFlipped((pre) => !pre);
           }}
-          className="rounded-lg h-full bg-white flex items-center justify-center p-10 border border-slate-400"
+          className={`relative overflow-hidden rounded-lg h-full bg-white flex items-center justify-center p-10 border border-slate-400 `}
         >
-          <div className="text-4xl">漢字</div>
-          <div className="absolute bottom-0 right-0 -translate-x-1 ">
-            <p className="text-xs text-gray-400">Flip</p>
-          </div>
+          <div className="text-xl">漢字</div>
+          {/* Testing status tag */}
+          <div
+            status={"failed"}
+            className={`${styles.statusFlag} absolute bottom-0 right-0 rotate-45 translate-x-1/2 translate-y-1/2 w-5 h-5 bg-red-500`}
+          ></div>
         </div>
         {/* Back */}
         <div
           onClick={() => {
             setIsFlipped((pre) => !pre);
           }}
-          className="relative w-full h-full rounded bg-white p-2 border border-slate-400"
+          className="relative overflow-hidden w-full h-full rounded bg-white p-2 border border-slate-400"
         >
           {/* Back side background */}
           <div
@@ -49,7 +52,7 @@ export default function CardLearn() {
           >
             {haveDefine2 ? (
               <div className=" text-gray-700 bg-white bg-opacity-90">
-                <p className="text-center text-xl">KANJI</p>
+                <p className="text-center">KANJI</p>
               </div>
             ) : (
               <></>
@@ -60,13 +63,9 @@ export default function CardLearn() {
                 haveDefine2 ? "pb-4" : ""
               } `}
             >
-              <p className="text-center text-2xl font-semibold">Meaning</p>
+              <p className="text-center font-semibold">Meaning</p>
               <p className="text-center text-sm">Example</p>
             </div>
-          </div>
-          {/* Status */}
-          <div className="absolute bottom-0 right-0 -translate-x-1 ">
-            <p className="text-xs text-gray-400">Flip</p>
           </div>
         </div>
       </ReactCardFlip>

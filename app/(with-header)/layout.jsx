@@ -15,7 +15,7 @@ export default async function RootLayout(props) {
     <html lang="en">
       <body>
         <Providers>
-          <ClerkProvider>
+          <ClerkProvider {...props}>
             <div className="main">
               <div className="primary-blue-bg"></div>
             </div>

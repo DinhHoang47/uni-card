@@ -3,7 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
-import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
@@ -16,6 +15,7 @@ import { open, close } from "@redux/authModalSlice";
 import AuthModal from "./AuthModal";
 import { CSSTransition } from "react-transition-group";
 import { useClerk, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import styles from "./styles.module.css";
 
 export default function Nav() {
   // States
@@ -107,14 +107,30 @@ export default function Nav() {
             >
               <p className=" ">Collections</p>
             </Link>
-            <Link
-              href="/mypage"
-              className={`flex items-center menu_item ${
-                currentPath === "/mypage" ? "active" : ""
-              }`}
-            >
-              <p className="">My Page</p>
-            </Link>
+            {
+              <>
+                <SignedIn>
+                  <Link
+                    href="/mypage"
+                    className={`flex items-center menu_item ${
+                      currentPath === "/mypage" ? "active" : ""
+                    }`}
+                  >
+                    <p className="">My Page</p>
+                  </Link>
+                </SignedIn>
+                <SignedOut>
+                  <button
+                    onClick={() => openSignIn({ afterSignInUrl: "/mypage" })}
+                    className={`flex items-center menu_item ${
+                      currentPath === "/mypage" ? "active" : ""
+                    }`}
+                  >
+                    <p className="">My Page</p>
+                  </button>
+                </SignedOut>
+              </>
+            }
           </div>
         </div>
         {/* Mobile Menu */}
@@ -149,11 +165,18 @@ export default function Nav() {
         {/* Desktop Navigation */}
         <div className="hidden sm:flex mr-2 ">
           <SignedIn>
-            <UserButton afterSignOutUrl="/collections" />
+            <UserButton
+              appearance={{
+                elements: {
+                  avatarBox: "h-10 w-10",
+                },
+              }}
+              afterSignOutUrl={pathname}
+            />
           </SignedIn>
           <SignedOut>
             <button
-              onClick={() => openSignIn({})}
+              onClick={() => openSignIn({ redirectUrl: pathname })}
               className="px-5 font-semibold bg-amber-400 h-10 rounded"
             >
               Sign In
@@ -167,6 +190,32 @@ export default function Nav() {
             className="h-10 w-10 flex items-center justify-center border  text-gray-400 border-gray-300 rounded-full hover:border-gray-400 hover:text-gray-500  hover:transition-all hover:duration-300 cursor-pointer"
           >
             <MagnifyingGlassIcon className="h-6 w-6  " />
+          </div>
+          <div className="flex items-center justify-center">
+            <SignedIn>
+              <UserButton
+                appearance={{
+                  elements: {
+                    avatarBox: "h-10 w-10",
+                  },
+                }}
+                afterSignOutUrl={pathname}
+              />
+            </SignedIn>
+            <SignedOut>
+              <button
+                onClick={() =>
+                  openSignIn({
+                    afterSignUpUrl: pathname,
+                    afterSignInUrl: pathname,
+                    redirectUrl: pathname,
+                  })
+                }
+                className={`px-5 font-semibold bg-amber-400 h-10 rounded `}
+              >
+                Sign In
+              </button>
+            </SignedOut>
           </div>
         </div>
       </nav>

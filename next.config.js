@@ -12,15 +12,6 @@ const nextConfig = {
       },
     ],
   },
-  // async redirects() {
-  //   return [
-  //     {
-  //       source: "/",
-  //       destination: "/collections",
-  //       permanent: true, // this will  tell the browser to cache the default path to /collections
-  //     },
-  //   ];
-  // },
 };
 
 module.exports = nextConfig;

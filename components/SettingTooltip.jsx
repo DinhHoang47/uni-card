@@ -3,10 +3,8 @@ import { useEffect } from "react";
 
 export default function SettingTooltip({ setIsOpenPopup, handleDelete }) {
   useEffect(() => {
-    console.log("rendered");
     const closeThisPopup = () => {
       setIsOpenPopup(false);
-      console.log("clicked");
     };
     window.addEventListener("click", closeThisPopup, false);
     return () => window.removeEventListener("click", closeThisPopup);

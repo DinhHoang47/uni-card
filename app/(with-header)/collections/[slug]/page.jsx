@@ -16,6 +16,7 @@ import EditCollectionModal from "./components/EditCollectionModal";
 import { useRouter } from "next/navigation";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import SettingTooltip from "@components/SettingTooltip";
+import { SignedIn, SignedOut, useClerk } from "@clerk/nextjs";
 
 const MuiChipsInputStyled = styled(MuiChipsInput)`
   & div.MuiInputBase-root {
@@ -44,20 +45,12 @@ export default function CollectionDetail({ params }) {
   // Handle modal close
   const popupRef = useRef(null);
 
-  // useEffect(() => {
-  //   const closeModal = () => {
-  //     popupRef.current.classList.add("hidden");
-  //     console.log("clicked");
-  //   };
-  //   console.log("rerender");
-  //   window.addEventListener("click", closeModal, false);
-  //   return () => window.removeEventListener("click", closeModal);
-  // }, []);
-
   // Handle delete collection
   const handleDelete = () => {
     window.confirm("Are you sure to delete this collection.");
   };
+
+  const { openSignIn } = useClerk();
   return (
     <div className="w-full mt-4 space-y-8 px-2 sm:px-8  relative">
       {/* Section */}
@@ -134,12 +127,24 @@ export default function CollectionDetail({ params }) {
           </div>
           {/* Action Button */}
           <div className="flex justify-end items-end">
-            <Link
-              href={`/learning/${params.id}`}
-              className="px-4 h-10 w-full sm:w-24 rounded-md bg-blue-600 text-white flex items-center justify-center"
-            >
-              <p>Learn</p>
-            </Link>
+            <SignedIn>
+              <Link
+                href={`/learning/${params.slug}`}
+                className="px-4 h-10 w-full sm:w-24 rounded-md bg-blue-600 text-white flex items-center justify-center"
+              >
+                <p>Learn</p>
+              </Link>
+            </SignedIn>
+            <SignedOut>
+              <button
+                onClick={() =>
+                  openSignIn({ redirectUrl: `/learning/${params.slug}` })
+                }
+                className="px-4 h-10 w-full sm:w-24 rounded-md bg-blue-600 text-white flex items-center justify-center"
+              >
+                <p>Learn</p>
+              </button>
+            </SignedOut>
           </div>
         </div>
       </div>
@@ -179,12 +184,8 @@ export default function CollectionDetail({ params }) {
             </button>
           </div>
           <ul className="flex space-x-2">
-            <li className="bg-white px-2 rounded shadow-sm bg-blue-100">
-              #Tag1
-            </li>
-            <li className="bg-white px-2 rounded shadow-sm bg-blue-100">
-              #Tag2
-            </li>
+            <li className=" px-2 rounded shadow-sm bg-blue-100">#Tag1</li>
+            <li className=" px-2 rounded shadow-sm bg-blue-100">#Tag2</li>
           </ul>
         </div>
       </div>
