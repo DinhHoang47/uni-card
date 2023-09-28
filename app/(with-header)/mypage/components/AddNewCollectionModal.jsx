@@ -59,7 +59,7 @@ export default function AddNewCollectionModal({ setIsOpen, handleAddNew }) {
         <form className="space-y-2">
           {/* Collection title */}
           <div className="space-y-1 ">
-            <label className="">Title</label>
+            <label className="font-semibold">Title</label>
             <input
               placeholder="漢字"
               className="w-full border-b-2 px-2  resize-none focus:border-blue-300 focus:outline-none bg-transparent border-gray-300"
@@ -67,7 +67,7 @@ export default function AddNewCollectionModal({ setIsOpen, handleAddNew }) {
           </div>
           {/* Description max length 100 */}
           <div className="space-y-1 ">
-            <label className="">Description</label>
+            <label className="font-semibold">Description</label>
             <TextareaAutosize
               placeholder="Example"
               onChange={() => {}}
@@ -79,7 +79,7 @@ export default function AddNewCollectionModal({ setIsOpen, handleAddNew }) {
           </div>
           {/* Tags */}
           <div className="space-y-1 ">
-            <label className="">Tags</label>
+            <label className="font-semibold">Tags</label>
             <MuiChipsInputStyled
               id="my-mui-chipsinput"
               hideClearAll={true}

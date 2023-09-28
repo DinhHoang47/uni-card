@@ -10,6 +10,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "api.multiavatar.com",
       },
+      {
+        protocol: "https",
+        hostname: "img.clerk.com",
+      },
     ],
   },
 };

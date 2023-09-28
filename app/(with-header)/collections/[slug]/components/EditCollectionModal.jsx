@@ -112,7 +112,6 @@ export default function EditCollectionModal({ setIsOpen }) {
         {/* Close btn */}
         <button
           onClick={() => {
-            console.log("clicked");
             setIsOpen(false);
           }}
           className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-1 border border-gray-300"

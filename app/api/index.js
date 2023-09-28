@@ -19,3 +19,13 @@ export const SignIn = (credential) => {
 export const getCollection = (id) => {
   return API.get(`collections/${id}`);
 };
+
+export const testRoute = (token) => {
+  return API.get("test", {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      mode: "cors",
+    },
+  });
+};

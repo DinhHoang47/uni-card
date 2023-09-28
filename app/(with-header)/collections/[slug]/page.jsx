@@ -1,40 +1,17 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import styled from "@emotion/styled";
 import Image from "next/image";
-import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/24/outline";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
-import EditIcon from "@public/assets/icons/EditIcon";
-import { MuiChipsInput } from "mui-chips-input";
 import Link from "next/link";
 import DesktopTermTable from "./components/DesktopTermTable";
 import MobileTermTable from "./components/MobileTermTable";
 import { CSSTransition } from "react-transition-group";
 import AddTermModal from "./components/AddTermModal";
 import EditCollectionModal from "./components/EditCollectionModal";
-import { useRouter } from "next/navigation";
-import { TrashIcon } from "@heroicons/react/24/outline";
 import SettingTooltip from "@components/SettingTooltip";
 import { SignedIn, SignedOut, useClerk } from "@clerk/nextjs";
-
-const MuiChipsInputStyled = styled(MuiChipsInput)`
-  & div.MuiInputBase-root {
-    margin: 0;
-    padding: 0;
-    border-bottom: 2px solid #d1d5db;
-    border-radius: 0;
-    &:focus-within {
-      border-bottom: 2px solid #93c5fd;
-    }
-  }
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  & fieldset {
-    border: none;
-  }
-`;
+import { publicCollectionServ } from "@services/PublicCollectionService";
 
 export default function CollectionDetail({ params }) {
   // Modal state
@@ -42,26 +19,32 @@ export default function CollectionDetail({ params }) {
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
   const [editCardId, setEditCardId] = useState(null);
   const [isOpenPopup, setIsOpenPopup] = useState(false);
-  // Handle modal close
-  const popupRef = useRef(null);
 
+  console.log(params);
   // Handle delete collection
   const handleDelete = () => {
     window.confirm("Are you sure to delete this collection.");
   };
+
+  // Fetch data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await publicCollectionServ.getCollectionDetail(
+          params.slug
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const { openSignIn } = useClerk();
   return (
     <div className="w-full mt-4 space-y-8 px-2 sm:px-8  relative">
       {/* Section */}
       <div className="w-full space-y-4">
-        {/* Title */}
-        <div className="">
-          <button className="flex items-center">
-            <ChevronLeftIcon className="h-4 w-4 text-sm" />
-            <span className="">All collections</span>
-          </button>
-        </div>
         {/* Container */}
         <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-8">
           {/* Collection Info */}
@@ -81,14 +64,15 @@ export default function CollectionDetail({ params }) {
               {/* Title */}
               <div className="relative flex items-center space-x-2">
                 <h4 className="font-semibold">Collection title here</h4>
-                <button
+                {/* Edit button */}
+                {/* <button
                   onClick={() => {
                     setIsCollectionModalOpen(true);
                   }}
                   className=""
                 >
                   <EditIcon className="fill-indigo-500" />
-                </button>
+                </button> */}
                 {/* Actions */}
                 <div className="absolute right-0 top-0 translate-x-10 -translate-y-1">
                   <button
@@ -102,6 +86,7 @@ export default function CollectionDetail({ params }) {
                   </button>
                   {isOpenPopup && (
                     <SettingTooltip
+                      setIsEditModalOpen={setIsCollectionModalOpen}
                       setIsOpenPopup={setIsOpenPopup}
                       handleDelete={handleDelete}
                     />
@@ -154,14 +139,6 @@ export default function CollectionDetail({ params }) {
         <div className="flex flex-col">
           <div className="flex items-center space-x-2">
             <p className="font-semibold">Description</p>
-            <button
-              onClick={() => {
-                isModalOpen(true);
-              }}
-              className=""
-            >
-              <EditIcon className="fill-indigo-500" />
-            </button>
           </div>
           <div className="grow">
             <p>
@@ -174,14 +151,6 @@ export default function CollectionDetail({ params }) {
         <div className="">
           <div className="flex items-center space-x-2">
             <p className="font-semibold">Tags</p>
-            <button
-              onClick={() => {
-                setIsCollectionModalOpen(true);
-              }}
-              className=""
-            >
-              <EditIcon className="fill-indigo-500" />
-            </button>
           </div>
           <ul className="flex space-x-2">
             <li className=" px-2 rounded shadow-sm bg-blue-100">#Tag1</li>

@@ -18,7 +18,6 @@ export default function CollectionLearn({ params }) {
   const [isOpenPopup, setIsOpenPopup] = useState(false);
 
   const handleTest = () => {
-    console.log(params);
     setIsOpen(true);
   };
   return (
@@ -104,7 +103,11 @@ export default function CollectionLearn({ params }) {
         timeout={200}
         unmountOnExit
       >
-        <SettingModal isOpen={isOpen} setIsOpen={setIsOpen} />
+        <SettingModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          slug={params.slug}
+        />
       </CSSTransition>
     </div>
   );

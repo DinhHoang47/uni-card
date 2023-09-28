@@ -1,8 +1,8 @@
 "use client";
+import AddNewCollectionModal from "@components/AddNewCollectionModal";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import AddNewCollectionModal from "./AddNewCollectionModal";
 
 export default function AddNew() {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,10 +27,7 @@ export default function AddNew() {
         timeout={200}
         unmountOnExit
       >
-        <AddNewCollectionModal
-          handleAddNew={handleAddNew}
-          setIsOpen={setIsOpen}
-        />
+        <AddNewCollectionModal setIsOpen={setIsOpen} />
       </CSSTransition>
     </div>
   );

@@ -1,21 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { Bars4Icon } from "@heroicons/react/24/solid";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import { BellIcon } from "@heroicons/react/24/outline";
-import { useDispatch, useSelector } from "react-redux";
-import { open, close } from "@redux/authModalSlice";
+import { useSelector } from "react-redux";
 import AuthModal from "./AuthModal";
 import { CSSTransition } from "react-transition-group";
 import { useClerk, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import styles from "./styles.module.css";
+import RightSidebar from "./RightSidebar";
+import AddNewCollectionModal from "./AddNewCollectionModal";
 
 export default function Nav() {
   // States
@@ -30,10 +27,6 @@ export default function Nav() {
   const menuRef = useRef();
   // Ref for searchbar
   const searchContainerRef = useRef();
-  // Ref for auth modal
-  const authContainerRef = useRef();
-  const authBgRef = useRef();
-  const authRef = useRef();
   // Route
   const router = useRouter();
   const pathname = usePathname();
@@ -86,6 +79,10 @@ export default function Nav() {
   // Clerk authenticate
 
   const { openSignIn } = useClerk();
+
+  // Add new collection
+
+  const [isAddNewOpen, setIsAddNewOpen] = useState(false);
 
   return (
     <div
@@ -163,8 +160,16 @@ export default function Nav() {
           </div>
         </div>
         {/* Desktop Navigation */}
-        <div className="hidden sm:flex mr-2 ">
+        <div className="hidden sm:flex mr-2 space-x-2">
           <SignedIn>
+            <button
+              onClick={() => {
+                setIsAddNewOpen(true);
+              }}
+              className="create_btn text-blue-700 hover:text-white "
+            >
+              <PlusIcon className="h-7 w-7 " />
+            </button>
             <UserButton
               appearance={{
                 elements: {
@@ -191,8 +196,16 @@ export default function Nav() {
           >
             <MagnifyingGlassIcon className="h-6 w-6  " />
           </div>
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center space-x-2">
             <SignedIn>
+              <button
+                onClick={() => {
+                  setIsAddNewOpen(true);
+                }}
+                className="create_btn text-blue-700 hover:text-white "
+              >
+                <PlusIcon className="h-7 w-7 " />
+              </button>
               <UserButton
                 appearance={{
                   elements: {
@@ -220,28 +233,14 @@ export default function Nav() {
         </div>
       </nav>
       {/* Right Sidebar */}
-      <div className="mobile_side_bar invisible inset-0" ref={containerRef}>
-        {/* Background */}
-        <div
-          onClick={toggleSidebar}
-          ref={bgRef}
-          className="opacity-0 duration-500 ease-out transition-all  flex absolute top-0 left-0 bg-slate-400 h-screen w-screen"
-        ></div>
-        {/* Overlayer */}
-        <div
-          ref={menuRef}
-          className="-translate-x-full duration-300 ease-out transition-all max-w-xs flex flex-col divide-y space-y-4 absolute top-0 left-0 w-2/3 h-screen bg-white px-2 pt-2"
-        >
-          <div className="flex justify-end">
-            <button
-              className="flex items-center justify-center h-10 w-10 rounded-full border border-gray-300"
-              onClick={toggleSidebar}
-            >
-              <XMarkIcon className="h-6 w-6 text-gray-500" />
-            </button>
-          </div>
-        </div>
-      </div>
+      <RightSidebar
+        containerRef={containerRef}
+        bgRef={bgRef}
+        toggleSidebar={toggleSidebar}
+        menuRef={menuRef}
+        currentPath={currentPath}
+        pathname={pathname}
+      />
       {/* Search Modal*/}
       <div
         onClick={toggleSearchModal}
@@ -280,6 +279,15 @@ export default function Nav() {
         unmountOnExit
       >
         <AuthModal isOpen={isOpen} />
+      </CSSTransition>
+      {/* New collection */}
+      <CSSTransition
+        classNames={"modal"}
+        in={isAddNewOpen}
+        timeout={200}
+        unmountOnExit
+      >
+        <AddNewCollectionModal setIsOpen={setIsAddNewOpen} router={router} />
       </CSSTransition>
     </div>
   );
