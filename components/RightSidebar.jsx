@@ -1,5 +1,3 @@
-import { SignedIn, SignedOut, SignOutButton, useClerk } from "@clerk/nextjs";
-import { useUser } from "@clerk/nextjs";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -15,8 +13,6 @@ export default function RightSidebar({
   pathname,
 }) {
   const router = useRouter();
-  const { user } = useUser();
-  const { openSignIn } = useClerk();
   return (
     <div className="mobile_side_bar invisible inset-0" ref={containerRef}>
       {/* Background */}
@@ -70,44 +66,38 @@ export default function RightSidebar({
             </button>
           </li>
         </ul>
-        <SignedIn>
-          <div className="relative flex flex-col space-y-4">
-            <div className="flex items-center space-x-2">
-              <Image
-                className="rounded-full"
-                width={40}
-                height={40}
-                alt={"userImage"}
-                src={user?.imageUrl || "/assets/images/user.png"}
-              />
-              <div className="">
-                <p>{user?.fullName}</p>
-                <p>{user?.emailAddresses[0].emailAddress}</p>
-              </div>
+        <div className="relative flex flex-col space-y-4">
+          <div className="flex items-center space-x-2">
+            <Image
+              className="rounded-full"
+              width={40}
+              height={40}
+              alt={"userImage"}
+              src={"/assets/images/user.png"}
+            />
+            <div className="">
+              <p>User name</p>
+              <p>Email address</p>
             </div>
-            <SignOutButton>
-              <button
-                onClick={() => {
-                  toggleSidebar();
-                }}
-                className="w-full h-10 border border-gray-200 rounded-md font-semibold"
-              >
-                Sign out
-              </button>
-            </SignOutButton>
           </div>
-        </SignedIn>
-        <SignedOut>
           <button
             onClick={() => {
               toggleSidebar();
-              openSignIn({ redirectUrl: pathname });
             }}
-            className="w-full rounded-md h-10 font-semibold bg-amber-400"
+            className="w-full h-10 border border-gray-200 rounded-md font-semibold"
           >
-            Sign In
+            Sign out
           </button>
-        </SignedOut>
+        </div>
+        <button
+          onClick={() => {
+            toggleSidebar();
+            openSignIn({ redirectUrl: pathname });
+          }}
+          className="w-full rounded-md h-10 font-semibold bg-amber-400"
+        >
+          Sign In
+        </button>
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ export const logIn =
       const roles = response?.data?.roles;
       dispatch(setUserInfo({ accessToken, roles }));
       setLoading(false);
+      setErrMsg("");
     } catch (error) {
       if (!error?.response) {
         setErrMsg("No server response");

@@ -31,7 +31,7 @@ const initialRows = [
     term: "DataGridPro",
     define1: "is Awesome",
     define2: null,
-    image: "/assets/images/collection-icon.jpg",
+    image: "/assets/images/collection-default-img.png",
   },
   {
     id: 3,

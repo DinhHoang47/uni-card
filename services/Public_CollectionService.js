@@ -5,7 +5,10 @@ class PublicCollectionServ extends BaseService {
     super();
   }
   getCollectionDetail(slug) {
-    return this.get(`/collections/${slug}`);
+    return this.get(`collections/${slug}`);
+  }
+  getCollectionLikes(id) {
+    return this.get(`collections/${id}/likes`);
   }
 }
 

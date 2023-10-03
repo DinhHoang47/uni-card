@@ -1,12 +1,13 @@
 "use client";
 import AddNewCollectionModal from "@components/AddNewCollectionModal";
 import { PlusIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CSSTransition } from "react-transition-group";
 
 export default function AddNew() {
   const [isOpen, setIsOpen] = useState(false);
-  const handleAddNew = () => {};
+  const router = useRouter();
   return (
     <div
       onClick={() => {
@@ -27,7 +28,7 @@ export default function AddNew() {
         timeout={200}
         unmountOnExit
       >
-        <AddNewCollectionModal setIsOpen={setIsOpen} />
+        <AddNewCollectionModal setIsOpen={setIsOpen} router={router} />
       </CSSTransition>
     </div>
   );

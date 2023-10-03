@@ -50,7 +50,6 @@ export default function SignIn() {
       redirect: true,
       callbackUrl: "/",
     });
-    console.log("result: ", result);
   };
 
   return (

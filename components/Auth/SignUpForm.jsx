@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
-import * as api from "../app/api";
+import * as api from "../../app/api/index.js";
 import Spinner from "@public/assets/icons/spinner";
 //Username alphanumeric string that may include _ and – having a length of 3 to 16 characters.
 const USER_REGEX = /^[a-z0-9_-]{3,16}$/;
@@ -14,6 +14,7 @@ const EMAIL_REGEX = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/;
 export default function SignUpForm({ mode, setAuthMode }) {
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
   const [username, setUsername] = useState("");
   const [validUsername, setValidUsername] = useState(false);
@@ -68,6 +69,11 @@ export default function SignUpForm({ mode, setAuthMode }) {
       const userData = { username, email, password: pwd };
       const response = await api.signUp(userData);
       setLoading(false);
+      setSuccessMsg("Successful! Sign in to continue.");
+      setTimeout(() => {
+        setSuccessMsg("");
+        setAuthMode(mode.signIn);
+      }, 1000);
     } catch (error) {
       if (!error?.response) {
         setErrMsg("No server response");
@@ -83,6 +89,7 @@ export default function SignUpForm({ mode, setAuthMode }) {
     <div className="">
       <div className="mb-2">
         <p className="mt-2 text-sm text-orange-500 pl-1">{errMsg}</p>
+        <p className="mt-2 text-sm text-green-500 pl-1">{successMsg}</p>
       </div>
       <form onSubmit={handleSignup} className="space-y-3" action="">
         {/* Username */}

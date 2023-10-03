@@ -2,33 +2,27 @@ import { BACKEND_URL } from "./config";
 import axios from "axios";
 
 export class PrivateService {
-  constructor(token) {
+  constructor() {
     this.backendUrl = BACKEND_URL;
-    this.token = token;
   }
 
   get(url) {
-    if (!this.token) {
-      throw new Error("Not authenticated!");
-    }
     return axios({
       url: `${this.backendUrl}/${url}`,
       method: "GET",
-      headers: { Authorization: `Bearer ${this.token}` },
+      withCredentials: true,
     });
   }
 
-  post(url, jsonData) {
-    if (!this.token) {
-      throw new Error("Not authenticated!");
-    }
-    return axios({
+  post(url, jsonData = {}) {
+    const config = {
       url: `${this.backendUrl}/${url}`,
       method: "POST",
-      data: jsonData,
-      headers: {
-        Authorization: `Bearer ${this.token}`,
-      },
-    });
+      withCredentials: true,
+    };
+    if (jsonData !== undefined) {
+      config.data = jsonData;
+    }
+    return axios(config);
   }
 }

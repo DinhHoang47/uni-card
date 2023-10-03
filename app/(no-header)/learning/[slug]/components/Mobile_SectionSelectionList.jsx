@@ -6,9 +6,7 @@ export default function Mobile_SectionSelectionList({ openMenu, setOpenMenu }) {
   useEffect(() => {
     const closeMobileSectionMenu = () => {
       setOpenMenu(false);
-      console.log("close modal");
     };
-    console.log("menu rendered");
     window.addEventListener("click", closeMobileSectionMenu);
     return () => window.removeEventListener("click", closeMobileSectionMenu);
   }, []);

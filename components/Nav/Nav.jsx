@@ -7,13 +7,17 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { Bars4Icon } from "@heroicons/react/24/solid";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import { useSelector } from "react-redux";
-import AuthModal from "./AuthModal";
+import { useDispatch, useSelector } from "react-redux";
+import AuthModal from "../Auth/AuthModal";
 import { CSSTransition } from "react-transition-group";
-import { useClerk, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import RightSidebar from "./RightSidebar";
-import AddNewCollectionModal from "./AddNewCollectionModal";
-
+import RightSidebar from "../RightSidebar";
+import AddNewCollectionModal from "../AddNewCollectionModal";
+import AmberButton from "@components/Buttons/AmberButton";
+import { open } from "../../redux/authModalSlice.js";
+import useUser from "@lib/useUser";
+import Image from "next/image";
+import TooltipMenu from "@components/TooltipMenu";
+import UserMenu from "./UserMenu";
 export default function Nav() {
   // States
   const [currentPath, setCurrentPath] = useState("");
@@ -76,13 +80,18 @@ export default function Nav() {
     searchContainerRef.current.classList.toggle("invisible");
   };
 
-  // Clerk authenticate
-
-  const { openSignIn } = useClerk();
-
   // Add new collection
 
   const [isAddNewOpen, setIsAddNewOpen] = useState(false);
+
+  // Auth modal
+
+  const dispatch = useDispatch();
+
+  // User object
+  const { user, mutateUser } = useUser();
+  // UserMenu state
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <div
@@ -106,26 +115,14 @@ export default function Nav() {
             </Link>
             {
               <>
-                <SignedIn>
-                  <Link
-                    href="/mypage"
-                    className={`flex items-center menu_item ${
-                      currentPath === "/mypage" ? "active" : ""
-                    }`}
-                  >
-                    <p className="">My Page</p>
-                  </Link>
-                </SignedIn>
-                <SignedOut>
-                  <button
-                    onClick={() => openSignIn({ afterSignInUrl: "/mypage" })}
-                    className={`flex items-center menu_item ${
-                      currentPath === "/mypage" ? "active" : ""
-                    }`}
-                  >
-                    <p className="">My Page</p>
-                  </button>
-                </SignedOut>
+                <Link
+                  href="/mypage"
+                  className={`flex items-center menu_item ${
+                    currentPath === "/mypage" ? "active" : ""
+                  }`}
+                >
+                  <p className="">My Page</p>
+                </Link>
               </>
             }
           </div>
@@ -161,32 +158,51 @@ export default function Nav() {
         </div>
         {/* Desktop Navigation */}
         <div className="hidden sm:flex mr-2 space-x-2">
-          <SignedIn>
-            <button
+          <button
+            onClick={() => {
+              {
+                user.isLoggedIn ? setIsAddNewOpen(true) : dispatch(open());
+              }
+            }}
+            className="create_btn text-blue-700 hover:text-white "
+          >
+            <PlusIcon className="h-7 w-7 " />
+          </button>
+          {user?.isLoggedIn === false && (
+            <AmberButton
               onClick={() => {
-                setIsAddNewOpen(true);
+                dispatch(open());
               }}
-              className="create_btn text-blue-700 hover:text-white "
-            >
-              <PlusIcon className="h-7 w-7 " />
-            </button>
-            <UserButton
-              appearance={{
-                elements: {
-                  avatarBox: "h-10 w-10",
-                },
-              }}
-              afterSignOutUrl={pathname}
-            />
-          </SignedIn>
-          <SignedOut>
-            <button
-              onClick={() => openSignIn({ redirectUrl: pathname })}
-              className="px-5 font-semibold bg-amber-400 h-10 rounded"
             >
               Sign In
-            </button>
-          </SignedOut>
+            </AmberButton>
+          )}
+          {user?.isLoggedIn === true && (
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsMenuOpen((pre) => !pre);
+              }}
+              className="relative cursor-pointer rounded-full w-10 h-10 flex items-center justify-center border hover:border-blue-400 transition-all"
+            >
+              <Image
+                className="rounded-full"
+                alt="user-images"
+                width={36}
+                height={36}
+                src={user.imageUrl || "/assets/images/user.png"}
+              />
+              {isMenuOpen && (
+                <TooltipMenu setIsOpen={setIsMenuOpen}>
+                  <UserMenu
+                    closeTooltip={() => {
+                      setIsMenuOpen(false);
+                    }}
+                  />
+                </TooltipMenu>
+              )}
+            </div>
+          )}
         </div>
         {/* Mobile Navigation */}
         <div className="sm:hidden flex relative space-x-2 mr-2">
@@ -196,40 +212,7 @@ export default function Nav() {
           >
             <MagnifyingGlassIcon className="h-6 w-6  " />
           </div>
-          <div className="flex items-center justify-center space-x-2">
-            <SignedIn>
-              <button
-                onClick={() => {
-                  setIsAddNewOpen(true);
-                }}
-                className="create_btn text-blue-700 hover:text-white "
-              >
-                <PlusIcon className="h-7 w-7 " />
-              </button>
-              <UserButton
-                appearance={{
-                  elements: {
-                    avatarBox: "h-10 w-10",
-                  },
-                }}
-                afterSignOutUrl={pathname}
-              />
-            </SignedIn>
-            <SignedOut>
-              <button
-                onClick={() =>
-                  openSignIn({
-                    afterSignUpUrl: pathname,
-                    afterSignInUrl: pathname,
-                    redirectUrl: pathname,
-                  })
-                }
-                className={`px-5 font-semibold bg-amber-400 h-10 rounded `}
-              >
-                Sign In
-              </button>
-            </SignedOut>
-          </div>
+          <div className="flex items-center justify-center space-x-2"></div>
         </div>
       </nav>
       {/* Right Sidebar */}

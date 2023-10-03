@@ -3,13 +3,13 @@
 import PortalModalWrapper from "@components/PortalModalWrapper";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import * as api from "../app/api";
+import * as api from "../../app/api";
 
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 import { useDispatch } from "react-redux";
 
-import { close } from "../redux/authModalSlice";
+import { close } from "../../redux/authModalSlice";
 import SignUpForm from "./SignUpForm";
 import SignInForm from "./SignInForm";
 

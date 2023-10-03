@@ -1,15 +1,15 @@
 "use client";
-
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { logIn } from "@actions/user";
-
 import {
   ExclamationCircleIcon,
   EyeIcon,
   EyeSlashIcon,
 } from "@heroicons/react/24/outline";
 import Spinner from "@public/assets/icons/spinner";
+import * as api from "../../app/api/index.js";
+import useUser from "@lib/useUser.js";
+import { close } from "../../redux/authModalSlice";
+import { useDispatch } from "react-redux";
 
 const EMAIL_REGEX = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/;
 
@@ -17,7 +17,6 @@ export default function SignInForm({ mode, setAuthMode }) {
   const [showPassword, setShowPassword] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
 
   // State for input element
 
@@ -28,6 +27,10 @@ export default function SignInForm({ mode, setAuthMode }) {
   const [pwd, setPwd] = useState("");
   const [validPwd, setValidPwd] = useState(false);
   const [pwdFocus, setPwdFocus] = useState(false);
+  // Use User
+
+  const { mutateUser } = useUser();
+  const dispatch = useDispatch();
 
   // Check email validation
 
@@ -42,10 +45,24 @@ export default function SignInForm({ mode, setAuthMode }) {
     setErrMsg("");
   }, [email, pwd]);
 
+  // Handle sign in
+
   const handleSignIn = async (e) => {
     e.preventDefault();
     const credential = { email, password: pwd };
-    dispatch(logIn(credential, setLoading, setErrMsg));
+    // --- Start new code for useUSer
+    try {
+      setLoading(true);
+      const { data: user } = await api.SignIn(credential);
+      console.log(user);
+      mutateUser(user);
+      setLoading(false);
+      dispatch(close());
+    } catch (error) {
+      setLoading(false);
+      setErrMsg(error?.response.data.message || "Something went wrong!");
+    }
+    // --- End
   };
 
   return (

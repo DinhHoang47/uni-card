@@ -1,7 +1,5 @@
 import Footer from "@components/Footer";
-import Nav from "@components/Nav";
-import { Providers } from "@redux/provider";
-import { ClerkProvider } from "@clerk/nextjs";
+import Nav from "@components/Nav/Nav";
 
 import "@styles/globals.css";
 
@@ -12,22 +10,15 @@ export const meta = {
 
 export default async function RootLayout(props) {
   return (
-    <html lang="en">
-      <body>
-        <Providers>
-          <ClerkProvider {...props}>
-            <div className="main">
-              <div className="primary-blue-bg"></div>
-            </div>
-            <main className="app mt-16">
-              <Nav />
-              {props.auth}
-              {props.children}
-              <Footer />
-            </main>
-          </ClerkProvider>
-        </Providers>
-      </body>
-    </html>
+    <>
+      <div className="main">
+        <div className="primary-blue-bg"></div>
+      </div>
+      <main className="app mt-16">
+        <Nav />
+        {props.children}
+        <Footer />
+      </main>
+    </>
   );
 }

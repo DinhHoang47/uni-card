@@ -12,10 +12,10 @@ export default function CollectionCard() {
             <p className="text_secondary">101 terms</p>
           </div>
           <Image
-            alt="collection-icon"
+            alt="collection-default-img"
             width={56}
             height={56}
-            src={"/assets/images/collection-icon.jpg"}
+            src={"/assets/images/collection-default-img.png"}
           />
         </div>
         <div className="flex justify-between">

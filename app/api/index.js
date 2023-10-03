@@ -10,22 +10,26 @@ export const signUp = (userData) => {
 };
 
 export const SignIn = (credential) => {
-  return API.post(`auth`, credential, {
+  return API.post(`login`, credential, {
     headers: { "Content-Type": "application/json" },
     withCredentials: true,
   });
+};
+
+export const LogOut = () => {
+  return API.post(
+    "logout",
+    {},
+    {
+      withCredentials: true,
+    }
+  );
 };
 
 export const getCollection = (id) => {
   return API.get(`collections/${id}`);
 };
 
-export const testRoute = (token) => {
-  return API.get("test", {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-      mode: "cors",
-    },
-  });
+export const getUser = (url) => {
+  return API.get(url);
 };

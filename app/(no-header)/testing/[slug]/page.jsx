@@ -15,7 +15,6 @@ export default function CollectionTest({ params }) {
   const showMode = searchParams.get("show");
 
   const handleSubmit = () => {
-    console.log("handle submit");
     setIsOpen(true);
   };
 

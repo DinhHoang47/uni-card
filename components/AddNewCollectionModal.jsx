@@ -1,10 +1,8 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
-import { useAuth } from "@clerk/nextjs";
 import styled from "@emotion/styled";
 
-import { privateCollectionServ } from "@services/PrivateCollectionService";
+import { privateCollectionServ } from "@services/Private_CollectionService";
 import { MuiChipsInput } from "mui-chips-input";
 import PortalModalWrapper from "@components/PortalModalWrapper";
 import { TextareaAutosize } from "@mui/base";
@@ -15,7 +13,7 @@ import { generateUniqueName } from "@utils/generateUniqueName";
 import {
   MAX_COLLECTION_IMG_SIZE,
   MAX_COLLECTION_IMG_SIZE_TEXT,
-} from "@utils/config/config";
+} from "@utils/config";
 
 export default function AddNewCollectionModal({ setIsOpen, router }) {
   // Handle dynamic size for modal start
@@ -64,7 +62,6 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
   const [errMsg, setErrMsg] = useState("");
 
   // Handle add new collection   -------------------------------
-  const { getToken } = useAuth();
 
   const handleFileChange = (e) => {
     setErrMsg("");
@@ -98,8 +95,7 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
         tags: chips,
         imageUrl,
       };
-      const token = await getToken();
-      const result = await privateCollectionServ(token).create(data);
+      const result = await privateCollectionServ().create(data);
       // Check if slug exists in the result
       if (result?.data.slug) {
         const slug = result.data.slug;
