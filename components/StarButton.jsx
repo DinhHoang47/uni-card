@@ -1,4 +1,5 @@
 import { StarIcon } from "@heroicons/react/24/outline";
+import { deepClone } from "@lib/deepClone";
 import { useLike } from "@lib/useLike";
 import useUser from "@lib/useUser";
 import { open } from "@redux/authModalSlice";
@@ -7,7 +8,7 @@ import { publicCollectionServ } from "@services/Public_CollectionService";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";
 
-const fetchLike = (id) =>
+const fetchLike = ([url, id]) =>
   publicCollectionServ
     .getCollectionLikes(id)
     .then((res) => res.data)
@@ -15,23 +16,45 @@ const fetchLike = (id) =>
 
 export default function StarButton({ collectionId }) {
   const dispatch = useDispatch();
-  const { data, error, trigger, mutate } = useSWR(collectionId, fetchLike, {
-    revalidateIfStale: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  });
+  const { data, mutate } = useSWR(
+    ["collections/id/likes", collectionId],
+    fetchLike,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  );
   const { user } = useUser();
   const handleLike = async () => {
     try {
-      const result = await privateCollectionServ().like(collectionId);
+      // Clone current liked post array
+      let currentLikedPosts = deepClone(likedPosts);
+      if (liked) {
+        currentLikedPosts = currentLikedPosts.filter(
+          (postId) => postId !== collectionId
+        );
+      } else {
+        currentLikedPosts.push(collectionId);
+      }
+      likedPostsMutate(currentLikedPosts, {
+        optimisticData: currentLikedPosts,
+        revalidate: false,
+      });
+      const result = await privateCollectionServ()
+        .like(collectionId)
+        .then((res) => res.data);
+
       mutate();
-      likedPostsMutate();
     } catch (error) {
       console.log(error);
     }
   };
 
-  const { liked, likedPostsMutate } = useLike(user?.isLoggedIn, collectionId);
+  const { liked, likedPosts, likedPostsMutate } = useLike(
+    user?.isLoggedIn,
+    collectionId
+  );
 
   return (
     <>

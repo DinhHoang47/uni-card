@@ -13,7 +13,6 @@ import { CSSTransition } from "react-transition-group";
 import AddTermModal from "./components/AddTermModal";
 import EditCollectionModal from "./components/EditCollectionModal";
 import SettingTooltip from "@components/SettingTooltip";
-import { SignedIn, SignedOut, useClerk } from "@clerk/nextjs";
 import { publicCollectionServ } from "@services/Public_CollectionService";
 import UserLink from "@components/UserLink";
 import StarButton from "@components/StarButton";

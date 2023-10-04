@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import { useEffect } from "react";
-import { useAuth } from "@clerk/nextjs";
 import * as api from "@app/api/index.js";
 
 export default function UserInfo() {

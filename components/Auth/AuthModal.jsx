@@ -3,7 +3,6 @@
 import PortalModalWrapper from "@components/PortalModalWrapper";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import * as api from "../../app/api";
 
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
@@ -13,18 +12,24 @@ import { close } from "../../redux/authModalSlice";
 import SignUpForm from "./SignUpForm";
 import SignInForm from "./SignInForm";
 
-export default function AuthModal({ isOpen }) {
+export default function AuthModal() {
   // Handle dynamic size for modal start
   const childrenRef = useRef(null);
   const dispatch = useDispatch();
   const [childHeight, setChildHeight] = useState();
   const [childWidth, setChildWidth] = useState();
 
-  const [loading, setLoading] = useState(false);
   useEffect(() => {
     setChildHeight(childrenRef.current.offsetHeight);
     setChildWidth(childrenRef.current.offsetWidth);
   }, [childHeight, childWidth]);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
 
   const mode = {
     signIn: 0,

@@ -28,8 +28,6 @@
     "bcrypt": "^5.1.0",
     "install": "^0.13.0",
     "keen-slider": "^6.8.6",
-    "mongodb": "^5.7.0",
-    "mongoose": "^7.4.1",
     "mui-chips-input": "^2.0.2",
     "next": "13.4.12",
     "next-auth": "^4.22.3",

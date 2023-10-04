@@ -10,7 +10,6 @@ export default function UserMenu({ closeTooltip, ...props }) {
         <li>
           <button
             onClick={async () => {
-              console.log("logout");
               const { data: user } = await api.LogOut();
               mutateUser(user, false);
               closeTooltip();

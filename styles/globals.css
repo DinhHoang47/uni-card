@@ -348,11 +348,51 @@ html {
   transition: all 0.2s;
 }
 
-/* Create new term modal */
+.my-node-enter {
+  opacity: 0;
+}
+.my-node-enter-active {
+  opacity: 1;
+  transition: opacity 200ms;
+}
+.my-node-exit {
+  opacity: 1;
+}
+.my-node-exit-active {
+  opacity: 0;
+  transition: opacity 200ms;
+}
 
-.createNewTermModalContent {
-  /* width: 320px;
-  height: 630px;
-  top: calc(50% - 315px);
-  left: calc(50% - 120px); */
+/* Right Sidebar Background & Container Transition CSS */
+
+.right-sidebar-enter .sidebarBackground {
+  opacity: 0;
+}
+.right-sidebar-enter-active .sidebarBackground {
+  opacity: 0.5;
+  transition: opacity 200ms;
+}
+.right-sidebar-exit .sidebarBackground {
+  opacity: 0.5;
+}
+.right-sidebar-exit-active .sidebarBackground {
+  opacity: 0;
+  transition: opacity 200ms;
+}
+/* Right Sidebar Container  */
+.right-sidebar-enter .sidebarContainer {
+  transform: translateX(-100%);
+}
+.right-sidebar-enter-active .sidebarContainer {
+  transform: translateX(0);
+}
+.right-sidebar-enter-done .sidebarContainer {
+  transform: translateX(0);
+}
+
+.right-sidebar-exit .sidebarContainer {
+  transform: translateX(0);
+}
+.right-sidebar-exit-active .sidebarContainer {
+  transform: translateX(-100%);
 }

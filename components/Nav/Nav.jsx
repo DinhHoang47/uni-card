@@ -10,10 +10,11 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import AuthModal from "../Auth/AuthModal";
 import { CSSTransition } from "react-transition-group";
-import RightSidebar from "../RightSidebar";
+import RightSidebar from "../Sidebar/RightSidebar";
 import AddNewCollectionModal from "../AddNewCollectionModal";
 import AmberButton from "@components/Buttons/AmberButton";
 import { open } from "../../redux/authModalSlice.js";
+import { open as openSidebar } from "../../redux/rightSideBarSlice.js";
 import useUser from "@lib/useUser";
 import Image from "next/image";
 import TooltipMenu from "@components/TooltipMenu";
@@ -25,10 +26,6 @@ export default function Nav() {
   // Redux store
   const isOpen = useSelector((state) => state.authModal.isOpen);
 
-  // Ref for menu sidebar
-  const containerRef = useRef();
-  const bgRef = useRef();
-  const menuRef = useRef();
   // Ref for searchbar
   const searchContainerRef = useRef();
   // Route
@@ -70,12 +67,6 @@ export default function Nav() {
 
   // Open Menu
 
-  const toggleSidebar = () => {
-    containerRef.current.classList.toggle("invisible");
-    bgRef.current.classList.toggle("opacity-0");
-    bgRef.current.classList.toggle("opacity-50");
-    menuRef.current.classList.toggle("-translate-x-full");
-  };
   const toggleSearchModal = () => {
     searchContainerRef.current.classList.toggle("invisible");
   };
@@ -131,7 +122,9 @@ export default function Nav() {
         <div className="flex lg:hidden h-full items-center space-x-2">
           <div
             className="flex items-center justify-center h-10 w-10 rounded-ful cursor-pointer"
-            onClick={toggleSidebar}
+            onClick={() => {
+              dispatch(openSidebar());
+            }}
           >
             <Bars4Icon className="h-6 w-6 text-gray-400" />
           </div>
@@ -157,11 +150,20 @@ export default function Nav() {
           </div>
         </div>
         {/* Desktop Navigation */}
-        <div className="hidden sm:flex mr-2 space-x-2">
+        <div className="flex mr-2 space-x-2">
+          <div className="sm:hidden flex relative">
+            <div
+              onClick={toggleSearchModal}
+              className="h-10 w-10 flex items-center justify-center border  text-gray-400 border-gray-300 rounded-full hover:border-gray-400 hover:text-gray-500  hover:transition-all hover:duration-300 cursor-pointer"
+            >
+              <MagnifyingGlassIcon className="h-6 w-6  " />
+            </div>
+            <div className="flex items-center justify-center"></div>
+          </div>
           <button
             onClick={() => {
               {
-                user.isLoggedIn ? setIsAddNewOpen(true) : dispatch(open());
+                user?.isLoggedIn ? setIsAddNewOpen(true) : dispatch(open());
               }
             }}
             className="create_btn text-blue-700 hover:text-white "
@@ -204,26 +206,9 @@ export default function Nav() {
             </div>
           )}
         </div>
-        {/* Mobile Navigation */}
-        <div className="sm:hidden flex relative space-x-2 mr-2">
-          <div
-            onClick={toggleSearchModal}
-            className="h-10 w-10 flex items-center justify-center border  text-gray-400 border-gray-300 rounded-full hover:border-gray-400 hover:text-gray-500  hover:transition-all hover:duration-300 cursor-pointer"
-          >
-            <MagnifyingGlassIcon className="h-6 w-6  " />
-          </div>
-          <div className="flex items-center justify-center space-x-2"></div>
-        </div>
       </nav>
       {/* Right Sidebar */}
-      <RightSidebar
-        containerRef={containerRef}
-        bgRef={bgRef}
-        toggleSidebar={toggleSidebar}
-        menuRef={menuRef}
-        currentPath={currentPath}
-        pathname={pathname}
-      />
+      <RightSidebar currentPath={currentPath} pathname={pathname} />
       {/* Search Modal*/}
       <div
         onClick={toggleSearchModal}

@@ -54,13 +54,16 @@ export default function SignInForm({ mode, setAuthMode }) {
     try {
       setLoading(true);
       const { data: user } = await api.SignIn(credential);
-      console.log(user);
       mutateUser(user);
       setLoading(false);
       dispatch(close());
     } catch (error) {
       setLoading(false);
-      setErrMsg(error?.response.data.message || "Something went wrong!");
+      if (!error.response) {
+        setErrMsg("No server response.");
+      } else {
+        setErrMsg(error?.response.data.message || "Something went wrong!");
+      }
     }
     // --- End
   };
