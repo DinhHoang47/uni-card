@@ -45,7 +45,7 @@ export default function CollectionDetail({ params }) {
   if (data) {
     const { id, title, imageUrl, tags, description, userId, likes } = data.data;
     return (
-      <div className="w-full mt-4 space-y-8 px-2 sm:px-8  relative">
+      <div className="w-full my-4 space-y-8 px-2 sm:px-8  relative">
         {/* Section */}
         <div className="w-full space-y-4">
           {/* Container */}

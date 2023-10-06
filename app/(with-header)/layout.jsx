@@ -1,3 +1,4 @@
+import CommonMessage from "@components/CommonMessage/CommonMessage";
 import Footer from "@components/Footer";
 import Nav from "@components/Nav/Nav";
 
@@ -11,10 +12,7 @@ export const meta = {
 export default async function RootLayout(props) {
   return (
     <>
-      <div className="main">
-        <div className="primary-blue-bg"></div>
-      </div>
-      <main className="app mt-16">
+      <main className="app mt-16 bg-blue-50">
         <Nav />
         {props.children}
         <Footer />

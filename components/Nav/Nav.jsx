@@ -15,18 +15,21 @@ import AddNewCollectionModal from "../AddNewCollectionModal";
 import AmberButton from "@components/Buttons/AmberButton";
 import { open, close as closeAuthModal } from "../../redux/authModalSlice.js";
 import { open as openSidebar } from "../../redux/rightSideBarSlice.js";
+import { addMessage } from "@redux/commonMessageSlice.js";
 import useUser from "@lib/useUser";
 import Image from "next/image";
 import TooltipMenu from "@components/TooltipMenu";
 import UserMenu from "./UserMenu";
 import Script from "next/script";
 import GoogleOneTap from "./GoogleOneTap";
+import CommonMessage from "@components/CommonMessage/CommonMessage";
 
 export default function Nav() {
   // States
   const [currentPath, setCurrentPath] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const isOpen = useSelector((state) => state.authModal.isOpen);
+  const [messageModal, setMessageModal] = useState(false);
 
   const searchContainerRef = useRef();
   // Route
@@ -89,14 +92,21 @@ export default function Nav() {
       id="primary-nav"
       className="fixed flex items-center justify-center w-full  top-0 left-0 right-0 z-10 bg-white border-b border-b-outline-primary"
     >
-      <GoogleOneTap />
       <Script
         strategy="beforeInteractive"
         src="https://accounts.google.com/gsi/client"
       ></Script>
+      <GoogleOneTap />
       <nav className="flex-between h-16 w-full md:px-8">
         {/* Destop Menu */}
         <div className="hidden lg:flex h-full ">
+          <button
+            onClick={() => {
+              dispatch(addMessage({ text: "message", variation: "success" }));
+            }}
+          >
+            x
+          </button>
           <Link href="/" className="flex gap-2 items-center">
             <p className="logo_text font-vina text-xl">UniCard</p>
           </Link>
@@ -262,6 +272,7 @@ export default function Nav() {
       >
         <AddNewCollectionModal setIsOpen={setIsAddNewOpen} router={router} />
       </CSSTransition>
+      <CommonMessage isOpen={messageModal} />
     </div>
   );
 }
