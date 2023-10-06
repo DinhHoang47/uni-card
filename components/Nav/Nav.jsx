@@ -13,24 +13,27 @@ import { CSSTransition } from "react-transition-group";
 import RightSidebar from "../Sidebar/RightSidebar";
 import AddNewCollectionModal from "../AddNewCollectionModal";
 import AmberButton from "@components/Buttons/AmberButton";
-import { open } from "../../redux/authModalSlice.js";
+import { open, close as closeAuthModal } from "../../redux/authModalSlice.js";
 import { open as openSidebar } from "../../redux/rightSideBarSlice.js";
 import useUser from "@lib/useUser";
 import Image from "next/image";
 import TooltipMenu from "@components/TooltipMenu";
 import UserMenu from "./UserMenu";
+import Script from "next/script";
+import GoogleOneTap from "./GoogleOneTap";
+
 export default function Nav() {
   // States
   const [currentPath, setCurrentPath] = useState("");
   const [searchValue, setSearchValue] = useState("");
-  // Redux store
   const isOpen = useSelector((state) => state.authModal.isOpen);
 
-  // Ref for searchbar
   const searchContainerRef = useRef();
   // Route
   const router = useRouter();
   const pathname = usePathname();
+
+  const { user, mutateUser } = useUser();
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -48,9 +51,6 @@ export default function Nav() {
     router.push(`/search?query=${searchValue}`);
   };
 
-  const toggleMobileNotification = () => {
-    setMobileNotiDropdown((pre) => !pre);
-  };
   // Underline current tab base on URL
   useEffect(() => {
     const collection = "/collections";
@@ -64,6 +64,8 @@ export default function Nav() {
       setCurrentPath("");
     }
   }, [pathname]);
+
+  // Init google account and show a prompt if user not logged in yet
 
   // Open Menu
 
@@ -79,8 +81,6 @@ export default function Nav() {
 
   const dispatch = useDispatch();
 
-  // User object
-  const { user, mutateUser } = useUser();
   // UserMenu state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -89,6 +89,11 @@ export default function Nav() {
       id="primary-nav"
       className="fixed flex items-center justify-center w-full  top-0 left-0 right-0 z-10 bg-white border-b border-b-outline-primary"
     >
+      <GoogleOneTap />
+      <Script
+        strategy="beforeInteractive"
+        src="https://accounts.google.com/gsi/client"
+      ></Script>
       <nav className="flex-between h-16 w-full md:px-8">
         {/* Destop Menu */}
         <div className="hidden lg:flex h-full ">

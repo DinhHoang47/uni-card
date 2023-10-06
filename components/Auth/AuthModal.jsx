@@ -2,7 +2,6 @@
 
 import PortalModalWrapper from "@components/PortalModalWrapper";
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
@@ -11,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { close } from "../../redux/authModalSlice";
 import SignUpForm from "./SignUpForm";
 import SignInForm from "./SignInForm";
+import GoogleSignInButton from "./GoogleSignInButton";
 
 export default function AuthModal() {
   // Handle dynamic size for modal start
@@ -74,17 +74,7 @@ export default function AuthModal() {
             </button>
           </div>
           {/* Google Auth */}
-          <div className="">
-            <button className="h-10 w-full px-4 flex items-center justify-around space-x-2 border border-gray-300 rounded ">
-              <span>Continue with Google</span>
-              <Image
-                width={32}
-                height={32}
-                alt="google-icon"
-                src={"/assets/icons/google.svg"}
-              />
-            </button>
-          </div>
+          <GoogleSignInButton />
           <div className="flex items-center justify-center">
             <p className="text-gray-400 font-semibold">- or email -</p>
           </div>

@@ -1,22 +1,22 @@
 "use client";
 import Image from "next/image";
-import { useEffect } from "react";
-import * as api from "@app/api/index.js";
+import useUser from "@lib/useUser";
 
 export default function UserInfo() {
+  const { user, mutateUser } = useUser("/collections");
   return (
     <div className="flex items-center space-x-2">
       <div className="">
         <Image
           width={40}
           height={40}
-          src={"https://api.multiavatar.com/Binx Bond.png"}
+          src={user?.imageUrl || "/assets/images/user.png"}
           alt="user-image"
         />
       </div>
       <div className="flex flex-col">
-        <div className="font-semibold">User Name</div>
-        <div className="">useremail@gmail.com</div>
+        <div className="font-semibold">{user?.username}</div>
+        <div className="">{user?.email}</div>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { StarIcon } from "@heroicons/react/24/outline";
-import { deepClone } from "@lib/deepClone";
+import { deepClone } from "@utils/deepClone";
 import { useLike } from "@lib/useLike";
 import useUser from "@lib/useUser";
 import { open } from "@redux/authModalSlice";

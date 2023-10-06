@@ -104,7 +104,7 @@ export default function SignUpForm({ mode, setAuthMode }) {
             onBlur={(e) => {
               setUsernameFocus(false);
             }}
-            autoComplete="off"
+            autoComplete="one-time-code"
             required
             aria-invalid={validUsername ? "false" : "true"}
             id="username"
@@ -159,6 +159,7 @@ export default function SignUpForm({ mode, setAuthMode }) {
             placeholder="Email"
             name="email"
             aria-label="Email"
+            autoComplete="false"
           />
           <div
             className={`absolute right-0 top-0 translate-y-[10px] -translate-x-2`}
@@ -197,6 +198,7 @@ export default function SignUpForm({ mode, setAuthMode }) {
             placeholder="Password"
             name="password"
             aria-label="Password"
+            autoComplete="one-time-code"
           />
           <div
             className={`absolute right-0 top-0 translate-y-[10px] -translate-x-2`}
@@ -237,6 +239,7 @@ export default function SignUpForm({ mode, setAuthMode }) {
             placeholder="Repeat Password"
             name="repeat-password"
             aria-label="Repeat Password"
+            autoComplete="one-time-code"
           />
           <div
             className={`absolute right-0 top-0 translate-y-[10px] -translate-x-2`}

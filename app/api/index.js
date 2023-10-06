@@ -31,5 +31,15 @@ export const getCollection = (id) => {
 };
 
 export const getUser = (url) => {
-  return API.get(url);
+  return API.get(url, {
+    headers: {},
+    withCredentials: true,
+  });
+};
+
+export const googleSignIn = (credential) => {
+  return API.post("auth/googleSignIn", credential, {
+    headers: { "Content-Type": "application/json" },
+    withCredentials: true,
+  });
 };

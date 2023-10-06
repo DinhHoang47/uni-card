@@ -6,8 +6,9 @@ import {
   close as closeSidebar,
   open as openSidebar,
 } from "../../redux/rightSideBarSlice.js";
+import { open as openAuthModal } from "../../redux/authModalSlice.js";
 import { CSSTransition } from "react-transition-group";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import useUser from "@lib/useUser.js";
 import * as api from "../../app/api/index.js";
 
@@ -15,12 +16,21 @@ export default function RightSidebar({ currentPath, pathname }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const isOpen = useSelector((state) => state.rightSidebar.isOpen);
+  // Store a callback to execute on modal existed
+  const [callBackOnExisted, setCallBackOnExisted] = useState(() => () => {});
   const nodeRef = useRef(null);
   const { user, mutateUser } = useUser();
   const handleLogout = async () => {
     const { data: user } = await api.LogOut();
     mutateUser(user, false);
     dispatch(closeSidebar());
+  };
+  const handleSignIn = () => {
+    dispatch(closeSidebar());
+    // open AuthModal after close the sidebar
+    setCallBackOnExisted(() => () => {
+      dispatch(openAuthModal());
+    });
   };
   return (
     <CSSTransition
@@ -29,6 +39,7 @@ export default function RightSidebar({ currentPath, pathname }) {
       timeout={200}
       classNames="right-sidebar"
       unmountOnExit
+      onExited={callBackOnExisted}
     >
       <div ref={nodeRef} className="mobile_side_bar">
         {/* Background */}
@@ -101,7 +112,7 @@ export default function RightSidebar({ currentPath, pathname }) {
 
           {!user?.isLoggedIn && (
             <button
-              onClick={() => {}}
+              onClick={handleSignIn}
               className="w-full rounded-md h-10 font-semibold bg-amber-400"
             >
               Sign In
