@@ -2,21 +2,26 @@ import Image from "next/image";
 import { StarIcon } from "@heroicons/react/24/outline";
 import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
 import Link from "next/link";
-export default function CollectionCard() {
+import StarButton from "./StarButton/StarButton";
+export default function CollectionCard({ user, data }) {
   return (
-    <Link href={"/collections/1"}>
+    <Link href={`/collections/${data?.slug}`}>
       <div className="h-40 p-4 flex flex-col justify-between bg-white rounded-lg border-gray-300 border hover:shadow-[0px_2px_5px_1px_#90cdf4] transition-all duration-300">
         <div className="flex justify-between">
           <div className="flex flex-col">
-            <h5 className="font-semibold">Collections title here</h5>
+            <h5 className="font-semibold">{data?.title}</h5>
             <p className="text_secondary">101 terms</p>
           </div>
-          <Image
-            alt="collection-default-img"
-            width={56}
-            height={56}
-            src={"/assets/images/collection-default-img.png"}
-          />
+          <div className="rounded border border-gray-200">
+            <Image
+              alt="collection-default-img"
+              width={56}
+              height={56}
+              src={
+                data?.imageUrl || `/assets/images/collection-default-img.png`
+              }
+            />
+          </div>
         </div>
         <div className="flex justify-between">
           {/* User */}
@@ -26,17 +31,18 @@ export default function CollectionCard() {
               className="rounded-full"
               width={24}
               height={24}
-              src={"/assets/images/user.png"}
+              src={user?.imageUrl || "/assets/images/user.png"}
             />
-            <span className="font-semibold text-sm">User Name</span>
+            <span className="font-semibold text-sm">{user?.username}</span>
           </div>
           {/* Actions */}
-          <div className="flex space-x-4">
-            <button className="flex items-center ">
-              <StarIcon className="h-7 w-7" />
-              {/* <StarIconSolid className="h-7 w-7 text-yellow-300" /> */}
-              <span className="ml-1 font-satoshi leading-7">96</span>
-            </button>
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+            }}
+            className="px-2"
+          >
+            <StarButton collectionId={data?.id} />
           </div>
         </div>
       </div>

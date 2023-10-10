@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeMessage } from "@redux/commonMessageSlice.js";
 import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
-export default function CommonMessage({ isOpen }) {
+export default function CommonMessage() {
   const messageArray = useSelector((state) => state.commonMessage.messageArray);
   const showModal = messageArray.length !== 0;
   return (
@@ -32,18 +33,18 @@ const MessageCard = ({ variation = "info", message = "", ...props }) => {
   const [type] = useState({
     info: {
       color: "blue",
-      icon: <ExclamationCircleIcon className={`h-6 w-6 text-blue-400`} />,
-      class: `flex items-center px-2 py-2 space-x-2 border border-slate-200 rounded shadow-lg bg-blue-100`,
+      icon: <ExclamationCircleIcon className={`h-6 w-6 text-blue-600`} />,
+      class: `flex items-center px-2 py-2 space-x-2 border border-slate-200 rounded-lg shadow-lg bg-white`,
     },
     success: {
       color: "green",
-      icon: <CheckCircleIcon className="h-6 w-6 text-green-500" />,
-      class: `flex items-center px-2 py-2 space-x-2 border border-slate-200 rounded shadow-lg bg-green-100`,
+      icon: <CheckCircleIcon className="h-6 w-6 text-green-600" />,
+      class: `flex items-center px-2 py-2 space-x-2 border border-slate-200 rounded-lg shadow-lg bg-white`,
     },
     warning: {
       color: "orange",
-      icon: <CheckCircleIcon className="h-6 w-6 text-orange-500" />,
-      class: `flex items-center px-2 py-2 space-x-2 border border-slate-200 rounded shadow-lg bg-orange-100`,
+      icon: <ExclamationTriangleIcon className="h-6 w-6 text-orange-600" />,
+      class: `flex items-center px-2 py-2 space-x-2 border border-slate-200 rounded-lg shadow-lg bg-white`,
     },
   });
   const dispatch = useDispatch();
@@ -54,9 +55,21 @@ const MessageCard = ({ variation = "info", message = "", ...props }) => {
   }, []);
 
   return (
-    <li {...props} className={type[variation].class}>
-      <span>{type[variation].icon}</span>
-      <p className={`text-${type[variation].color}-600`}>{message}</p>
+    <li
+      {...props}
+      className={
+        type[variation]?.class ||
+        `flex items-center px-2 py-2 space-x-2 border border-slate-200 rounded-lg shadow-lg bg-white`
+      }
+    >
+      <span>
+        {type[variation] ? (
+          type[variation].icon
+        ) : (
+          <ExclamationCircleIcon className={`h-6 w-6 text-blue-400`} />
+        )}
+      </span>
+      <p className={``}>{message}</p>
     </li>
   );
 };

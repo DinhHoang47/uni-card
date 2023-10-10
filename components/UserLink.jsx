@@ -9,7 +9,7 @@ const fetcher = ([url, id]) => publicUserServ.getUserInfo(id);
 export default function UserLink({ id }) {
   const { data, error, isLoading } = useSWRImmutable(["/users", id], fetcher);
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div className="text-sm select-none">Admin</div>;
+  if (error) return <div className="text-sm select-none">Anonymous User</div>;
   if (data) {
     const { username, imageUrl } = data.data;
     return (

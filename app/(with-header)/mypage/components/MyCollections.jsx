@@ -1,5 +1,5 @@
 import AddNew from "./AddNew";
-import CollectionsList from "./CollectionsList";
+import MyCollectionsList from "./MyCollectionsList";
 
 export default function MyCollections() {
   return (
@@ -12,7 +12,7 @@ export default function MyCollections() {
       </div>
       {/* Collections List */}
       <div className="mt-4 sm:mt-10">
-        <CollectionsList />
+        <MyCollectionsList />
       </div>
     </div>
   );

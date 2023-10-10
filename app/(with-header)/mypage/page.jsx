@@ -1,4 +1,3 @@
-import AddNew from "./components/AddNew";
 import LearningCollections from "./components/LearningCollections";
 import MyCollections from "./components/MyCollections";
 import Streak from "./components/Streak";

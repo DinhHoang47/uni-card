@@ -15,7 +15,7 @@ import EditCollectionModal from "./components/EditCollectionModal";
 import SettingTooltip from "@components/SettingTooltip";
 import { publicCollectionServ } from "@services/Public_CollectionService";
 import UserLink from "@components/UserLink";
-import StarButton from "@components/StarButton";
+import StarButton from "@components/StarButton/StarButton";
 import useSWR from "swr";
 
 const fetcher = (slug) => publicCollectionServ.getCollectionDetail(slug);

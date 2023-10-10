@@ -7,6 +7,10 @@ class PublicUserServ extends BaseService {
   getUserInfo(id) {
     return this.get(`users/${id}`);
   }
+
+  getUsersCollection(id) {
+    return this.get(`user/${id}/collections`);
+  }
 }
 
 export const publicUserServ = new PublicUserServ();

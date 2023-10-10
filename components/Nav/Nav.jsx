@@ -15,7 +15,6 @@ import AddNewCollectionModal from "../AddNewCollectionModal";
 import AmberButton from "@components/Buttons/AmberButton";
 import { open, close as closeAuthModal } from "../../redux/authModalSlice.js";
 import { open as openSidebar } from "../../redux/rightSideBarSlice.js";
-import { addMessage } from "@redux/commonMessageSlice.js";
 import useUser from "@lib/useUser";
 import Image from "next/image";
 import TooltipMenu from "@components/TooltipMenu";
@@ -86,7 +85,6 @@ export default function Nav() {
 
   // UserMenu state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   return (
     <div
       id="primary-nav"
@@ -100,13 +98,6 @@ export default function Nav() {
       <nav className="flex-between h-16 w-full md:px-8">
         {/* Destop Menu */}
         <div className="hidden lg:flex h-full ">
-          <button
-            onClick={() => {
-              dispatch(addMessage({ text: "message", variation: "success" }));
-            }}
-          >
-            x
-          </button>
           <Link href="/" className="flex gap-2 items-center">
             <p className="logo_text font-vina text-xl">UniCard</p>
           </Link>
@@ -165,7 +156,7 @@ export default function Nav() {
           </div>
         </div>
         {/* Desktop Navigation */}
-        <div className="flex mr-2 space-x-2">
+        <div className="flex mr-2 sm:mr-0 space-x-2">
           <div className="sm:hidden flex relative">
             <div
               onClick={toggleSearchModal}
@@ -272,7 +263,7 @@ export default function Nav() {
       >
         <AddNewCollectionModal setIsOpen={setIsAddNewOpen} router={router} />
       </CSSTransition>
-      <CommonMessage isOpen={messageModal} />
+      <CommonMessage />
     </div>
   );
 }

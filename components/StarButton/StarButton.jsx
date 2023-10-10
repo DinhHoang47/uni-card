@@ -62,10 +62,12 @@ export default function StarButton({ collectionId }) {
         onClick={() => {
           user.isLoggedIn === true ? handleLike() : dispatch(open());
         }}
-        className="flex space-x-1"
+        className="flex items-start"
       >
-        <StarIcon className={`h-5 w-5 ${liked && "fill-yellow-400"}`} />
-        <span className="font-satoshi">{data?.likeCount}</span>
+        <div className="inline-flex space-x-1 hover:shadow-[0_0.5rem_0.5rem_-0.4rem_rgba(251,235,55,1)] hover:-translate-y-[2px] transition-all">
+          <StarIcon className={`h-5 w-5 ${liked && "fill-yellow-400"} `} />
+          <span className="font-satoshi">{data?.likeCount}</span>
+        </div>
       </button>
     </>
   );

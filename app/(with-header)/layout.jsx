@@ -12,9 +12,11 @@ export const meta = {
 export default async function RootLayout(props) {
   return (
     <>
-      <main className="app mt-16 bg-blue-50">
-        <Nav />
-        {props.children}
+      <main className=" mt-16 bg-blue-50">
+        <div className="app">
+          <Nav />
+          {props.children}
+        </div>
         <Footer />
       </main>
     </>

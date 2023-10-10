@@ -67,7 +67,6 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
     setErrMsg("");
     const currentFile = e.target.files[0];
     const maxSizeInBytes = MAX_COLLECTION_IMG_SIZE;
-    console.log("selectedfile", currentFile.size);
     if (currentFile && currentFile.size > maxSizeInBytes) {
       setErrMsg(`Maximum image size is ${MAX_COLLECTION_IMG_SIZE_TEXT}.`);
       e.target.value = null;

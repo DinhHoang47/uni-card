@@ -3,7 +3,7 @@ import Image from "next/image";
 import useUser from "@lib/useUser";
 
 export default function UserInfo() {
-  const { user, mutateUser } = useUser("/collections");
+  const { user } = useUser("/collections");
   return (
     <div className="flex items-center space-x-2">
       <div className="">
