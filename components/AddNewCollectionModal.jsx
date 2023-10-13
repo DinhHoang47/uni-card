@@ -14,6 +14,8 @@ import {
   MAX_COLLECTION_IMG_SIZE,
   MAX_COLLECTION_IMG_SIZE_TEXT,
 } from "@utils/config";
+import { useSWRConfig } from "swr";
+import useUser from "@lib/useUser";
 
 export default function AddNewCollectionModal({ setIsOpen, router }) {
   // Handle dynamic size for modal start
@@ -62,6 +64,9 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
   const [errMsg, setErrMsg] = useState("");
 
   // Handle add new collection   -------------------------------
+  const { user } = useUser();
+
+  const { mutate } = useSWRConfig();
 
   const handleFileChange = (e) => {
     setErrMsg("");
@@ -74,6 +79,9 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
       setSelectedFile(currentFile);
     }
   };
+  const updateMycollection = () => {
+    mutate((key) => Array.isArray(key) && key[0] === "/user/id/posts");
+  };
 
   const handleAddNew = async () => {
     setLoading(true);
@@ -82,8 +90,9 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
       let imageUrl = null;
       if (selectedFile) {
         const imageId = generateUniqueName(title);
-        const imageResult = await uploadImage(selectedFile, imageId);
-        imageUrl = imageResult.data?.url;
+        const preset = "collection_image";
+        const imageResult = await uploadImage(selectedFile, imageId, preset);
+        imageUrl = imageResult.data?.secure_url;
       }
       const trimmedTitle = title.trim();
       const trimmedDescription = description.trim();
@@ -94,13 +103,14 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
         tags: chips,
         imageUrl,
       };
-      const result = await privateCollectionServ().create(data);
-      // Check if slug exists in the result
-      if (result?.data.slug) {
-        const slug = result.data.slug;
+      const result = await privateCollectionServ.create(data);
+      // Check if id exists in the result
+      if (result?.data.id) {
+        const id = result.data.id;
         setLoading(false);
         setIsOpen(false);
-        router.push(`/collections/${slug}`);
+        updateMycollection();
+        router.push(`/collections/${id}`);
       } else {
         throw new (class customeError extends Error {
           constructor(response) {
@@ -187,7 +197,6 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
               }}
               type="file"
               name="image"
-              id=""
               accept="image/*"
               multiple={false}
             />

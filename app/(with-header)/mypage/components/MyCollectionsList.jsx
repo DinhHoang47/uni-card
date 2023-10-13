@@ -9,11 +9,12 @@ const collectionsFetcher = ([url, id]) =>
   publicUserServ.getUsersCollection(id).then((res) => res.data.posts);
 
 export default function MyCollectionsList() {
-  const { user } = useUser();
+  const { user,userIsLoading } = useUser();
   const {
     data: posts,
     error,
     isLoading,
+    isValidating,
     mutate,
   } = useSWR(() => [`/user/id/posts`, user.id], collectionsFetcher,
   {
@@ -21,9 +22,8 @@ export default function MyCollectionsList() {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });
-  if (isLoading) return <SkeletionLoading />;
+  if (isLoading || userIsLoading) return <SkeletionLoading />;
   if (posts) {
-    console.log(posts);
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-10">
         {posts.map((post) => (

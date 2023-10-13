@@ -6,7 +6,7 @@ import PortalModalWrapper from "@components/PortalModalWrapper";
 import { useEffect, useRef, useState } from "react";
 import ResultList from "./ResultList";
 
-export default function SettingModal({ isOpen, setIsOpen, slug }) {
+export default function SettingModal({ isOpen, setIsOpen }) {
   // Handle dynamic size for modal start
   const childrenRef = useRef(null);
   const [childHeight, setChildHeight] = useState();

@@ -9,7 +9,7 @@ import {
 import { useState } from "react";
 import LearningModeTooltip from "./LearningModeTooltip";
 
-export default function Header({ slug, handleTest }) {
+export default function Header({ slug, id, handleTest }) {
   const [isOpenPopup1, setIsOpenPopup1] = useState();
   const [isOpenPopup2, setIsOpenPopup2] = useState();
   return (
@@ -30,7 +30,7 @@ export default function Header({ slug, handleTest }) {
           />
         </button>
         {isOpenPopup1 && (
-          <BackTooltip slug={slug} setIsOpenPopup={setIsOpenPopup1} />
+          <BackTooltip id={id} slug={slug} setIsOpenPopup={setIsOpenPopup1} />
         )}
         <div className="flex items-center">
           <span className="font-semibold line-clamp-1">

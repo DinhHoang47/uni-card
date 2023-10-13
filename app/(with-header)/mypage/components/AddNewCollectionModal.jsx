@@ -74,7 +74,7 @@ export default function AddNewCollectionModal({ setIsOpen, handleAddNew }) {
               maxRows={2}
               maxLength={100}
               wrap="hard"
-              className="w-full border-b-2 resize-none focus:border-blue-300 focus:outline-none bg-transparent border-gray-300"
+              className="w-full px-2 border-b-2 resize-none focus:border-blue-300 focus:outline-none bg-transparent border-gray-300"
             ></TextareaAutosize>
           </div>
           {/* Tags */}

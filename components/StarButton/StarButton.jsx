@@ -14,7 +14,7 @@ const fetchLike = ([url, id]) =>
     .then((res) => res.data)
     .catch((err) => err);
 
-export default function StarButton({ collectionId }) {
+export default function StarButton({ collectionId, userId }) {
   const dispatch = useDispatch();
   const { data, mutate } = useSWR(
     ["collections/id/likes", collectionId],
@@ -41,7 +41,7 @@ export default function StarButton({ collectionId }) {
         optimisticData: currentLikedPosts,
         revalidate: false,
       });
-      const result = await privateCollectionServ()
+      const result = await privateCollectionServ
         .like(collectionId)
         .then((res) => res.data);
 
@@ -52,8 +52,8 @@ export default function StarButton({ collectionId }) {
   };
 
   const { liked, likedPosts, likedPostsMutate } = useLike(
-    user?.isLoggedIn,
-    collectionId
+    collectionId,
+    user?.isLoggedIn
   );
 
   return (
@@ -64,8 +64,12 @@ export default function StarButton({ collectionId }) {
         }}
         className="flex items-start"
       >
-        <div className="inline-flex space-x-1 hover:shadow-[0_0.5rem_0.5rem_-0.4rem_rgba(251,235,55,1)] hover:-translate-y-[2px] transition-all">
-          <StarIcon className={`h-5 w-5 ${liked && "fill-yellow-400"} `} />
+        <div className="inline-flex space-x-1  hover:-translate-y-[2px] transition-all">
+          <StarIcon
+            className={`h-5 w-5 ${
+              liked && "fill-yellow-400"
+            } hover:shadow-[0_0.5rem_0.5rem_-0.4rem_rgba(251,235,55,1)] `}
+          />
           <span className="font-satoshi">{data?.likeCount}</span>
         </div>
       </button>

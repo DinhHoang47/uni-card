@@ -323,7 +323,12 @@ html {
 }
 
 /* Transform container to create animation */
-
+/* For small device like iphone SE */
+@media screen and (max-width: 400px) {
+  .modalContent {
+    width: 350px;
+  }
+}
 .modal-enter .modalContent {
   opacity: 0;
   transform: scale(0.8);

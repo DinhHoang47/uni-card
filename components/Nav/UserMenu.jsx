@@ -33,7 +33,9 @@ export default function UserMenu({ closeTooltip, ...props }) {
               const { data: user } = await api.LogOut();
               mutateUser(user, false);
               closeTooltip();
-              mutate(() => true, undefined, { revalidate: true });
+              mutate((key) => key !== "likedPosts", undefined, {
+                revalidate: true,
+              });
             }}
             className="flex items-center w-full space-x-1 hover:text-blue-500"
           >

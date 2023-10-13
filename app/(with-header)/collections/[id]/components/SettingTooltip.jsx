@@ -1,11 +1,23 @@
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+import { privateCollectionServ } from "@services/Private_CollectionService";
 
 import { useEffect } from "react";
 
+const handleDelete = async (collectionId) => {
+  const confirmed = window.confirm(
+    "❌ Are you sure to delete this collection !"
+  );
+  if (confirmed) {
+    console.log("clid", collectionId);
+    const result = await privateCollectionServ.deleteCollection(collectionId);
+    console.log("result: ", result);
+  }
+};
+
 export default function SettingTooltip({
   setIsOpenPopup,
-  handleDelete,
   setIsEditModalOpen,
+  collectionData,
 }) {
   useEffect(() => {
     const closeThisPopup = () => {
@@ -36,7 +48,7 @@ export default function SettingTooltip({
           <li
             onClick={() => {
               setIsOpenPopup(false);
-              handleDelete();
+              handleDelete(collectionData.id);
             }}
             className="flex items-center space-x-1 cursor-pointer hover:text-red-500"
           >

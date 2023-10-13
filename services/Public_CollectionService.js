@@ -4,8 +4,8 @@ class PublicCollectionServ extends BaseService {
   constructor() {
     super();
   }
-  getCollectionDetail(slug) {
-    return this.get(`collections/${slug}`);
+  getCollectionDetail(id) {
+    return this.get(`collections/${id}`);
   }
   getCollectionLikes(id) {
     return this.get(`collections/${id}/likes`);

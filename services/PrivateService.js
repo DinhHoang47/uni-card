@@ -13,7 +13,6 @@ export class PrivateService {
       withCredentials: true,
     });
   }
-
   post(url, jsonData = {}) {
     const config = {
       url: `${this.backendUrl}/${url}`,
@@ -23,6 +22,24 @@ export class PrivateService {
     if (jsonData !== undefined) {
       config.data = jsonData;
     }
+    return axios(config);
+  }
+  put(url, data) {
+    if (!data) return new Error("Data is required.");
+    const config = {
+      url: `${this.backendUrl}/${url}`,
+      method: "PUT",
+      data: data,
+      withCredentials: true,
+    };
+    return axios(config);
+  }
+  delete(url) {
+    const config = {
+      url: `${this.backendUrl}/${url}`,
+      method: "DELETE",
+      withCredentials: true,
+    };
     return axios(config);
   }
 }

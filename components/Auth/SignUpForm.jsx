@@ -76,7 +76,7 @@ export default function SignUpForm({ mode, setAuthMode }) {
       }, 1000);
     } catch (error) {
       if (!error?.response) {
-        setErrMsg("No server response");
+        setErrMsg("No server response.");
       } else if (error.response?.status === 409) {
         setErrMsg(error.response?.data.message);
       } else {
