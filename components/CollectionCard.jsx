@@ -9,11 +9,11 @@ export default function CollectionCard({ user, data }) {
       <div className="h-40 p-4 flex flex-col justify-between bg-white rounded-lg border-gray-300 border hover:shadow-[0px_2px_5px_1px_#90cdf4] transition-all duration-300">
         <div className="flex justify-between">
           <div className="flex flex-col">
-            <h5 className="font-semibold">{data?.title}</h5>
+            <h5 className="font-semibold line-clamp-2">{data?.title}</h5>
             <p className="text_secondary">101 terms</p>
           </div>
-          <div className="rounded border border-gray-200">
-            <div className="w-14 h-14">
+          <div className="">
+            <div className="w-14 h-14 rounded border border-gray-200">
               <Image
                 alt={`collection-default-img`}
                 style={{ width: "100%", height: "auto" }}

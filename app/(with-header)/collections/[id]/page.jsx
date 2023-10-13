@@ -49,7 +49,7 @@ export default function CollectionDetail({ params }) {
               <p className="font-semibold">Description</p>
             </div>
             <div className="grow">
-              <p>{description}</p>
+              <p>{description ? description : "No description"}</p>
             </div>
           </div>
           {/* Tags */}

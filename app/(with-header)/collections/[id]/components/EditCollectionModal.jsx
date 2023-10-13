@@ -9,7 +9,6 @@ import {
   MAX_COLLECTION_IMG_SIZE,
   MAX_COLLECTION_IMG_SIZE_TEXT,
 } from "@utils/config";
-import { useCollection } from "@lib/useCollection";
 import { updateImage, uploadImage } from "@services/CldService";
 import { privateCollectionServ } from "@services/Private_CollectionService";
 import Spinner from "@public/assets/icons/spinner";
@@ -145,6 +144,7 @@ export default function EditCollectionModal({
           <div className="space-y-1 ">
             <label className="">Title</label>
             <input
+              maxLength={225}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="w-full border-b-2 px-2  resize-none focus:border-blue-300 focus:outline-none bg-transparent border-gray-300"
@@ -166,7 +166,7 @@ export default function EditCollectionModal({
             ></TextareaAutosize>
           </div>
           {/* Tags */}
-          <div className="space-y-1 ">
+          <div className="space-y-1 max-w-[380px]">
             <label className="">Tags</label>
             <StyledChips chips={chips} setChips={setChips} />
           </div>
@@ -229,7 +229,7 @@ export default function EditCollectionModal({
                 loading ? "" : "hidden"
               } animate-spin -ml-1 mr-3 h-5 w-5 text-white`}
             />
-            Create
+            Save
           </button>
         </form>
 

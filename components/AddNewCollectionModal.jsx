@@ -89,7 +89,8 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
       // Upload image if existing
       let imageUrl = null;
       if (selectedFile) {
-        const imageId = generateUniqueName(title);
+        // Generate public_id with trimed length to 20 letter
+        const imageId = generateUniqueName(title.slice(0, 10));
         const preset = "collection_image";
         const imageResult = await uploadImage(selectedFile, imageId, preset);
         imageUrl = imageResult.data?.secure_url;
@@ -151,6 +152,7 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
           <div className="space-y-1 ">
             <label className="font-semibold">Title</label>
             <input
+              maxLength={225}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="漢字"
               className="w-full border-b-2 px-2  resize-none focus:border-blue-300 focus:outline-none bg-transparent border-gray-300"

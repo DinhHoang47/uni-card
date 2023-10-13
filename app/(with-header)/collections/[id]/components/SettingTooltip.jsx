@@ -1,16 +1,34 @@
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { privateCollectionServ } from "@services/Private_CollectionService";
-
+import { useRouter } from "next/navigation";
+import { addMessage } from "@redux/commonMessageSlice.js";
+import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+import { useSWRConfig } from "swr";
 
-const handleDelete = async (collectionId) => {
+const handleDelete = async (collectionId, dispatch, router, globalMutate) => {
   const confirmed = window.confirm(
     "❌ Are you sure to delete this collection !"
   );
   if (confirmed) {
-    console.log("clid", collectionId);
-    const result = await privateCollectionServ.deleteCollection(collectionId);
-    console.log("result: ", result);
+    await privateCollectionServ
+      .deleteCollection(collectionId)
+      .then((res) => {
+        dispatch(addMessage({ text: "Deleted", variation: "success" }));
+
+        // Fecth new user collection using global mutete
+        globalMutate((key) => key[0].startsWith("/user/id/posts"), undefined, {
+          revalidate: true,
+        });
+        setTimeout(() => {
+          router.push("/mypage");
+        }, 1000);
+      })
+      .catch((err) => {
+        console.log(err);
+        const errMsg = err.response?.data?.message || "Failed to delete.";
+        dispatch(addMessage({ text: errMsg, variation: "warning" }));
+      });
   }
 };
 
@@ -19,6 +37,9 @@ export default function SettingTooltip({
   setIsEditModalOpen,
   collectionData,
 }) {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { mutate: globalMutate } = useSWRConfig();
   useEffect(() => {
     const closeThisPopup = () => {
       setIsOpenPopup(false);
@@ -32,7 +53,7 @@ export default function SettingTooltip({
         onClick={(e) => {
           e.stopPropagation();
         }}
-        className="absolute  bg-white px-2 py-2 rounded top-3/4 border"
+        className="absolute bg-white px-2 py-2 rounded top-3/4 border"
       >
         <ul className="space-y-1">
           <li
@@ -48,7 +69,7 @@ export default function SettingTooltip({
           <li
             onClick={() => {
               setIsOpenPopup(false);
-              handleDelete(collectionData.id);
+              handleDelete(collectionData.id, dispatch, router, globalMutate);
             }}
             className="flex items-center space-x-1 cursor-pointer hover:text-red-500"
           >

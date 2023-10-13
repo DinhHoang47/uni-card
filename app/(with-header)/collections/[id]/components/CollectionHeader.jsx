@@ -20,7 +20,21 @@ export default function CollectionHeader({
       {/* Collection Info */}
       <div className="flex items-center space-x-2">
         {/* Collection Image */}
-        <div className="relative rounded border border-gray-300 object-cover w-[72px] h-[72px]">
+        <div className="w-20 h-20 border rounded border-gray-200 flex items-center flex-shrink-0">
+          <Image
+            alt={`collection-${data.title}-image`}
+            style={{ width: "100%", height: "auto" }}
+            width={0}
+            height={0}
+            sizes="100vw"
+            src={
+              imageUrl
+                ? `${imageUrl}`
+                : "/assets/images/collection-default-img.png"
+            }
+          />
+        </div>
+        {/* <div className="relative rounded border border-gray-300 object-cover w-[72px] h-[72px]">
           <Image
             fill
             sizes={"72px"}
@@ -33,14 +47,14 @@ export default function CollectionHeader({
                 : "/assets/images/collection-default-img.png"
             }
           />
-        </div>
+        </div> */}
         {/* Title & Star & Creator */}
-        <div className=" flex flex-col space-y-1 justify-between">
+        <div className=" flex flex-col space-y-1 justify-between pr-5 sm:pr-0">
           {/* Title */}
           <div className="relative flex items-center space-x-2">
-            <h4 className="font-semibold">{title}</h4>
+            <h4 className="font-semibold line-clamp-3">{title}</h4>
             {/* Actions */}
-            <div className="absolute right-0 top-0 translate-x-10 -translate-y-1">
+            <div className="absolute  top-full right-0 -translate-x-10 sm:right-0 sm:top-0 sm:translate-x-10 sm:-translate-y-1">
               <button
                 className=""
                 onClick={(e) => {
