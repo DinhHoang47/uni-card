@@ -3,10 +3,10 @@ import styles from "./styles.module.css";
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { TrashIcon } from "@heroicons/react/24/outline";
 
-export default function MobileRow({ setEditCardId, setIsModalOpen }) {
+export default function MobileRow({ setTermModalOpen }) {
   const handleEdit = () => {
     setEditCardId();
-    setIsModalOpen(true);
+    setTermModalOpen(true);
   };
   return (
     <li className={`${styles.mobileRow} relative space-y-2 text-center p-4`}>

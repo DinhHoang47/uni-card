@@ -1,18 +1,16 @@
 import styles from "./styles.module.css";
 
 import DesktopRow from "./DesktopRow";
+import { useRef } from "react";
 
-export default function DesktopTermTable({
-  setIsModalOpen,
-  editCardId,
-  setEditCardId,
-}) {
+export default function DesktopTermTable({ setTermModalOpen, setEditCardId }) {
+  const meaning2Ref = useRef();
   return (
     <div className="">
       <div className="">
         <button
           onClick={() => {
-            setIsModalOpen(true);
+            setTermModalOpen(true);
           }}
           className={`w-full h-10 rounded-md font-semibold border-2 border-dashed ${styles.addButton} `}
         >
@@ -24,23 +22,17 @@ export default function DesktopTermTable({
           <li>No</li>
           <li>Term</li>
           <li>Meaning 1</li>
-          <li>Meaning 2</li>
+          <li ref={meaning2Ref}>Meaning 2</li>
           <li>Example</li>
           <li>Image</li>
-          <li>Actions</li>
+          <li></li>
         </ul>
       </div>
 
       <div className="mt-2">
         <ul className={`${styles.rows}`}>
-          <DesktopRow
-            setIsModalOpen={setIsModalOpen}
-            setEditCardId={setEditCardId}
-          />
-          <DesktopRow
-            setIsModalOpen={setIsModalOpen}
-            setEditCardId={setEditCardId}
-          />
+          <DesktopRow setTermModalOpen={setTermModalOpen} />
+          <DesktopRow setTermModalOpen={setTermModalOpen} />
         </ul>
       </div>
     </div>

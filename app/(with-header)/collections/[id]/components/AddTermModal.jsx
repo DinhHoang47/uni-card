@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { TextareaAutosize } from "@mui/base";
 
-export default function AddTermModal({ setIsModalOpen, isModalOpen }) {
+export default function AddTermModal({ setTermModalOpen, isTermModalOpen }) {
   // Handle dynamic size for modal start
   const childrenRef = useRef(null);
   const [childHeight, setChildHeight] = useState();
@@ -29,7 +29,7 @@ export default function AddTermModal({ setIsModalOpen, isModalOpen }) {
     return () => {
       document.body.style.overflow = "unset";
     };
-  }, [isModalOpen]);
+  }, [isTermModalOpen]);
 
   return (
     <PortalModalWrapper childrenHeight={childHeight} childrenWidth={childWidth}>
@@ -237,7 +237,7 @@ export default function AddTermModal({ setIsModalOpen, isModalOpen }) {
         {/* Close btn */}
         <button
           onClick={() => {
-            setIsModalOpen(false);
+            setTermModalOpen(false);
           }}
           className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-1 border border-gray-300"
         >

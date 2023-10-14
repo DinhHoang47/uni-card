@@ -1,8 +1,6 @@
 "use client";
 import { useState } from "react";
 
-import DesktopTermTable from "./components/DesktopTermTable";
-import MobileTermTable from "./components/MobileTermTable";
 import { CSSTransition } from "react-transition-group";
 import AddTermModal from "./components/AddTermModal";
 import EditCollectionModal from "./components/EditCollectionModal";
@@ -11,12 +9,12 @@ import { useCollection } from "@lib/useCollection";
 import XSpinner from "@components/Spinner/XSpinner";
 import CollectionHeader from "./components/CollectionHeader";
 import Link from "next/link";
+import TermTable from "./components/TermTable";
 
 export default function CollectionDetail({ params }) {
   // Modal state
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTermModalOpen, setTermModalOpen] = useState(false);
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
-  const [editCardId, setEditCardId] = useState(null);
 
   // Fetch data
   const { data, error, isLoading, mutate } = useCollection(params.id);
@@ -74,34 +72,21 @@ export default function CollectionDetail({ params }) {
         </div>
         {/* Section */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h4 className="font-semibold">Terms</h4>
-          </div>
-          <div className="hidden sm:block">
-            <DesktopTermTable
-              setEditCardId={setEditCardId}
-              setIsModalOpen={setIsModalOpen}
-            />
-          </div>
-          <div className="block sm:hidden">
-            <MobileTermTable
-              setEditCardId={setEditCardId}
-              setIsModalOpen={setIsModalOpen}
-            />
-          </div>
+          <TermTable
+            collectionId={data.id}
+            setTermModalOpen={setTermModalOpen}
+          />
         </div>
         {/* Add Modal */}
         <CSSTransition
           classNames={"modal"}
-          in={isModalOpen}
+          in={isTermModalOpen}
           timeout={200}
           unmountOnExit
         >
           <AddTermModal
-            editCardId={editCardId}
-            setEditCardId={setEditCardId}
-            isModalOpen={isModalOpen}
-            setIsModalOpen={setIsModalOpen}
+            isTermModalOpen={isTermModalOpen}
+            setTermModalOpen={setTermModalOpen}
           />
         </CSSTransition>
         {/* Edit collection detail modal */}
