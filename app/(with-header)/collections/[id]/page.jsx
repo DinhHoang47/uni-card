@@ -73,11 +73,13 @@ export default function CollectionDetail({ params }) {
         {/* Section */}
         <div className="space-y-4">
           <TermTable
+            displayImg={data.display_img}
+            displayDef2={data.display_def_2}
             collectionId={data.id}
             setTermModalOpen={setTermModalOpen}
           />
         </div>
-        {/* Add Modal */}
+        {/* Add Term Modal */}
         <CSSTransition
           classNames={"modal"}
           in={isTermModalOpen}
@@ -85,6 +87,8 @@ export default function CollectionDetail({ params }) {
           unmountOnExit
         >
           <AddTermModal
+            displayDef2={data.display_def_2}
+            displayImg={data.display_img}
             isTermModalOpen={isTermModalOpen}
             setTermModalOpen={setTermModalOpen}
           />

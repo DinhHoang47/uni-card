@@ -1,7 +1,11 @@
 import MobileRow from "./MobileRow";
 import styles from "./styles.module.css";
 
-export default function MobileTermTable({ setTermModalOpen }) {
+export default function MobileTermTable({
+  displayImg,
+  displayDef2,
+  setTermModalOpen,
+}) {
   return (
     <div className="">
       <div className="">
@@ -17,7 +21,11 @@ export default function MobileTermTable({ setTermModalOpen }) {
 
       <div className="mt-4">
         <ul className="space-y-4">
-          <MobileRow setTermModalOpen={setTermModalOpen} />
+          <MobileRow
+            displayImg={displayImg}
+            displayDef2={displayDef2}
+            setTermModalOpen={setTermModalOpen}
+          />
         </ul>
       </div>
     </div>

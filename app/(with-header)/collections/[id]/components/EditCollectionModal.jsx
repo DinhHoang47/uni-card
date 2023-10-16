@@ -4,6 +4,7 @@ import PortalModalWrapper from "@components/PortalModalWrapper";
 import { useEffect, useRef, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { TextareaAutosize } from "@mui/base";
+import { Switch } from "@mui/material";
 import Image from "next/image";
 import {
   MAX_COLLECTION_IMG_SIZE,
@@ -29,6 +30,13 @@ export default function EditCollectionModal({
     setChildHeight(childrenRef.current.offsetHeight);
     setChildWidth(childrenRef.current.offsetWidth);
   }, [childHeight, childWidth]);
+  // Disable scrollbar after render modal
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
   // Chips state
   const [chips, setChips] = useState(data.tags);
   // Handle file selection
@@ -43,19 +51,21 @@ export default function EditCollectionModal({
       e.target.value = null;
     } else {
       setSelectedFile(currentFile);
+      // Get and set selected file local url
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setSelectedFileUrl(e.target.result);
+      };
+      reader.readAsDataURL(currentFile);
     }
-    // Get and set selected file local url
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setSelectedFileUrl(e.target.result);
-    };
-    reader.readAsDataURL(currentFile);
   };
   // Get userId
   const creatorId = data.userId;
   // Input states
   const [title, setTitle] = useState(data.title);
   const [description, setDescription] = useState(data.description);
+  const [displayDef2, setDisplayDef2] = useState(data.display_def_2);
+  const [displayImg, setDisplayImg] = useState(data.display_img);
   const [imageUrl, setImageUrl] = useState(data.imageUrl);
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileUrl, setSelectedFileUrl] = useState(null);
@@ -88,6 +98,8 @@ export default function EditCollectionModal({
         description: trimmedDescription,
         tags: chips,
         imageUrl: updatedUrl,
+        display_def_2: displayDef2,
+        display_img: displayImg,
       };
       const optimizeUIData = {
         id: data.id,
@@ -99,6 +111,8 @@ export default function EditCollectionModal({
         updatedAt: data.updatedAt,
         description: trimmedDescription,
         userId: data.userId,
+        display_def_2: displayDef2,
+        display_img: displayImg,
       };
       const mutateOptions = {
         optimisticData: optimizeUIData,
@@ -207,6 +221,28 @@ export default function EditCollectionModal({
               name="image"
               accept="image/*"
               multiple={false}
+            />
+          </div>
+          {/* Switchs */}
+          <div className="space-y-1 max-w-[380px]">
+            <p>Card display setting</p>
+            <label className="">Definition 2</label>
+            <Switch
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setDisplayDef2(true);
+                } else {
+                  setDisplayDef2(false);
+                }
+              }}
+              checked={displayDef2}
+            />
+            <label className="">Image</label>
+            <Switch
+              onChange={(e) => {
+                setDisplayImg((pre) => !pre);
+              }}
+              checked={displayImg}
             />
           </div>
           {/* Error Message */}

@@ -103,7 +103,7 @@ export default function SettingModal({ isOpen, setIsOpen, slug }) {
               />
               <div className="w-32 h-16 border border-black justify-around items-center flex flex-col rounded text-xs">
                 <span>KANJI</span>
-                <span>Meaning</span>
+                <span>Definition</span>
               </div>
               <div
                 className={`h-5 w-5 rounded-full bg-zinc-200 ${styles.checkMark}`}

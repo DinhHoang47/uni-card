@@ -12,7 +12,7 @@ export default function AnswerInput_2() {
         </div>
         <input
           className="w-full text-center h-10 text-xl"
-          placeholder="Meaning"
+          placeholder="Definition"
           type="text"
         />
       </div>

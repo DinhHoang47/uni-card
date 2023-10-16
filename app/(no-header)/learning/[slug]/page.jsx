@@ -59,12 +59,12 @@ export default function CollectionLearn({ params }) {
               />
             </div>
             <div className="flex items-center space-x-2">
-              <label htmlFor="meaning-setting">Meaning</label>
+              <label htmlFor="definition-setting">Definition</label>
               <input
                 className="h-4 w-4"
                 type="checkbox"
                 name=""
-                id="meaning-setting"
+                id="definition-setting"
               />
             </div>
             <div className="flex items-center space-x-2">

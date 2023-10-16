@@ -1,10 +1,28 @@
+/* Desktop table */
+
 .tableHeader {
   display: grid;
-  grid-template: none / 50px 1fr 1fr 1fr 1fr 100px 60px;
+  grid-template: none / 50px 1fr 1fr 1fr 100px 60px;
   height: 40px;
   box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
     rgba(17, 17, 26, 0.1) 0px 0px 8px;
   background-color: rgb(255 255 255 / 0.5);
+}
+
+.tableHeadGridFull {
+  grid-template: none / 50px 1fr 1fr 1fr 1fr 1fr 60px;
+}
+
+.tableHeadGridCol6 {
+  grid-template: none / 50px 1fr 1fr 1fr 1fr 60px;
+}
+
+.tableHeadGridCol5 {
+  grid-template: none / 50px 1fr 1fr 1fr 60px;
+}
+
+.tableHeadGridUnset {
+  grid-template: unset;
 }
 
 .tableHeader li {
@@ -36,14 +54,30 @@
 .row:not(:first-child) {
   margin-top: 8px;
 }
+
 .rowItems {
   background-color: rgb(255 255 255 / 0.5);
   padding: 4px 2px;
   display: grid;
-  grid-template-columns: 50px 1fr 1fr 1fr 1fr 100px 60px;
   gap: 5px;
   border-radius: 4px;
 }
+
+.rowItemsGridFull {
+  grid-template: none / 50px 1fr 1fr 1fr 1fr 1fr 60px;
+}
+
+.rowItemsGridCol6 {
+  grid-template: none / 50px 1fr 1fr 1fr 1fr 60px;
+}
+
+.rowItemsGridCol5 {
+  grid-template: none / 50px 1fr 1fr 1fr 60px;
+}
+.rowItemsGridColUnset {
+  grid-template: unset;
+}
+
 .rowItem {
   position: relative;
   display: flex;
@@ -81,6 +115,22 @@
   justify-content: space-around;
 }
 
+.edittingRow {
+  border: solid 1px #0ea5e9;
+}
+
+.autoSizeTextArea {
+  background-color: #dbeafe;
+  width: 100%;
+}
+
+.autoSizeTextArea:focus-visible {
+  outline: none;
+  border-bottom: dashed 1px #0ea5e9;
+}
+
+/* Mobile table */
+
 .mobileRow {
   display: flex;
   flex-direction: column;
@@ -89,6 +139,10 @@
   box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
     rgba(17, 17, 26, 0.1) 0px 0px 8px;
   cursor: pointer;
+}
+
+.mobileRowEditting {
+  border: solid 1px #0ea5e9;
 }
 
 .mobileRow:hover {
@@ -102,19 +156,6 @@
 
 .mobileRow > :not(:last-child):not(:nth-last-child(2)) {
   /* Gray 300 */
+  padding-bottom: 4px;
   border-bottom: dashed 1px #d1d5db;
-}
-
-.edittingRow {
-  border: solid 1px #0ea5e9;
-}
-
-.autoSizeTextArea {
-  background-color: #dbeafe;
-  width: 100%;
-}
-
-.autoSizeTextArea:focus-visible {
-  outline: none;
-  border-bottom: dashed 1px #0ea5e9;
 }

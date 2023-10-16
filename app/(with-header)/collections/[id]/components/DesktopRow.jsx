@@ -9,21 +9,41 @@ import { MinusCircleIcon } from "@heroicons/react/20/solid";
 import { CloudArrowUpIcon } from "@heroicons/react/20/solid";
 import { TextareaAutosize } from "@mui/base";
 
-export default function DesktopRow({ setTermModalOpen }) {
+export default function DesktopRow({ displayImg, displayDef2 }) {
   const [editting, setEditting] = useState(false);
   const handleEdit = () => {
     setEditting(true);
-    // setTermModalOpen(true);
   };
   const handleUpdate = () => {
     setEditting(false);
   };
   const handleDelete = () => {};
 
+  // Dynamic styles
+  // Max 7 col
+  const totalCol = 5 + (displayImg ? 1 : 0) + (displayDef2 ? 1 : 0);
+  let rowItemsGridTemp;
+  switch (totalCol) {
+    case 7:
+      rowItemsGridTemp = styles.rowItemsGridFull;
+      break;
+    case 6:
+      rowItemsGridTemp = styles.rowItemsGridCol6;
+      break;
+    case 5:
+      rowItemsGridTemp = styles.rowItemsGridCol5;
+      break;
+    default:
+      rowItemsGridTemp = styles.rowItemsGridColUnset;
+      break;
+  }
+
   return (
     <li className={`${styles.row}`}>
       <ul
-        className={`${styles.rowItems} ${editting ? styles.edittingRow : ""}`}
+        className={`${styles.rowItems} ${rowItemsGridTemp} ${
+          editting ? styles.edittingRow : ""
+        }`}
       >
         <li
           className={`${styles.rowItem} ${editting ? styles.edittingItem : ""}`}
@@ -46,24 +66,28 @@ export default function DesktopRow({ setTermModalOpen }) {
             <span>abcdefasdf asdf asdf asdfa sdfas sdfasdf asdf asdfasd a</span>
           )}
         </li>
-        <li datafield="meaning2" className={`${styles.rowItem}`}>
-          Meaning
+        <li datafield="definition2" className={`${styles.rowItem}`}>
+          Definition
         </li>
-        <li className={`${styles.rowItem}`}>Kanji</li>
+        {displayDef2 && <li className={`${styles.rowItem}`}>Kanji</li>}
+
         <li className={`${styles.rowItem}`}>Example</li>
-        <li datafield="image" className={`${styles.rowItem}`}>
-          <Image
-            alt="card-image"
-            width={40}
-            height={40}
-            src={"/assets/images/samurai_cartoon.jpg"}
-          />
-        </li>
+        {displayImg && (
+          <li datafield="image" className={`${styles.rowItem}`}>
+            <Image
+              alt="card-image"
+              width={40}
+              height={40}
+              src={"/assets/images/samurai_cartoon.jpg"}
+            />
+          </li>
+        )}
+
         <li className={`${styles.rowItem}`}>
           {!editting && (
             <>
               <button onClick={handleEdit}>
-                <PencilIcon className="h-4 w-4 text-blue-500" />
+                <PencilIcon className="h-4 w-4 text-blue-600" />
               </button>
             </>
           )}

@@ -34,20 +34,6 @@ export default function CollectionHeader({
             }
           />
         </div>
-        {/* <div className="relative rounded border border-gray-300 object-cover w-[72px] h-[72px]">
-          <Image
-            fill
-            sizes={"72px"}
-            style={{ objectFit: "cover" }}
-            className="rounded"
-            alt="collection-img"
-            src={
-              imageUrl
-                ? `${imageUrl}`
-                : "/assets/images/collection-default-img.png"
-            }
-          />
-        </div> */}
         {/* Title & Star & Creator */}
         <div className=" flex flex-col space-y-1 justify-between pr-5 sm:pr-0">
           {/* Title */}

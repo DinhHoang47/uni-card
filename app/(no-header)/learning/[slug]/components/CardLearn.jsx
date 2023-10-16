@@ -63,7 +63,7 @@ export default function CardLearn() {
                 haveDefine2 ? "pb-4" : ""
               } `}
             >
-              <p className="text-center font-semibold">Meaning</p>
+              <p className="text-center font-semibold">Definition</p>
               <p className="text-center text-sm">Example</p>
             </div>
           </div>

@@ -65,7 +65,7 @@ export default function MobileCardLearn() {
                 haveDefine2 ? "pb-4" : ""
               } ${!haveImage ? "flex flex-col h-full justify-center" : ""} `}
             >
-              <p className="text-center text-2xl font-semibold">Meaning</p>
+              <p className="text-center text-2xl font-semibold">Define</p>
               <p className="text-center text-sm">Example</p>
             </div>
           </div>

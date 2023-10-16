@@ -35,7 +35,7 @@ export default function TestingCard_Back() {
               haveDefine2 ? "pb-4" : ""
             } `}
           >
-            <p className="text-center text-2xl font-semibold">Meaning</p>
+            <p className="text-center text-2xl font-semibold">Definition</p>
           </div>
         </div>
       </div>

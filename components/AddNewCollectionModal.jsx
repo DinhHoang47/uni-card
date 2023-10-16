@@ -38,23 +38,7 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
     setChips(newChips);
   };
   const [chips, setChips] = useState([]);
-  const MuiChipsInputStyled = styled(MuiChipsInput)`
-    & div.MuiInputBase-root {
-      margin: 0;
-      padding: 0;
-      border-bottom: 2px solid #d1d5db;
-      border-radius: 0;
-      &:focus-within {
-        border-bottom: 2px solid #93c5fd;
-      }
-    }
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    & fieldset {
-      border: none;
-    }
-  `;
+
   // Input states
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -64,7 +48,6 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
   const [errMsg, setErrMsg] = useState("");
 
   // Handle add new collection   -------------------------------
-  const { user } = useUser();
 
   const { mutate } = useSWRConfig();
 
@@ -241,3 +224,21 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
     </PortalModalWrapper>
   );
 }
+
+const MuiChipsInputStyled = styled(MuiChipsInput)`
+  & div.MuiInputBase-root {
+    margin: 0;
+    padding: 0;
+    border-bottom: 2px solid #d1d5db;
+    border-radius: 0;
+    &:focus-within {
+      border-bottom: 2px solid #93c5fd;
+    }
+  }
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  & fieldset {
+    border: none;
+  }
+`;
