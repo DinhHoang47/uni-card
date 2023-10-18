@@ -1,6 +1,5 @@
 import Image from "next/image";
-import { v4 as uuidv4 } from "uuid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   MAX_COLLECTION_IMG_SIZE,
@@ -24,6 +23,8 @@ export default function DesktopRow({
   displayImg,
   displayDef2,
   displayExample,
+  onDeleteRow,
+  onUpdateRow,
 }) {
   // States
   // Fetched data
@@ -34,23 +35,36 @@ export default function DesktopRow({
   const [errMsg, setErrMsg] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileUrl, setSelectedFileUrl] = useState(null);
-  const uid = uuidv4();
+  const [editted, setEditted] = useState(false);
   // Input value
   const [term, setTerm] = useState(cardData.term);
   const [definition1, setDefition1] = useState(cardData.definition_1);
   const [definition2, setDefition2] = useState(cardData.definition_2);
   const [example, setExample] = useState(cardData.example);
-  const [imageUrl, setImageUrl] = useState(cardData.image_url);
   // Handler
   const handleEdit = () => {
     setEditting(true);
   };
-  const handleUpdate = () => {
+  const handleUpdate = async (cardId) => {
+    if (editted) {
+      await onUpdateRow(cardId, { data: "Input data" });
+    }
     setEditting(false);
   };
   const handleDelete = () => {};
-  const cancelEditting = () => {};
-
+  //Set editting if info changed
+  useEffect(() => {
+    if (
+      term !== cardData.term ||
+      definition1 !== cardData.definition_1 ||
+      definition2 !== cardData.definition_2 ||
+      example !== cardData.example
+    ) {
+      setEditted(true);
+    } else {
+      setEditted(false);
+    }
+  }, [term, definition1, definition2, example, selectedFileUrl]);
   // Dynamic variable
   let rowItemsGridTemp;
   switch (totalCol) {
@@ -70,7 +84,6 @@ export default function DesktopRow({
       rowItemsGridTemp = styles.rowItemsGridColUnset;
       break;
   }
-
   return (
     <li className={`${styles.row}`}>
       <ul
@@ -91,11 +104,14 @@ export default function DesktopRow({
           {editting ? (
             <TextareaAutosize
               maxLength={225}
-              defaultValue={term}
+              value={term}
+              onChange={(e) => {
+                setTerm(e.target.value);
+              }}
               className={styles.autoSizeTextArea}
             />
           ) : (
-            <span>{term}</span>
+            <p className="break-all">{cardData.term}</p>
           )}
         </li>
         {/* Def 1 */}
@@ -105,11 +121,11 @@ export default function DesktopRow({
           {editting && (
             <TextareaAutosize
               maxLength={225}
-              defaultValue={definition1}
+              defaultValue={cardData.definition_1}
               className={styles.autoSizeTextArea}
             />
           )}
-          {!editting && <span>{definition1}</span>}
+          {!editting && <span>{cardData.definition_1}</span>}
         </li>
         {/* Def 2 */}
         {displayDef2 && (
@@ -121,11 +137,11 @@ export default function DesktopRow({
             {editting && (
               <TextareaAutosize
                 maxLength={225}
-                defaultValue={definition2}
+                defaultValue={cardData.definition_2}
                 className={styles.autoSizeTextArea}
               />
             )}
-            {!editting && <span>{definition2}</span>}
+            {!editting && <p className="break-all">{cardData.definition_2}</p>}
           </li>
         )}
         {/* Example */}
@@ -138,29 +154,29 @@ export default function DesktopRow({
             {editting && (
               <TextareaAutosize
                 maxLength={225}
-                defaultValue={"abcdefasdf"}
+                defaultValue={cardData.example}
                 className={styles.autoSizeTextArea}
               />
             )}
-            {!editting && <span>Example</span>}
+            {!editting && <p className="break-all">{cardData.example}</p>}
           </li>
         )}
 
         {/* Card Image */}
         {displayImg && (
           <li datafield="image" className={`${styles.rowItem} relative`}>
-            {imageUrl && (
+            {cardData.image_url && (
               <div className="relative w-12 h-12 border border-gray-300 rounded-sm">
                 <Image
                   fill
                   sizes="40px"
                   style={{ objectFit: "contain" }}
                   alt="card-image"
-                  src={imageUrl}
+                  src={cardData.image_url}
                 />
               </div>
             )}
-            {!imageUrl && !selectedFileUrl && (
+            {!cardData.image_url && !selectedFileUrl && (
               <div className="relative w-12 h-12 border border-gray-300 rounded-sm">
                 <Image
                   sizes="40px"
@@ -171,7 +187,7 @@ export default function DesktopRow({
                 />
               </div>
             )}
-            {!imageUrl && selectedFileUrl && (
+            {!cardData.image_url && selectedFileUrl && (
               <div className="relative w-12 h-12 border border-gray-300 rounded-sm">
                 <Image
                   sizes="40px"
@@ -189,7 +205,7 @@ export default function DesktopRow({
                   type="file"
                   accept="image/*"
                   hidden
-                  id={uid}
+                  id={cardData.id}
                   onChange={(e) => {
                     handleFileChange(
                       e,
@@ -200,10 +216,10 @@ export default function DesktopRow({
                   }}
                 />
                 <label
-                  className="cursor-pointer absolute top-1/2 -translate-y-1/2  left-1/2 -translate-x-1/2 p-2"
-                  htmlFor={uid}
+                  className="cursor-pointer absolute top-1/2 -translate-y-1/2  left-1/2 translate-x-1/2 p-2"
+                  htmlFor={cardData.id}
                 >
-                  <PlusIcon className="h-6 w-6 text-blue-700" />
+                  <DocumentArrowUpIcon className="h-6 w-6 text-blue-500" />
                 </label>
               </>
             )}
@@ -215,9 +231,18 @@ export default function DesktopRow({
               <button
                 title="Edit"
                 className="flex items-center"
-                onClick={handleEdit}
+                onClick={() => {
+                  !cardData.uploading && handleEdit();
+                }}
               >
-                <PencilIcon className="h-5 w-5 text-blue-600" />
+                {cardData.uploading ? (
+                  <CloudArrowUpIcon
+                    title="Uploading please wait."
+                    className="h-5 w-5 text-blue-600 animate-bounce cursor-wait"
+                  />
+                ) : (
+                  <PencilIcon className="h-5 w-5 text-blue-500" />
+                )}
               </button>
             </>
           )}
@@ -226,16 +251,20 @@ export default function DesktopRow({
               <button
                 title="Delete"
                 className="flex items-center"
-                onClick={cancelEditting}
+                onClick={() => {
+                  onDeleteRow(cardData.id);
+                }}
               >
                 <TrashIcon className="h-5 w-5 text-red-400" />
               </button>
               <button
                 title="Save"
                 className="flex items-center"
-                onClick={handleUpdate}
+                onClick={() => {
+                  handleUpdate(cardData.id);
+                }}
               >
-                <CheckCircleIcon className="h-6 w-6 text-blue-600" />
+                <CheckCircleIcon className="h-6 w-6 text-blue-500" />
               </button>
             </>
           )}

@@ -1,6 +1,7 @@
 import MobileRow from "./MobileRow";
 
 export default function MobileTermTable({
+  onDeleteRow,
   cardList,
   displayExample,
   displayImg,
@@ -11,14 +12,15 @@ export default function MobileTermTable({
     <div className="">
       <div className="mt-4">
         <ul className="space-y-4">
-          {cardList.map((card, index) => (
+          {cardList.map((card) => (
             <MobileRow
-              key={`mobile-row-${index}`}
+              key={`mobile-card-${card.id}`}
               cardData={card}
               displayExample={displayExample}
               displayImg={displayImg}
               displayDef2={displayDef2}
               setTermModalOpen={setTermModalOpen}
+              onDeleteRow={onDeleteRow}
             />
           ))}
         </ul>

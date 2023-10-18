@@ -10,6 +10,8 @@ export default function DesktopTermTable({
   displayImg,
   displayExample,
   setTermModalOpen,
+  onDeleteRow,
+  onUpdateRow,
 }) {
   // Fetched data
   // Local variable
@@ -62,14 +64,16 @@ export default function DesktopTermTable({
       </div>
       <div className="mt-2">
         <ul className={`${styles.rows}`}>
-          {cardList.map((card, index) => (
+          {cardList.map((card) => (
             <DesktopRow
-              key={`row-${index}`}
+              key={`card-${card.id}`}
               cardData={card}
               displayImg={displayImg}
               displayExample={displayExample}
               displayDef2={displayDef2}
               setTermModalOpen={setTermModalOpen}
+              onDeleteRow={onDeleteRow}
+              onUpdateRow={onUpdateRow}
             />
           ))}
         </ul>

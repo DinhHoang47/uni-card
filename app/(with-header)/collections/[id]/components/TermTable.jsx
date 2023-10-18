@@ -1,10 +1,13 @@
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import DesktopTermTable from "./DesktopTermTable";
 import MobileTermTable from "./MobileTermTable";
 import styles from "./styles.module.css";
 
 import { InboxIcon } from "@heroicons/react/24/outline";
 import { useCard } from "@lib/useCard";
+import { privateCardServ } from "@services/Private_CardService";
+import { useDispatch } from "react-redux";
+import { addMessage } from "@redux/commonMessageSlice";
 
 export default function TermTable({
   displayExample,
@@ -15,7 +18,19 @@ export default function TermTable({
 }) {
   // Fetched data
   const { error, data, loading, mutate } = useCard(collectionId);
-  console.log("data: ", data);
+  console.log(data);
+  // Handler
+  const showErrorMsg = () => {
+    dispatch(addMessage({ text: "Fail to delete.", variation: "warning" }));
+  };
+  const onDeleteRow = (cardId) => {
+    handleDelete(cardId, data, mutate, showErrorMsg);
+  };
+  const onUpdateRow = (cardId, data) => {
+    handleUpdate(cardId, data);
+  };
+  const dispatch = useDispatch();
+
   if (error) return <ErrorMessage />;
   if (loading) return <LoadingComponent />;
   if (data) {
@@ -33,6 +48,8 @@ export default function TermTable({
           <>
             <div className="hidden sm:block">
               <DesktopTermTable
+                onUpdateRow={onUpdateRow}
+                onDeleteRow={onDeleteRow}
                 cardList={data}
                 displayImg={displayImg}
                 displayDef2={displayDef2}
@@ -42,11 +59,13 @@ export default function TermTable({
             </div>
             <div className="block sm:hidden">
               <MobileTermTable
+                onUpdateRow={onUpdateRow}
                 cardList={data}
                 displayImg={displayImg}
                 displayExample={displayExample}
                 displayDef2={displayDef2}
                 setTermModalOpen={setTermModalOpen}
+                onDeleteRow={onDeleteRow}
               />
             </div>
           </>
@@ -55,6 +74,8 @@ export default function TermTable({
     );
   }
 }
+
+// Component
 
 const AddTermButton = ({ setTermModalOpen }) => {
   return (
@@ -102,4 +123,35 @@ const NoCard = () => {
       <p className="text-gray-400">No cards</p>
     </div>
   );
+};
+
+// Functions
+
+const handleDelete = async (cardId, currentCardList, mutate, showErrorMsg) => {
+  const filteredCardList = currentCardList.filter((item) => item.id !== cardId);
+  const options = {
+    optimisticData: filteredCardList,
+    rollbackOnError(error) {
+      return error.name !== "AbortError";
+    },
+    revalidate: false,
+  };
+  mutate(deleteFn(cardId, currentCardList, showErrorMsg), options);
+};
+
+const deleteFn = async (cardId, currentCardList, showErrorMsg) => {
+  const deletedCardId = await privateCardServ
+    .deleteCard(cardId)
+    .then((res) => res.data)
+    .catch((err) => {
+      showErrorMsg();
+    });
+  const updatedCardList = currentCardList.filter(
+    (item) => item.id !== deletedCardId
+  );
+  return updatedCardList;
+};
+
+const handleUpdate = async (cardId, data) => {
+  console.log(cardId, data);
 };

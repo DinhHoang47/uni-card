@@ -3,6 +3,7 @@ import PortalModalWrapper from "@components/PortalModalWrapper";
 import { useEffect, useRef, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { TextareaAutosize } from "@mui/base";
+import { v4 as uuid } from "uuid";
 
 import {
   MAX_COLLECTION_IMG_SIZE,
@@ -352,11 +353,13 @@ const handleAddNew = async (
   // Check if term is valid
   if (trimmedTerm === "") return;
   const optimisticNewCardData = {
+    id: uuid(),
     term: trimmedTerm,
     definition_1: trimmedDef1,
     definition_2: trimmedDef2,
     example: trimmedEx,
     image_url: selectedFileUrl,
+    uploading: true,
   };
   const newCardData = {
     term: trimmedTerm,
@@ -409,11 +412,12 @@ const updateFn = async (
     example: example,
     image_url: imageUrl,
   };
-  console.log("dataToSend : ", dataToSend);
 
   const fetchedCard = await privateCollectionServ
     .createCard(collectionId, dataToSend)
-    .then((res) => res)
+    .then((res) => {
+      return res.data;
+    })
     .catch((error) => {
       throw new Error();
     });
