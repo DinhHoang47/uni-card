@@ -1,15 +1,20 @@
-import styles from "./styles.module.css";
-
-import DesktopRow from "./DesktopRow";
 import { useRef } from "react";
 
+import DesktopRow from "./DesktopRow";
+
+import styles from "./styles.module.css";
+
 export default function DesktopTermTable({
+  cardList,
   displayDef2,
   displayImg,
+  displayExample,
   setTermModalOpen,
-  setEditCardId,
 }) {
-  let totalCol = 5 + (displayDef2 ? 1 : 0) + (displayImg ? 1 : 0);
+  // Fetched data
+  // Local variable
+  let totalCol =
+    4 + (displayDef2 ? 1 : 0) + (displayImg ? 1 : 0) + (displayExample ? 1 : 0);
   let tableHeaderGridTemp;
   // Dynamic table styles
   switch (totalCol) {
@@ -22,22 +27,16 @@ export default function DesktopTermTable({
     case 5:
       tableHeaderGridTemp = styles.tableHeadGridCol5;
       break;
+    case 4:
+      tableHeaderGridTemp = styles.tableHeadGridCol4;
+      break;
     default:
       tableHeaderGridTemp = styles.tableHeadGridUnset;
       break;
   }
+
   return (
-    <div className="">
-      <div className="">
-        <button
-          onClick={() => {
-            setTermModalOpen(true);
-          }}
-          className={`w-full h-10 rounded-md font-semibold border-2 border-dashed ${styles.addButton} `}
-        >
-          + Add
-        </button>
-      </div>
+    <>
       <div className="mt-2">
         <ul
           className={` rounded-t-md w-full ${styles.tableHeader} ${tableHeaderGridTemp}`}
@@ -52,7 +51,7 @@ export default function DesktopTermTable({
               <p className="line-clamp-1">Definition 2</p>
             </li>
           )}
-          <li>Example</li>
+          {displayExample && <li>Example</li>}
           {displayImg && (
             <li>
               <p className="text-center w-full">Image</p>
@@ -61,16 +60,20 @@ export default function DesktopTermTable({
           <li></li>
         </ul>
       </div>
-
       <div className="mt-2">
         <ul className={`${styles.rows}`}>
-          <DesktopRow
-            displayImg={displayImg}
-            displayDef2={displayDef2}
-            setTermModalOpen={setTermModalOpen}
-          />
+          {cardList.map((card, index) => (
+            <DesktopRow
+              key={`row-${index}`}
+              cardData={card}
+              displayImg={displayImg}
+              displayExample={displayExample}
+              displayDef2={displayDef2}
+              setTermModalOpen={setTermModalOpen}
+            />
+          ))}
         </ul>
       </div>
-    </div>
+    </>
   );
 }

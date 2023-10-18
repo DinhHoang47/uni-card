@@ -24,13 +24,6 @@ export default function AuthModal() {
     setChildWidth(childrenRef.current.offsetWidth);
   }, [childHeight, childWidth]);
 
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, []);
-
   const mode = {
     signIn: 0,
     signUp: 1,

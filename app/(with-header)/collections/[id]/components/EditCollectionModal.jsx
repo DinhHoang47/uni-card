@@ -30,13 +30,6 @@ export default function EditCollectionModal({
     setChildHeight(childrenRef.current.offsetHeight);
     setChildWidth(childrenRef.current.offsetWidth);
   }, [childHeight, childWidth]);
-  // Disable scrollbar after render modal
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, []);
   // Chips state
   const [chips, setChips] = useState(data.tags);
   // Handle file selection
@@ -65,6 +58,7 @@ export default function EditCollectionModal({
   const [title, setTitle] = useState(data.title);
   const [description, setDescription] = useState(data.description);
   const [displayDef2, setDisplayDef2] = useState(data.display_def_2);
+  const [displayExample, setDisplayExample] = useState(data.display_example);
   const [displayImg, setDisplayImg] = useState(data.display_img);
   const [imageUrl, setImageUrl] = useState(data.imageUrl);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -100,6 +94,7 @@ export default function EditCollectionModal({
         imageUrl: updatedUrl,
         display_def_2: displayDef2,
         display_img: displayImg,
+        display_example: displayExample,
       };
       const optimizeUIData = {
         id: data.id,
@@ -113,6 +108,7 @@ export default function EditCollectionModal({
         userId: data.userId,
         display_def_2: displayDef2,
         display_img: displayImg,
+        display_example: displayExample,
       };
       const mutateOptions = {
         optimisticData: optimizeUIData,
@@ -226,23 +222,26 @@ export default function EditCollectionModal({
           {/* Switchs */}
           <div className="space-y-1 max-w-[380px]">
             <p>Card display setting</p>
-            <label className="">Definition 2</label>
+            <label className="">Def2</label>
             <Switch
               onChange={(e) => {
-                if (e.target.checked) {
-                  setDisplayDef2(true);
-                } else {
-                  setDisplayDef2(false);
-                }
+                setDisplayDef2((pre) => !pre);
               }}
               checked={displayDef2}
             />
-            <label className="">Image</label>
+            <label className="">Img</label>
             <Switch
               onChange={(e) => {
                 setDisplayImg((pre) => !pre);
               }}
               checked={displayImg}
+            />
+            <label className="">Ex</label>
+            <Switch
+              onChange={(e) => {
+                setDisplayExample((pre) => !pre);
+              }}
+              checked={displayExample}
             />
           </div>
           {/* Error Message */}

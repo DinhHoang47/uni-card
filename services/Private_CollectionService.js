@@ -22,6 +22,9 @@ class PrivateCollectionService extends PrivateService {
   getCloudinarySignature = (data) => {
     return this.post(`cldSignature`, data);
   };
+  createCard = (id, data) => {
+    return this.post(`collections/${id}/card`, data);
+  };
 }
 
 export const privateCollectionServ = (() => {

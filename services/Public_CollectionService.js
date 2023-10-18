@@ -10,6 +10,9 @@ class PublicCollectionServ extends BaseService {
   getCollectionLikes(id) {
     return this.get(`collections/${id}/likes`);
   }
+  getCardList(id) {
+    return this.get(`collections/${id}/cards`);
+  }
 }
 
 export const publicCollectionServ = new PublicCollectionServ();

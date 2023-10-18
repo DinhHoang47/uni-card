@@ -29,14 +29,6 @@ export default function SettingModal({ isOpen, setIsOpen }) {
   const [show, setShow] = useState("back");
   const [speed, setSpeed] = useState(speedLevel.moderate);
 
-  // Disable scrollbar after render modal
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen]);
-
   return (
     <PortalModalWrapper
       childrenHeight={childHeight}

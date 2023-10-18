@@ -65,6 +65,7 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
   const updateMycollection = () => {
     mutate((key) => Array.isArray(key) && key[0] === "/user/id/posts");
   };
+  const trimmedTitle = title.trim();
 
   const handleAddNew = async () => {
     setLoading(true);
@@ -78,7 +79,6 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
         const imageResult = await uploadImage(selectedFile, imageId, preset);
         imageUrl = imageResult.data?.secure_url;
       }
-      const trimmedTitle = title.trim();
       const trimmedDescription = description.trim();
       // Create formdata
       const data = {
@@ -198,7 +198,7 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
             }}
             disabled={loading || !title}
             className={`${
-              !title || loading ? "bg-blue-400" : "bg-blue-600"
+              !trimmedTitle || loading ? "bg-blue-400" : "bg-blue-600"
             }  w-full h-10 rounded inline-flex items-center justify-center px-4 py-2 font-semibold leading-6 text-sm shadow transition ease-in-out duration-150 text-white`}
           >
             <Spinner

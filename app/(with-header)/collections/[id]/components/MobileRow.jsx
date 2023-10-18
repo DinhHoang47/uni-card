@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { v4 as uuid } from "uuid";
 import styles from "./styles.module.css";
 import {
   MAX_COLLECTION_IMG_SIZE,
@@ -6,16 +7,28 @@ import {
 } from "@utils/config";
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { TrashIcon } from "@heroicons/react/24/solid";
-import { CloudArrowUpIcon } from "@heroicons/react/20/solid";
-import { useState } from "react";
+import { XMarkIcon } from "@heroicons/react/20/solid";
+import { CheckCircleIcon } from "@heroicons/react/20/solid";
+import { PlusIcon } from "@heroicons/react/20/solid";
+
+import { useRef, useState } from "react";
 import { TextareaAutosize } from "@mui/base";
 
-export default function MobileRow({ displayDef2, displayImg }) {
+export default function MobileRow({
+  cardData,
+  displayDef2,
+  displayImg,
+  displayExample,
+}) {
   // State
   const [editting, setEditting] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileUrl, setSelectedFileUrl] = useState(null);
+  const cardId = useRef(() => uuid());
+  let imageUrl = null;
+  // let imageUrl =
+  //   "https://res.cloudinary.com/unicard/image/upload/v1697429744/collections/brain_3.png";
   // Handler
   const handleEdit = () => {
     setEditting(true);
@@ -27,11 +40,12 @@ export default function MobileRow({ displayDef2, displayImg }) {
     setEditting(false);
   };
 
-  let imageUrl = null;
-  // let imageUrl =
-  //   "https://res.cloudinary.com/unicard/image/upload/v1697429744/collections/brain_3.png";
-  console.log(errMsg);
-  console.log("rerender");
+  const cancelEditting = () => {
+    setSelectedFile(null);
+    setSelectedFileUrl(null);
+    setEditting(false);
+  };
+  console.log(cardData);
   return (
     <li
       className={`${styles.mobileRow} ${
@@ -58,7 +72,11 @@ export default function MobileRow({ displayDef2, displayImg }) {
         )}
       </div>
       {/* Definition & Example */}
-      <div className="space-y-1">
+      <div
+        className={`space-y-1 ${
+          !displayImg || (!imageUrl && !selectedFileUrl) ? "pb-5" : ""
+        } `}
+      >
         {/* Definition */}
         <div className="flex justify-between">
           {editting && (
@@ -100,24 +118,26 @@ export default function MobileRow({ displayDef2, displayImg }) {
           </div>
         )}
         {/* Example*/}
-        <div className="flex justify-between">
-          {editting && (
-            <>
-              <span className="mr-1 text-gray-300 w-14">Ex:</span>
-              <TextareaAutosize
-                maxLength={225}
-                defaultValue={"lorem10"}
-                className={styles.autoSizeTextArea}
-              />
-            </>
-          )}
-          {!editting && (
-            <>
-              <span className="mr-1 text-gray-300 w-14">Ex:</span>
-              <span>humman là</span>
-            </>
-          )}
-        </div>
+        {displayExample && (
+          <div className="flex justify-between">
+            {editting && (
+              <>
+                <span className="mr-1 text-gray-300 w-14">Ex:</span>
+                <TextareaAutosize
+                  maxLength={225}
+                  defaultValue={"lorem10"}
+                  className={styles.autoSizeTextArea}
+                />
+              </>
+            )}
+            {!editting && (
+              <>
+                <span className="mr-1 text-gray-300 w-14">Ex:</span>
+                <span>humman là</span>
+              </>
+            )}
+          </div>
+        )}
       </div>
       {/* Error message */}
       {errMsg && (
@@ -127,8 +147,8 @@ export default function MobileRow({ displayDef2, displayImg }) {
       )}
 
       {/* Image */}
-      {displayImg && (
-        <div className="flex items-center">
+      {displayImg && (imageUrl || selectedFileUrl || editting) && (
+        <div className={`relative flex items-center`}>
           <span className="mr-1 text-gray-300 w-14">Img:</span>
           <div className={`relative w-14 h-14`}>
             {selectedFileUrl && (
@@ -151,45 +171,65 @@ export default function MobileRow({ displayDef2, displayImg }) {
                 src={imageUrl}
               />
             )}
+            {!imageUrl && !selectedFileUrl && (
+              <Image
+                priority={false}
+                fill
+                sizes="56px"
+                alt="card-image"
+                className="object-contain"
+                src={"/assets/images/uni-placeholder-image.png"}
+              />
+            )}
           </div>
           {editting && (
-            <input
-              onChange={(e) => {
-                handleFileChange(
-                  e,
-                  setErrMsg,
-                  setSelectedFile,
-                  setSelectedFileUrl
-                );
-              }}
-              multiple={false}
-              className="ml-4"
-              accept="image/*"
-              type="file"
-            />
+            <>
+              <input
+                hidden
+                id={cardId}
+                onChange={(e) => {
+                  handleFileChange(
+                    e,
+                    setErrMsg,
+                    setSelectedFile,
+                    setSelectedFileUrl
+                  );
+                }}
+                multiple={false}
+                className="ml-4"
+                accept="image/*"
+                type="file"
+              />
+              <label className="obsolute cursor-pointer" htmlFor={cardId}>
+                <PlusIcon className="h-6 w-6 text-blue-600" />
+              </label>
+            </>
           )}
         </div>
       )}
-
-      {/* Padding for edit button if no image display */}
-      {!displayImg && <div className="h-5"></div>}
       {/* Actions */}
-      <div className="absolute top-full right-0 !mt-0 -translate-y-10  flex items-center space-x-4 mr-6 pt-1">
+      <div className="absolute top-full right-0 !mt-0 -translate-y-8  flex items-center space-x-4 mr-6 pt-1">
         {!editting && (
-          <button>
-            <PencilIcon
-              onClick={handleEdit}
-              className="h-5 w-5 text-blue-600"
-            />
-          </button>
+          <>
+            <button>
+              <PencilIcon
+                onClick={handleEdit}
+                className="h-5 w-5 text-blue-600"
+              />
+            </button>
+          </>
         )}
         {editting && (
           <>
             <button onClick={handleDelete}>
               <TrashIcon className="h-5 w-5 text-red-400" />
             </button>
-            <button onClick={handleUpdate}>
-              <CloudArrowUpIcon className="h-5 w-5 text-blue-600" />
+            <button
+              title="Save"
+              className="flex items-center"
+              onClick={handleUpdate}
+            >
+              <CheckCircleIcon className="h-6 w-6 text-blue-600" />
             </button>
           </>
         )}

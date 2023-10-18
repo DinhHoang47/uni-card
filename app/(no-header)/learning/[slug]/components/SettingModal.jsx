@@ -34,14 +34,6 @@ export default function SettingModal({ isOpen, setIsOpen, slug }) {
     router.push(`/testing/${slug}?mode=${mode}&show=${show}&time=${speed}`);
   };
 
-  // Disable scrollbar after render modal
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen]);
-
   return (
     <PortalModalWrapper
       childrenHeight={childHeight}

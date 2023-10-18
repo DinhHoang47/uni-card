@@ -5,12 +5,6 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import ReactCardFlip from "react-card-flip";
 
 export default function CardPreview({ cardData, isOpen, setOpen }) {
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen]);
   console.log(cardData);
   const [isFlipped, setIsFlipped] = useState(false);
   const haveImageBg =

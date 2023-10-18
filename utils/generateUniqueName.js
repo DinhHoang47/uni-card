@@ -1,5 +1,5 @@
 export const generateUniqueName = (name) => {
-  const timestampDigits = 6;
+  const timestampDigits = 10;
   // remove all special characters (except kanji ...) and replace with "-"
   const specialCharsRegex = /[^\p{L}\p{N}]+/gu;
   const plainName = name.toLowerCase().replace(specialCharsRegex, "-");
