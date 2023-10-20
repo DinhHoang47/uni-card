@@ -1,5 +1,5 @@
 import MobilePlayground from "../../MobilePlayground";
-import Desktop_Playground_FlipCard from "../Desktop_Playground_FlipCard";
+import Desktop_Playground_FlipCard from "./Desktop_Playground_FlipCard";
 
 export default function PlayGround({ setOpenSelect }) {
   return (

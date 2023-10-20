@@ -26,17 +26,8 @@ export default function AddTermModal({
   displayImg,
   setTermModalOpen,
   collectionId,
+  hanger,
 }) {
-  // -------------------------------------------Common Modal State--------------------------------------
-  // Handle dynamic size for modal start
-  const childrenRef = useRef(null);
-  const [childHeight, setChildHeight] = useState();
-  const [childWidth, setChildWidth] = useState();
-  useEffect(() => {
-    setChildHeight(childrenRef.current.offsetHeight);
-    setChildWidth(childrenRef.current.offsetWidth);
-  }, [childHeight, childWidth]);
-  // -------------------------------------------Common Modal State End--------------------------------------
   // Fetched data
   // Local state
   const [coutinueInput, setContinueInput] = useState(false);
@@ -73,9 +64,9 @@ export default function AddTermModal({
   const trimmedTerm = term.trim();
 
   return (
-    <PortalModalWrapper childrenHeight={childHeight} childrenWidth={childWidth}>
+    <PortalModalWrapper mountTarget={hanger}>
       {/* Main Container */}
-      <div ref={childrenRef} className="bg-white relative rounded-md p-6">
+      <div className="bg-white relative rounded-md p-6">
         <h3 className="font-semibold text-xl text-center">Add Term</h3>
         {/* Preview*/}
         <div className=" space-y-2 ">

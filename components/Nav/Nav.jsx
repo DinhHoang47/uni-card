@@ -15,6 +15,7 @@ import AddNewCollectionModal from "../AddNewCollectionModal";
 import AmberButton from "@components/Buttons/AmberButton";
 import { open, close as closeAuthModal } from "../../redux/authModalSlice.js";
 import { open as openSidebar } from "../../redux/rightSideBarSlice.js";
+import { openAddNewCollectionModal } from "@redux/modalSlice";
 import useUser from "@lib/useUser";
 import Image from "next/image";
 import TooltipMenu from "@components/TooltipMenu";
@@ -28,8 +29,12 @@ export default function Nav() {
   const [currentPath, setCurrentPath] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const isOpen = useSelector((state) => state.authModal.isOpen);
-  const [messageModal, setMessageModal] = useState(false);
+  const isAddNewCollectionModalOpen = useSelector(
+    (state) => state.modal.isAddNewCollectionModalOpen
+  );
   const searchContainerRef = useRef();
+  const navhangerRef = useRef(null);
+  // Redux global state
   // Route
   const router = useRouter();
   const pathname = usePathname();
@@ -168,7 +173,9 @@ export default function Nav() {
           <button
             onClick={() => {
               {
-                user?.isLoggedIn ? setIsAddNewOpen(true) : dispatch(open());
+                user?.isLoggedIn
+                  ? dispatch(openAddNewCollectionModal())
+                  : dispatch(open());
               }
             }}
             className="create_btn text-blue-700 hover:text-white "
@@ -244,23 +251,31 @@ export default function Nav() {
           </form>
         </div>
       </div>
+      {/* Hanger for modal */}
+      <div id="navHanger" ref={navhangerRef} className=""></div>
       {/* Auth */}
       <CSSTransition
+        nodeRef={navhangerRef}
         classNames={"modal"}
         in={isOpen}
         timeout={200}
         unmountOnExit
       >
-        <AuthModal isOpen={isOpen} />
+        <AuthModal hanger={"navHanger"} isOpen={isOpen} />
       </CSSTransition>
       {/* New collection */}
       <CSSTransition
+        nodeRef={navhangerRef}
         classNames={"modal"}
-        in={isAddNewOpen}
+        in={isAddNewCollectionModalOpen}
         timeout={200}
         unmountOnExit
       >
-        <AddNewCollectionModal setIsOpen={setIsAddNewOpen} router={router} />
+        <AddNewCollectionModal
+          hanger={"navHanger"}
+          setIsOpen={setIsAddNewOpen}
+          router={router}
+        />
       </CSSTransition>
       <CommonMessage />
     </div>

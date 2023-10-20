@@ -7,14 +7,24 @@ import UserLink from "@components/UserLink";
 import Link from "next/link";
 import SettingTooltip from "./SettingTooltip";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function CollectionHeader({
   data,
   collectionId,
   setIsCollectionModalOpen,
 }) {
+  // Fetched data
   const { imageUrl, title, userId, likes } = data;
+
+  // Local state
   const [isOpenPopup, setIsOpenPopup] = useState(false);
+  // Handler
+  const router = useRouter();
+  const navigateToLearn = () => {
+    router.push(`/learning/${collectionId}`);
+  };
+
   return (
     <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-8">
       {/* Collection Info */}
@@ -71,12 +81,12 @@ export default function CollectionHeader({
       </div>
       {/* Action Button */}
       <div className="flex justify-end items-end">
-        <Link
-          href={`/learning/${collectionId}`}
+        <button
+          onClick={navigateToLearn}
           className="px-4 h-10 w-full sm:w-24 rounded-md bg-blue-600 text-white flex items-center justify-center"
         >
           <p>Learn</p>
-        </Link>
+        </button>
       </div>
     </div>
   );

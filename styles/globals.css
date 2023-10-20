@@ -414,3 +414,19 @@ html {
 .right-sidebar-exit-active .sidebarContainer {
   transform: translateX(-100%);
 }
+
+/* Transfrom to create animation when height change using CSSTransition */
+.height-change-animate-enter {
+  max-height: 0px;
+}
+.height-change-animate-enter-active {
+  max-height: 300px;
+  transition: all 400ms;
+}
+.height-change-animate-exit {
+  max-height: 300px;
+}
+.height-change-animate-exit-active {
+  max-height: 0px;
+  transition: all 400ms;
+}

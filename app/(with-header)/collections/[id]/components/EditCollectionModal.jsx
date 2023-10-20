@@ -22,23 +22,15 @@ export default function EditCollectionModal({
   setIsOpen,
   data,
   mutateCollection,
+  hanger,
 }) {
+  // Fetched data
   const { user } = useUser();
-  // Handle dynamic size for modal start
-  const childrenRef = useRef(null);
-  const [childHeight, setChildHeight] = useState();
-  const [childWidth, setChildWidth] = useState();
-  useEffect(() => {
-    setChildHeight(childrenRef.current.offsetHeight);
-    setChildWidth(childrenRef.current.offsetWidth);
-  }, [childHeight, childWidth]);
-  // Chips state
-  const [chips, setChips] = useState(data.tags);
-  // Handle file selection
+  // Local state
   const [loadingImage, setLoadingImage] = useState(false);
-  // Get userId
   const creatorId = data.userId;
   // Input states
+  const [chips, setChips] = useState(data.tags);
   const [title, setTitle] = useState(data.title);
   const [description, setDescription] = useState(data.description);
   const [displayDef2, setDisplayDef2] = useState(data.display_def_2);
@@ -122,8 +114,8 @@ export default function EditCollectionModal({
     }
   };
   return (
-    <PortalModalWrapper childrenHeight={childHeight} childrenWidth={childWidth}>
-      <div ref={childrenRef} className="bg-white relative rounded-md p-6">
+    <PortalModalWrapper mountTarget={hanger}>
+      <div className="bg-white relative rounded-md p-6">
         {/* Title */}
         <h3 className="font-semibold text-xl text-center">Edit collection</h3>
 

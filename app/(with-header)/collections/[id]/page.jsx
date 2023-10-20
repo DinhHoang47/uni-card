@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { CSSTransition } from "react-transition-group";
 import AddTermModal from "./components/AddTermModal";
@@ -12,12 +12,12 @@ import Link from "next/link";
 import TermTable from "./components/TermTable";
 
 export default function CollectionDetail({ params }) {
-  // Modal state
-  const [isTermModalOpen, setTermModalOpen] = useState(false);
-  const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
-
   // Fetch data
   const { data, error, isLoading, mutate } = useCollection(params.id);
+  // Local state
+  const [isTermModalOpen, setTermModalOpen] = useState(false);
+  const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
+  const collectionHangerRef = useRef(null);
   if (error) {
     return <div className="">Collection not found</div>;
   }
@@ -80,14 +80,17 @@ export default function CollectionDetail({ params }) {
             setTermModalOpen={setTermModalOpen}
           />
         </div>
+        <div ref={collectionHangerRef} id="collectionHanger"></div>
         {/* Add Term Modal */}
         <CSSTransition
+          nodeRef={collectionHangerRef}
           classNames={"modal"}
           in={isTermModalOpen}
           timeout={200}
           unmountOnExit
         >
           <AddTermModal
+            hanger={"collectionHanger"}
             displayExample={data.display_example}
             displayDef2={data.display_def_2}
             displayImg={data.display_img}
@@ -97,12 +100,14 @@ export default function CollectionDetail({ params }) {
         </CSSTransition>
         {/* Edit collection detail modal */}
         <CSSTransition
+          nodeRef={collectionHangerRef}
           classNames={"modal"}
           in={isCollectionModalOpen}
           timeout={200}
           unmountOnExit
         >
           <EditCollectionModal
+            hanger={"collectionHanger"}
             mutateCollection={mutate}
             data={data}
             setIsOpen={setIsCollectionModalOpen}

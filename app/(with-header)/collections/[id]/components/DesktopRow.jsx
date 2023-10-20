@@ -19,6 +19,7 @@ export default function DesktopRow({
   displayExample,
   onDeleteRow,
   onUpdateRow,
+  rowIndex,
 }) {
   // States
   // Fetched data
@@ -32,6 +33,7 @@ export default function DesktopRow({
   const [editted, setEditted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
+  const order = rowIndex + 1;
   // Input value
   const [term, setTerm] = useState(cardData.term);
   const [definition1, setDefition1] = useState(cardData.definition_1);
@@ -104,7 +106,7 @@ export default function DesktopRow({
         <li
           className={`${styles.rowItem} ${editting ? styles.edittingItem : ""}`}
         >
-          1
+          {order}
         </li>
         {/* Term */}
         <li

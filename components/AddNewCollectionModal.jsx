@@ -10,38 +10,17 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import Spinner from "@public/assets/icons/spinner";
 import { uploadImage } from "@services/CldService";
 import { generateUniqueName } from "@utils/generateUniqueName";
-import {
-  MAX_COLLECTION_IMG_SIZE,
-  MAX_COLLECTION_IMG_SIZE_TEXT,
-} from "@utils/config";
 import { useSWRConfig } from "swr";
-import useUser from "@lib/useUser";
 import { handleSelectedImage } from "@lib/handleSelectedImage";
 import Image from "next/image";
+import { useDispatch } from "react-redux";
+import { closeAddNewCollectionModal } from "@redux/modalSlice";
 
-export default function AddNewCollectionModal({ setIsOpen, router }) {
-  // Handle dynamic size for modal start
-  const childrenRef = useRef(null);
-  const [childHeight, setChildHeight] = useState();
-  const [childWidth, setChildWidth] = useState();
-  useEffect(() => {
-    setChildHeight(childrenRef.current.offsetHeight);
-    setChildWidth(childrenRef.current.offsetWidth);
-  }, [childHeight, childWidth]);
+export default function AddNewCollectionModal({ hanger, router }) {
   //   Handle input chip
-  const handleAddChip = (chipValue) => {
-    if (!chips.includes(chipValue)) {
-      setChips([...chips, chipValue]);
-    } else {
-    }
-  };
-  const handleDeleteChip = (chipValue) => {
-    const newChips = [...chips].filter((value) => value !== chipValue);
-    setChips(newChips);
-  };
-  const [chips, setChips] = useState([]);
 
   // Input states
+  const [chips, setChips] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
@@ -50,22 +29,10 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
   const [loadingImage, setLoadingImage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
-
-  // Handle add new collection   -------------------------------
-
+  // Handler add new collection   -------------------------------
+  const dispatch = useDispatch();
   const { mutate } = useSWRConfig();
 
-  const handleFileChange = (e) => {
-    setErrMsg("");
-    const currentFile = e.target.files[0];
-    const maxSizeInBytes = MAX_COLLECTION_IMG_SIZE;
-    if (currentFile && currentFile.size > maxSizeInBytes) {
-      setErrMsg(`Maximum image size is ${MAX_COLLECTION_IMG_SIZE_TEXT}.`);
-      e.target.value = null;
-    } else {
-      setSelectedFile(currentFile);
-    }
-  };
   const updateMycollection = () => {
     mutate((key) => Array.isArray(key) && key[0] === "/user/id/posts");
   };
@@ -96,7 +63,7 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
       if (result?.data.id) {
         const id = result.data.id;
         setLoading(false);
-        setIsOpen(false);
+        dispatch(closeAddNewCollectionModal());
         updateMycollection();
         router.push(`/collections/${id}`);
       } else {
@@ -122,14 +89,24 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
       setLoading(false);
     }
   };
+  const handleAddChip = (chipValue) => {
+    if (!chips.includes(chipValue)) {
+      setChips([...chips, chipValue]);
+    } else {
+    }
+  };
+  const handleDeleteChip = (chipValue) => {
+    const newChips = [...chips].filter((value) => value !== chipValue);
+    setChips(newChips);
+  };
   // Clear error message
   useEffect(() => {
     setErrMsg("");
   }, [title, description, chips]);
 
   return (
-    <PortalModalWrapper childrenHeight={childHeight} childrenWidth={childWidth}>
-      <div ref={childrenRef} className="bg-white relative rounded-md p-6">
+    <PortalModalWrapper mountTarget={hanger}>
+      <div className="bg-white relative rounded-md p-6">
         {/* Title */}
         <h3 className="font-semibold text-xl text-center">Create new</h3>
 
@@ -245,7 +222,7 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
         <button
           onClick={(e) => {
             e.stopPropagation();
-            setIsOpen(false);
+            dispatch(closeAddNewCollectionModal());
           }}
           className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-1 border border-gray-300"
         >

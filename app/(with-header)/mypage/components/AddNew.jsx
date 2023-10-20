@@ -1,17 +1,14 @@
 "use client";
-import AddNewCollectionModal from "@components/AddNewCollectionModal";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { CSSTransition } from "react-transition-group";
+import { useDispatch } from "react-redux";
+import { openAddNewCollectionModal } from "@redux/modalSlice";
 
 export default function AddNew() {
-  const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
+  const dispatch = useDispatch();
   return (
     <div
       onClick={() => {
-        setIsOpen(true);
+        dispatch(openAddNewCollectionModal());
       }}
       className="group relative w-full h-40 bg-white rounded-md border border-gray-300 flex flex-col items-center justify-center space-y-2 cursor-pointer hover:shadow-[0px_2px_5px_1px_#90cdf4] transition-all"
     >
@@ -21,15 +18,6 @@ export default function AddNew() {
       <div className="text-gray-400 group-hover:text-gray-500 absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-6 max-w-max">
         <p className="w-40">Create new collection</p>
       </div>
-      {/* Edit collection detail modal */}
-      <CSSTransition
-        classNames={"modal"}
-        in={isOpen}
-        timeout={200}
-        unmountOnExit
-      >
-        <AddNewCollectionModal setIsOpen={setIsOpen} router={router} />
-      </CSSTransition>
     </div>
   );
 }

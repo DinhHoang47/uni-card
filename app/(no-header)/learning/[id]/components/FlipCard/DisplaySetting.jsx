@@ -1,7 +1,7 @@
-export default function DisplaySetting({ openSelect }) {
+export default function DisplaySetting() {
   return (
     <>
-      <div className={`w-full space-y-4 ${openSelect ? "" : "sm:!mt-0"}`}>
+      <div className={`w-full space-y-4`}>
         {/* Setting & button */}
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 justify-between items-center">
           {/* Setting */}

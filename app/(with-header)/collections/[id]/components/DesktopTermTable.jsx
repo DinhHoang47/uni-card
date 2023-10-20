@@ -64,8 +64,9 @@ export default function DesktopTermTable({
       </div>
       <div className="mt-2">
         <ul className={`${styles.rows}`}>
-          {cardList.map((card) => (
+          {cardList.map((card, index) => (
             <DesktopRow
+              rowIndex={index}
               key={`card-${card.id}`}
               cardData={card}
               displayImg={displayImg}

@@ -6,17 +6,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import PortalModalWrapper from "@components/PortalModalWrapper";
 import { useEffect, useRef, useState } from "react";
 
-export default function SettingModal({ isOpen, setIsOpen, id }) {
-  // Handle dynamic size for modal start
-  const childrenRef = useRef(null);
-  const [childHeight, setChildHeight] = useState();
-  const [childWidth, setChildWidth] = useState();
-
-  useEffect(() => {
-    setChildHeight(childrenRef.current.offsetHeight);
-    setChildWidth(childrenRef.current.offsetWidth);
-  }, [childHeight, childWidth]);
-  // Handle dynamic size for modal end
+export default function SettingModal({ setIsOpen, id, hanger }) {
   // Setting
   const speedLevel = {
     slow: 15,
@@ -35,16 +25,9 @@ export default function SettingModal({ isOpen, setIsOpen, id }) {
   };
 
   return (
-    <PortalModalWrapper
-      childrenHeight={childHeight}
-      childrenWidth={childWidth}
-      mountTarget="learning-header"
-    >
+    <PortalModalWrapper mountTarget={hanger}>
       {/* Main container */}
-      <div
-        ref={childrenRef}
-        className="p-6 rounded relative bg-white space-y-3"
-      >
+      <div className="p-6 rounded relative bg-white space-y-3">
         <div className="font-semibold text-lg text-center select-none">
           Select Test Mode
         </div>

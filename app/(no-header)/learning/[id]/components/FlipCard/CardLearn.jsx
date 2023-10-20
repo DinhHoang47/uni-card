@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import ReactCardFlip from "react-card-flip";
-import styles from "./styles.module.css";
+import styles from "../../styles.module.css";
 
 export default function CardLearn() {
   const [isFlipped, setIsFlipped] = useState(false);
