@@ -72,7 +72,7 @@ export default function CollectionHeader({
       {/* Action Button */}
       <div className="flex justify-end items-end">
         <Link
-          href={`/learning/collectionId`}
+          href={`/learning/${collectionId}`}
           className="px-4 h-10 w-full sm:w-24 rounded-md bg-blue-600 text-white flex items-center justify-center"
         >
           <p>Learn</p>

@@ -8,8 +8,13 @@ import {
 
 import { useState } from "react";
 import LearningModeTooltip from "./LearningModeTooltip";
+import { useCollection } from "@lib/useCollection";
 
-export default function Header({ slug, id, handleTest }) {
+export default function Header({ id, handleTest }) {
+  const collectionId = id;
+  // Fetched data
+  const { data: collection } = useCollection(collectionId);
+  // Local state
   const [isOpenPopup1, setIsOpenPopup1] = useState();
   const [isOpenPopup2, setIsOpenPopup2] = useState();
   return (
@@ -30,11 +35,11 @@ export default function Header({ slug, id, handleTest }) {
           />
         </button>
         {isOpenPopup1 && (
-          <BackTooltip id={id} slug={slug} setIsOpenPopup={setIsOpenPopup1} />
+          <BackTooltip id={id} setIsOpenPopup={setIsOpenPopup1} />
         )}
         <div className="flex items-center">
           <span className="font-semibold line-clamp-1">
-            Collection title here Lorem ipsum dolor sit amet.
+            {collection?.title}
           </span>
         </div>
       </div>

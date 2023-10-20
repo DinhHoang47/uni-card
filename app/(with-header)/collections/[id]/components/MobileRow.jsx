@@ -11,34 +11,51 @@ import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { DocumentArrowUpIcon } from "@heroicons/react/20/solid";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextareaAutosize } from "@mui/base";
+import { handleSelectedImage } from "@lib/handleSelectedImage";
+import Spinner from "@public/assets/icons/spinner";
 
 export default function MobileRow({
-  cardData: data,
-  displayDef2,
+  cardData,
   displayImg,
+  displayDef2,
   displayExample,
   onDeleteRow,
+  onUpdateRow,
 }) {
-  // Input state
-  const initialData = {
-    term: data.term,
-    definition1: data.definition_1,
-    definition2: data.definition_2,
-    example: data.example,
-    imageUrl: data.image_url,
-  };
-  const [cardData, setCardData] = useState(initialData);
-  // State
+  // Local state
+  const [editted, setEditted] = useState(false);
+  const [loadingImage, setLoadingImage] = useState(false);
   const [editting, setEditting] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileUrl, setSelectedFileUrl] = useState(null);
+  // Input value
+  const [term, setTerm] = useState(cardData.term);
+  const [definition1, setDefition1] = useState(cardData.definition_1);
+  const [definition2, setDefition2] = useState(cardData.definition_2);
+  const [example, setExample] = useState(cardData.example);
+  // Handler
   const handleEdit = () => {
     setEditting(true);
   };
-  const handleUpdate = () => {
+  const handleUpdate = async (cardId) => {
+    if (editted) {
+      await onUpdateRow({
+        id: cardId,
+        term,
+        definition1,
+        definition2,
+        example,
+        selectedFileUrl,
+        imageUrl: cardData.image_url,
+        selectedFile: selectedFile,
+      });
+    }
+    setSelectedFile(null);
+    setSelectedFileUrl(null);
+    setErrMsg("");
     setEditting(false);
   };
   const handleDelete = (id) => {
@@ -50,6 +67,20 @@ export default function MobileRow({
     setSelectedFileUrl(null);
     setEditting(false);
   };
+  //Set editting if info changed
+  useEffect(() => {
+    if (
+      term !== cardData.term ||
+      definition1 !== cardData.definition_1 ||
+      definition2 !== cardData.definition_2 ||
+      example !== cardData.example ||
+      selectedFileUrl !== null
+    ) {
+      setEditted(true);
+    } else {
+      setEditted(false);
+    }
+  }, [term, definition1, definition2, example, selectedFileUrl]);
   return (
     <li
       className={`${styles.mobileRow} ${
@@ -63,7 +94,10 @@ export default function MobileRow({
             <span className="mr-1 text-gray-300 w-14">Term:</span>
             <TextareaAutosize
               maxLength={225}
-              defaultValue={data.term}
+              value={term}
+              onChange={(e) => {
+                setTerm(e.target.value);
+              }}
               className={styles.autoSizeTextArea}
             />
           </>
@@ -71,14 +105,16 @@ export default function MobileRow({
         {!editting && (
           <>
             <span className="mr-1 text-gray-300 w-14">Term:</span>
-            <span className="font-semibold">{data.term}</span>
+            <span className="font-semibold">{cardData.term}</span>
           </>
         )}
       </div>
       {/* Definition & Example */}
       <div
         className={`space-y-1 ${
-          !displayImg || (!data.image_url && !selectedFileUrl) ? "pb-5" : ""
+          editting && (!displayImg || (!cardData.image_url && !selectedFileUrl))
+            ? "pb-5"
+            : ""
         } `}
       >
         {/* Definition */}
@@ -88,7 +124,10 @@ export default function MobileRow({
               <span className="mr-1 text-gray-300 w-14">Def:</span>
               <TextareaAutosize
                 maxLength={225}
-                defaultValue={data.definition1}
+                value={definition1}
+                onChange={(e) => {
+                  setDefition1(e.target.value);
+                }}
                 className={styles.autoSizeTextArea}
               />
             </>
@@ -96,19 +135,22 @@ export default function MobileRow({
           {!editting && (
             <>
               <span className="mr-1 text-gray-300 w-14">Def:</span>
-              <span>{data.definition1}</span>
+              <span>{cardData.definition_1}</span>
             </>
           )}
         </div>
         {/* Definition 2*/}
         {displayDef2 && (
-          <div className="flex justify-between">
+          <div className="flex">
             {editting && (
               <>
                 <span className="mr-1 text-gray-300 w-14">Def 2:</span>
                 <TextareaAutosize
                   maxLength={225}
-                  defaultValue={data.definition2}
+                  onChange={(e) => {
+                    setDefition2(e.target.value);
+                  }}
+                  value={definition2}
                   className={styles.autoSizeTextArea}
                 />
               </>
@@ -116,20 +158,23 @@ export default function MobileRow({
             {!editting && (
               <>
                 <span className="mr-1 text-gray-300 w-14">Def 2:</span>
-                <span>{data.definition2}</span>
+                <span>{cardData.definition_2}</span>
               </>
             )}
           </div>
         )}
         {/* Example*/}
         {displayExample && (
-          <div className="flex justify-between">
+          <div className="flex">
             {editting && (
               <>
                 <span className="mr-1 text-gray-300 w-14">Ex:</span>
                 <TextareaAutosize
                   maxLength={225}
-                  defaultValue={data.example}
+                  value={example}
+                  onChange={(e) => {
+                    setExample(e.target.value);
+                  }}
                   className={styles.autoSizeTextArea}
                 />
               </>
@@ -137,7 +182,7 @@ export default function MobileRow({
             {!editting && (
               <>
                 <span className="mr-1 text-gray-300 w-14">Ex:</span>
-                <span>{data.example}</span>
+                <span>{cardData.example}</span>
               </>
             )}
           </div>
@@ -151,11 +196,11 @@ export default function MobileRow({
       )}
 
       {/* Image */}
-      {displayImg && (data.image_url || selectedFileUrl || editting) && (
+      {displayImg && (cardData.image_url || selectedFileUrl || editting) && (
         <div className={`relative flex items-center`}>
           <span className="mr-1 text-gray-300 w-14">Img:</span>
           <div className={`relative w-14 h-14`}>
-            {selectedFileUrl && (
+            {selectedFileUrl && editting && (
               <Image
                 priority={false}
                 fill
@@ -165,17 +210,17 @@ export default function MobileRow({
                 src={selectedFileUrl}
               />
             )}
-            {data.image_url && !selectedFileUrl && (
+            {cardData.image_url && !selectedFileUrl && (
               <Image
                 priority={false}
                 fill
                 sizes="56px"
                 alt="card-image"
                 className="object-contain"
-                src={data.image_url}
+                src={cardData.image_url}
               />
             )}
-            {!data.image_url && !selectedFileUrl && (
+            {!cardData.image_url && !selectedFileUrl && (
               <Image
                 priority={false}
                 fill
@@ -185,26 +230,33 @@ export default function MobileRow({
                 src={"/assets/images/uni-placeholder-image.png"}
               />
             )}
+            {loadingImage && (
+              <label className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <Spinner className="animate-spin h-5 w-5 text-blue-700" />
+              </label>
+            )}
           </div>
           {editting && (
             <>
               <input
                 hidden
-                id={data.id}
+                id={cardData.id}
                 onChange={(e) => {
-                  handleFileChange(
-                    e,
+                  handleSelectedImage({
+                    selectedFile: e.target.files[0],
+                    inputTarget: e.target.value,
                     setErrMsg,
                     setSelectedFile,
-                    setSelectedFileUrl
-                  );
+                    setSelectedFileUrl,
+                    setLoadingImage,
+                  });
                 }}
                 multiple={false}
                 className="ml-4"
                 accept="image/*"
                 type="file"
               />
-              <label className="obsolute cursor-pointer" htmlFor={data.id}>
+              <label className="obsolute cursor-pointer" htmlFor={cardData.id}>
                 <DocumentArrowUpIcon className="h-6 w-6 text-blue-600" />
               </label>
             </>
@@ -227,15 +279,18 @@ export default function MobileRow({
           <>
             <button
               onClick={() => {
-                handleDelete(data.id);
+                handleDelete(cardData.id);
               }}
             >
               <TrashIcon className="h-5 w-5 text-red-400" />
             </button>
             <button
+              disabled={loadingImage}
               title="Save"
               className="flex items-center"
-              onClick={handleUpdate}
+              onClick={() => {
+                handleUpdate(cardData.id);
+              }}
             >
               <CheckCircleIcon className="h-6 w-6 text-blue-500" />
             </button>
@@ -245,28 +300,3 @@ export default function MobileRow({
     </li>
   );
 }
-
-const handleFileChange = (
-  e,
-  setErrMsg,
-  setSelectedFile,
-  setSelectedFileUrl
-) => {
-  // Set selected file
-  setErrMsg("");
-  if (!e.target.files[0]) return;
-  const currentFile = e.target.files[0];
-  const maxSizeInBytes = MAX_COLLECTION_IMG_SIZE;
-  if (currentFile && currentFile.size > maxSizeInBytes) {
-    setErrMsg(`Maximum image size is ${MAX_COLLECTION_IMG_SIZE_TEXT}.`);
-    e.target.value = null;
-  } else {
-    setSelectedFile(currentFile);
-    // Get and set selected file local url
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setSelectedFileUrl(e.target.result);
-    };
-    reader.readAsDataURL(currentFile);
-  }
-};

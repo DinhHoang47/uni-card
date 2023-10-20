@@ -1,7 +1,7 @@
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import BackTooltip from "./BackTooltip";
-export default function Header({ slug, handleSubmit }) {
+export default function Header({ id, handleSubmit }) {
   const [isOpenPopup1, setIsOpenPopup1] = useState();
   return (
     <div
@@ -21,7 +21,7 @@ export default function Header({ slug, handleSubmit }) {
           />
         </button>
         {isOpenPopup1 && (
-          <BackTooltip slug={slug} setIsOpenPopup={setIsOpenPopup1} />
+          <BackTooltip id={id} setIsOpenPopup={setIsOpenPopup1} />
         )}
         <div className="flex items-center">
           <span className="font-semibold line-clamp-1">

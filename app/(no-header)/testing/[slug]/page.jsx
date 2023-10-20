@@ -21,7 +21,7 @@ export default function CollectionTest({ params }) {
   return (
     <div className="w-full mt-14 space-y-2 sm:space-y-4 px-2 sm:px-8 ">
       {/* Header */}
-      <Header slug={params.slug} handleSubmit={handleSubmit} />
+      <Header id={params.id} handleSubmit={handleSubmit} />
       {/* Section */}
       <div className="w-full">
         {/* Desktop Tesing-ground */}
@@ -43,7 +43,7 @@ export default function CollectionTest({ params }) {
         timeout={200}
         unmountOnExit
       >
-        <ResultModal isOpen={isOpen} setIsOpen={setIsOpen} slug={params.slug} />
+        <ResultModal isOpen={isOpen} setIsOpen={setIsOpen} id={params.id} />
       </CSSTransition>
     </div>
   );

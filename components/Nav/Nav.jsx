@@ -29,7 +29,6 @@ export default function Nav() {
   const [searchValue, setSearchValue] = useState("");
   const isOpen = useSelector((state) => state.authModal.isOpen);
   const [messageModal, setMessageModal] = useState(false);
-
   const searchContainerRef = useRef();
   // Route
   const router = useRouter();

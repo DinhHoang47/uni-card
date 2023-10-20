@@ -7,7 +7,7 @@ import Link from "next/link";
 
 import { useEffect } from "react";
 
-export default function BackTooltip({ setIsOpenPopup, slug }) {
+export default function BackTooltip({ setIsOpenPopup, id }) {
   useEffect(() => {
     const closeThisPopup = () => {
       setIsOpenPopup(false);
@@ -29,7 +29,7 @@ export default function BackTooltip({ setIsOpenPopup, slug }) {
         >
           <Link
             className="flex w-full items-center space-x-2 hover:text-blue-500"
-            href={`/collections/${slug}`}
+            href={`/collections/${id}`}
           >
             <ChevronLeftIcon className="h-6 w-6 hover:text-blue-500" />
             <span>This collection</span>

@@ -8,6 +8,7 @@ import { useCard } from "@lib/useCard";
 import { privateCardServ } from "@services/Private_CardService";
 import { useDispatch } from "react-redux";
 import { addMessage } from "@redux/commonMessageSlice";
+import { getImageUrl } from "@utils/getImageUrl";
 
 export default function TermTable({
   displayExample,
@@ -18,7 +19,6 @@ export default function TermTable({
 }) {
   // Fetched data
   const { error, data, loading, mutate } = useCard(collectionId);
-  console.log(data);
   // Handler
   const showErrorMsg = () => {
     dispatch(addMessage({ text: "Fail to delete.", variation: "warning" }));
@@ -26,8 +26,8 @@ export default function TermTable({
   const onDeleteRow = (cardId) => {
     handleDelete(cardId, data, mutate, showErrorMsg);
   };
-  const onUpdateRow = (cardId, data) => {
-    handleUpdate(cardId, data);
+  const onUpdateRow = (updatedCard) => {
+    handleUpdate(updatedCard, mutate, data, showErrorMsg);
   };
   const dispatch = useDispatch();
 
@@ -152,6 +152,74 @@ const deleteFn = async (cardId, currentCardList, showErrorMsg) => {
   return updatedCardList;
 };
 
-const handleUpdate = async (cardId, data) => {
-  console.log(cardId, data);
+const handleUpdate = async (
+  inputedCardData,
+  mutateCardList,
+  currentCardList,
+  showErrorMsg
+) => {
+  // Mutate local cardlist
+  const filteredCardList = currentCardList.map((item) => {
+    if (item.id !== inputedCardData.id) {
+      return item;
+    } else {
+      // Temporarily update image_url to selectedImageUrl if file selected
+      let tempImageUrl;
+      if (inputedCardData.selectedFileUrl) {
+        tempImageUrl = inputedCardData.selectedFileUrl;
+      } else {
+        tempImageUrl = item.image_url;
+      }
+      const newCardData = {
+        id: inputedCardData.id,
+        term: inputedCardData.term,
+        definition_1: inputedCardData.definition1,
+        definition_2: inputedCardData.definition2,
+        example: inputedCardData.example,
+        image_url: tempImageUrl,
+      };
+      return newCardData;
+    }
+  });
+  const options = {
+    optimisticData: filteredCardList,
+    rollbackOnError(error) {
+      return error.name !== "AbortError";
+    },
+    revalidate: false,
+  };
+  mutateCardList(
+    async (currentCached) => {
+      return updateFn(inputedCardData, currentCardList, showErrorMsg);
+    },
+
+    options
+  );
+};
+
+const updateFn = async (inputData, currentCardList, showErrorMsg) => {
+  const preset = "card_image";
+  const updatedImageUrl = await getImageUrl(
+    inputData.imageUrl,
+    inputData.selectedFile,
+    preset
+  );
+  const dataToSend = {
+    term: inputData.term,
+    definition_1: inputData.definition1,
+    definition_2: inputData.definition2,
+    example: inputData.example,
+    image_url: updatedImageUrl,
+  };
+  const fetchedData = await privateCardServ
+    .updateCard(inputData.id, dataToSend)
+    .then((res) => res.data);
+  const fetchedCardList = currentCardList.map((item) => {
+    if (item.id !== fetchedData.id) {
+      return item;
+    } else {
+      return fetchedData;
+    }
+  });
+  return fetchedCardList;
 };

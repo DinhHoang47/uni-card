@@ -1,18 +1,16 @@
 "use client";
-import { forwardRef } from "react";
 import { createPortal } from "react-dom";
 
-const PortalModalWrapper = forwardRef(function PortalModalWrapper(
-  { children, childrenHeight, childrenWidth, mountTarget },
-  ref
-) {
+const PortalModalWrapper = ({
+  children,
+  childrenHeight,
+  childrenWidth,
+  mountTarget,
+}) => {
   return (
     <>
       {createPortal(
         <div className="modalBackground bg-transparent-04 fixed top-0 left-0 right-0 bottom-0 py-16 overflow-y-auto flex justify-center z-20 no-scrollbar">
-          {/* Background */}
-          {/* <div className="fixed top-0 left-0 h-screen w-screen bg-gray-400 opacity-50 modalBackground"></div> */}
-          {/* Main Container */}
           <div
             style={{
               width: childrenWidth,
@@ -29,6 +27,6 @@ const PortalModalWrapper = forwardRef(function PortalModalWrapper(
       )}
     </>
   );
-});
+};
 
 export default PortalModalWrapper;

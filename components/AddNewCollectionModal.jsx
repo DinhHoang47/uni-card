@@ -16,6 +16,8 @@ import {
 } from "@utils/config";
 import { useSWRConfig } from "swr";
 import useUser from "@lib/useUser";
+import { handleSelectedImage } from "@lib/handleSelectedImage";
+import Image from "next/image";
 
 export default function AddNewCollectionModal({ setIsOpen, router }) {
   // Handle dynamic size for modal start
@@ -43,7 +45,9 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFileUrl, setSelectedFileUrl] = useState(null);
   // Loading and Error message state
+  const [loadingImage, setLoadingImage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
@@ -176,9 +180,34 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
           {/* Image upload */}
           <div className="space-y-1 flex flex-col ">
             <label className="font-semibold">Image</label>
+            <div className="relative w-20 h-20">
+              {/*Show Selected image */}
+              {selectedFileUrl && (
+                <Image
+                  fill
+                  alt={`Collection Image`}
+                  style={{ objectFit: "contain" }}
+                  sizes="80px"
+                  src={selectedFileUrl}
+                />
+              )}
+
+              {loadingImage && (
+                <span className="absolute-center">
+                  <Spinner className="w-5 h-5 text-blue-600 animate-spin" />
+                </span>
+              )}
+            </div>
             <input
               onChange={(e) => {
-                handleFileChange(e);
+                handleSelectedImage({
+                  selectedFile: e.target.files[0],
+                  inputTarget: e.target.value,
+                  setErrMsg,
+                  setSelectedFile,
+                  setSelectedFileUrl,
+                  setLoadingImage,
+                });
               }}
               type="file"
               name="image"
@@ -196,9 +225,11 @@ export default function AddNewCollectionModal({ setIsOpen, router }) {
               e.preventDefault();
               handleAddNew();
             }}
-            disabled={loading || !title}
+            disabled={loading || !title || loadingImage}
             className={`${
-              !trimmedTitle || loading ? "bg-blue-400" : "bg-blue-600"
+              !trimmedTitle || loading || loadingImage
+                ? "bg-blue-400"
+                : "bg-blue-600"
             }  w-full h-10 rounded inline-flex items-center justify-center px-4 py-2 font-semibold leading-6 text-sm shadow transition ease-in-out duration-150 text-white`}
           >
             <Spinner

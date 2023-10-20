@@ -7,6 +7,9 @@ class PrivateCardService extends PrivateService {
   deleteCard = (id) => {
     return this.delete(`cards/${id}`);
   };
+  updateCard = (id, data) => {
+    return this.put(`cards/${id}`, data);
+  };
 }
 
 export const privateCardServ = (() => {

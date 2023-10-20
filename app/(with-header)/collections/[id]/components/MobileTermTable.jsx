@@ -7,6 +7,7 @@ export default function MobileTermTable({
   displayImg,
   displayDef2,
   setTermModalOpen,
+  onUpdateRow,
 }) {
   return (
     <div className="">
@@ -21,6 +22,7 @@ export default function MobileTermTable({
               displayDef2={displayDef2}
               setTermModalOpen={setTermModalOpen}
               onDeleteRow={onDeleteRow}
+              onUpdateRow={onUpdateRow}
             />
           ))}
         </ul>

@@ -6,7 +6,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import PortalModalWrapper from "@components/PortalModalWrapper";
 import { useEffect, useRef, useState } from "react";
 
-export default function SettingModal({ isOpen, setIsOpen, slug }) {
+export default function SettingModal({ isOpen, setIsOpen, id }) {
   // Handle dynamic size for modal start
   const childrenRef = useRef(null);
   const [childHeight, setChildHeight] = useState();
@@ -31,7 +31,7 @@ export default function SettingModal({ isOpen, setIsOpen, slug }) {
 
   const handleTest = () => {
     setIsOpen(false);
-    router.push(`/testing/${slug}?mode=${mode}&show=${show}&time=${speed}`);
+    router.push(`/testing/${id}?mode=${mode}&show=${show}&time=${speed}`);
   };
 
   return (

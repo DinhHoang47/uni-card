@@ -1,22 +1,16 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import {
-  MAX_COLLECTION_IMG_SIZE,
-  MAX_COLLECTION_IMG_SIZE_TEXT,
-} from "@utils/config";
-
 import styles from "./styles.module.css";
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import { CloudArrowUpIcon } from "@heroicons/react/20/solid";
 import { DocumentArrowUpIcon } from "@heroicons/react/20/solid";
-import { PlusCircleIcon } from "@heroicons/react/20/solid";
-import { PlusIcon } from "@heroicons/react/20/solid";
 
-import { XMarkIcon } from "@heroicons/react/20/solid";
 import { TextareaAutosize } from "@mui/base";
+import { handleSelectedImage } from "@lib/handleSelectedImage";
+import Spinner from "@public/assets/icons/spinner";
 
 export default function DesktopRow({
   cardData,
@@ -36,6 +30,8 @@ export default function DesktopRow({
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileUrl, setSelectedFileUrl] = useState(null);
   const [editted, setEditted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loadingImage, setLoadingImage] = useState(false);
   // Input value
   const [term, setTerm] = useState(cardData.term);
   const [definition1, setDefition1] = useState(cardData.definition_1);
@@ -47,8 +43,20 @@ export default function DesktopRow({
   };
   const handleUpdate = async (cardId) => {
     if (editted) {
-      await onUpdateRow(cardId, { data: "Input data" });
+      await onUpdateRow({
+        id: cardId,
+        term,
+        definition1,
+        definition2,
+        example,
+        selectedFileUrl,
+        imageUrl: cardData.image_url,
+        selectedFile: selectedFile,
+      });
     }
+    setSelectedFile(null);
+    setSelectedFileUrl(null);
+    setErrMsg("");
     setEditting(false);
   };
   const handleDelete = () => {};
@@ -58,7 +66,8 @@ export default function DesktopRow({
       term !== cardData.term ||
       definition1 !== cardData.definition_1 ||
       definition2 !== cardData.definition_2 ||
-      example !== cardData.example
+      example !== cardData.example ||
+      selectedFileUrl !== null
     ) {
       setEditted(true);
     } else {
@@ -121,8 +130,11 @@ export default function DesktopRow({
           {editting && (
             <TextareaAutosize
               maxLength={225}
-              defaultValue={cardData.definition_1}
               className={styles.autoSizeTextArea}
+              value={definition1}
+              onChange={(e) => {
+                setDefition1(e.target.value);
+              }}
             />
           )}
           {!editting && <span>{cardData.definition_1}</span>}
@@ -137,7 +149,10 @@ export default function DesktopRow({
             {editting && (
               <TextareaAutosize
                 maxLength={225}
-                defaultValue={cardData.definition_2}
+                onChange={(e) => {
+                  setDefition2(e.target.value);
+                }}
+                value={definition2}
                 className={styles.autoSizeTextArea}
               />
             )}
@@ -154,8 +169,11 @@ export default function DesktopRow({
             {editting && (
               <TextareaAutosize
                 maxLength={225}
-                defaultValue={cardData.example}
                 className={styles.autoSizeTextArea}
+                value={example}
+                onChange={(e) => {
+                  setExample(e.target.value);
+                }}
               />
             )}
             {!editting && <p className="break-all">{cardData.example}</p>}
@@ -165,19 +183,19 @@ export default function DesktopRow({
         {/* Card Image */}
         {displayImg && (
           <li datafield="image" className={`${styles.rowItem} relative`}>
-            {cardData.image_url && (
-              <div className="relative w-12 h-12 border border-gray-300 rounded-sm">
+            {!editting && cardData.image_url && (
+              <div className="relative w-12 h-12">
                 <Image
-                  fill
                   sizes="40px"
+                  fill
                   style={{ objectFit: "contain" }}
                   alt="card-image"
                   src={cardData.image_url}
                 />
               </div>
             )}
-            {!cardData.image_url && !selectedFileUrl && (
-              <div className="relative w-12 h-12 border border-gray-300 rounded-sm">
+            {!editting && !cardData.image_url && (
+              <div className="relative w-12 h-12">
                 <Image
                   sizes="40px"
                   fill
@@ -187,16 +205,42 @@ export default function DesktopRow({
                 />
               </div>
             )}
-            {!cardData.image_url && selectedFileUrl && (
-              <div className="relative w-12 h-12 border border-gray-300 rounded-sm">
-                <Image
-                  sizes="40px"
-                  fill
-                  style={{ objectFit: "contain" }}
-                  alt="card-image"
-                  src={selectedFileUrl}
-                />
-              </div>
+            {editting && (
+              <>
+                {selectedFileUrl && (
+                  <div className="relative w-12 h-12">
+                    <Image
+                      sizes="40px"
+                      fill
+                      style={{ objectFit: "contain" }}
+                      alt="card-image"
+                      src={selectedFileUrl}
+                    />
+                  </div>
+                )}
+                {!selectedFileUrl && cardData.image_url && (
+                  <div className="relative w-12 h-12">
+                    <Image
+                      fill
+                      sizes="40px"
+                      style={{ objectFit: "contain" }}
+                      alt="card-image"
+                      src={cardData.image_url}
+                    />
+                  </div>
+                )}
+                {!selectedFileUrl && !cardData.image_url && (
+                  <div className="relative w-12 h-12">
+                    <Image
+                      sizes="40px"
+                      fill
+                      style={{ objectFit: "contain" }}
+                      alt="card-image"
+                      src={"/assets/images/uni-placeholder-image.png"}
+                    />
+                  </div>
+                )}
+              </>
             )}
             {editting && (
               <>
@@ -207,12 +251,14 @@ export default function DesktopRow({
                   hidden
                   id={cardData.id}
                   onChange={(e) => {
-                    handleFileChange(
-                      e,
+                    handleSelectedImage({
+                      selectedFile: e.target.files[0],
+                      inputTarget: e.target.value,
                       setErrMsg,
                       setSelectedFile,
-                      setSelectedFileUrl
-                    );
+                      setSelectedFileUrl,
+                      setLoadingImage,
+                    });
                   }}
                 />
                 <label
@@ -221,6 +267,11 @@ export default function DesktopRow({
                 >
                   <DocumentArrowUpIcon className="h-6 w-6 text-blue-500" />
                 </label>
+                {loadingImage && (
+                  <label className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                    <Spinner className="animate-spin h-6 w-6 text-blue-700" />
+                  </label>
+                )}
               </>
             )}
           </li>
@@ -232,13 +283,13 @@ export default function DesktopRow({
                 title="Edit"
                 className="flex items-center"
                 onClick={() => {
-                  !cardData.uploading && handleEdit();
+                  !loading && handleEdit();
                 }}
               >
-                {cardData.uploading ? (
+                {loading ? (
                   <CloudArrowUpIcon
                     title="Uploading please wait."
-                    className="h-5 w-5 text-blue-600 animate-bounce cursor-wait"
+                    className="h-5 w-5 text-blue-600 animate-bounce cursor-default"
                   />
                 ) : (
                   <PencilIcon className="h-5 w-5 text-blue-500" />
@@ -249,6 +300,7 @@ export default function DesktopRow({
           {editting && (
             <>
               <button
+                disabled={loadingImage}
                 title="Delete"
                 className="flex items-center"
                 onClick={() => {
@@ -258,6 +310,7 @@ export default function DesktopRow({
                 <TrashIcon className="h-5 w-5 text-red-400" />
               </button>
               <button
+                disabled={loadingImage}
                 title="Save"
                 className="flex items-center"
                 onClick={() => {
@@ -287,30 +340,3 @@ export default function DesktopRow({
     </li>
   );
 }
-
-const handleFileChange = (
-  e,
-  setErrMsg,
-  setSelectedFile,
-  setSelectedFileUrl
-) => {
-  // Set selected file
-  setErrMsg("");
-  if (!e.target.files[0]) return;
-  const currentFile = e.target.files[0];
-  const maxSizeInBytes = MAX_COLLECTION_IMG_SIZE;
-  if (currentFile && currentFile.size > maxSizeInBytes) {
-    setErrMsg(
-      `Maximum image size is ${MAX_COLLECTION_IMG_SIZE_TEXT}.Try again`
-    );
-    e.target.value = null;
-  } else {
-    setSelectedFile(currentFile);
-    // Get and set selected file local url
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setSelectedFileUrl(e.target.result);
-    };
-    reader.readAsDataURL(currentFile);
-  }
-};

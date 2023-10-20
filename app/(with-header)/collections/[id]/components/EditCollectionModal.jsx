@@ -15,6 +15,8 @@ import { privateCollectionServ } from "@services/Private_CollectionService";
 import Spinner from "@public/assets/icons/spinner";
 import useUser from "@lib/useUser";
 import StyledChips from "./StyledChips";
+import { getImageUrl } from "@utils/getImageUrl";
+import { handleSelectedImage } from "@lib/handleSelectedImage";
 
 export default function EditCollectionModal({
   setIsOpen,
@@ -33,25 +35,7 @@ export default function EditCollectionModal({
   // Chips state
   const [chips, setChips] = useState(data.tags);
   // Handle file selection
-  const handleFileChange = (e) => {
-    // Set selected file
-    setErrMsg("");
-    if (!e.target.files[0]) return;
-    const currentFile = e.target.files[0];
-    const maxSizeInBytes = MAX_COLLECTION_IMG_SIZE;
-    if (currentFile && currentFile.size > maxSizeInBytes) {
-      setErrMsg(`Maximum image size is ${MAX_COLLECTION_IMG_SIZE_TEXT}.`);
-      e.target.value = null;
-    } else {
-      setSelectedFile(currentFile);
-      // Get and set selected file local url
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setSelectedFileUrl(e.target.result);
-      };
-      reader.readAsDataURL(currentFile);
-    }
-  };
+  const [loadingImage, setLoadingImage] = useState(false);
   // Get userId
   const creatorId = data.userId;
   // Input states
@@ -83,7 +67,8 @@ export default function EditCollectionModal({
         setIsOpen(false);
         return;
       }
-      const updatedUrl = await getImageUrl(imageUrl, selectedFile);
+      const preset = "collection_image";
+      const updatedUrl = await getImageUrl(imageUrl, selectedFile, preset);
       const trimmedTitle = title.trim();
       const trimmedDescription = description.trim();
       // Data to update
@@ -169,8 +154,7 @@ export default function EditCollectionModal({
               onChange={(e) => {
                 setDescription(e.target.value);
               }}
-              maxRows={2}
-              maxLength={100}
+              maxLength={225}
               wrap="hard"
               className="w-full px-2 border-b-2 resize-none focus:border-blue-300 focus:outline-none bg-transparent border-gray-300"
             ></TextareaAutosize>
@@ -184,8 +168,8 @@ export default function EditCollectionModal({
           <div className="space-y-1 flex flex-col ">
             <label className="">Image</label>
             {/*Show Current Image if no image selected */}
-            {data.imageUrl && !selectedFileUrl && (
-              <div className="w-20 h-20">
+            <div className="relative w-20 h-20">
+              {data.imageUrl && !selectedFileUrl && (
                 <Image
                   alt={`collection-${data.title}-image`}
                   style={{ width: "100%", height: "auto" }}
@@ -194,11 +178,9 @@ export default function EditCollectionModal({
                   sizes="100vw"
                   src={data.imageUrl}
                 />
-              </div>
-            )}
-            {/*Show Selected image */}
-            {selectedFileUrl && (
-              <div className="w-20 h-20">
+              )}
+              {/*Show Selected image */}
+              {selectedFileUrl && (
                 <Image
                   alt={`collection-${data.title}-image`}
                   style={{ width: "100%", height: "auto" }}
@@ -207,11 +189,24 @@ export default function EditCollectionModal({
                   sizes="100vw"
                   src={selectedFileUrl}
                 />
-              </div>
-            )}
+              )}
+              {loadingImage && (
+                <span className="absolute-center">
+                  <Spinner className="w-5 h-5 text-blue-600 animate-spin" />
+                </span>
+              )}
+            </div>
+
             <input
               onChange={(e) => {
-                handleFileChange(e);
+                handleSelectedImage({
+                  selectedFile: e.target.files[0],
+                  inputTarget: e.target.value,
+                  setErrMsg,
+                  setSelectedFile,
+                  setSelectedFileUrl,
+                  setLoadingImage,
+                });
               }}
               type="file"
               name="image"
@@ -254,9 +249,9 @@ export default function EditCollectionModal({
               e.preventDefault();
               handleUpdate(e);
             }}
-            disabled={loading || !title}
+            disabled={loading || !title || loadingImage}
             className={`${
-              !title || loading ? "bg-blue-400" : "bg-blue-600"
+              !title || loading || loadingImage ? "bg-blue-400" : "bg-blue-600"
             }  w-full h-10 rounded inline-flex items-center justify-center px-4 py-2 font-semibold leading-6 text-sm shadow transition ease-in-out duration-150 text-white`}
           >
             <Spinner
@@ -281,35 +276,3 @@ export default function EditCollectionModal({
     </PortalModalWrapper>
   );
 }
-
-const getImageUrl = async (oldImageUrl, selectedFile) => {
-  // If no selected file and no oldImageUrl
-  if (!selectedFile && !oldImageUrl) {
-    return null;
-    // If has oldImageUrl but no selected file
-  } else if (oldImageUrl && !selectedFile) {
-    return oldImageUrl;
-    // If has/no imageUrl and selected file -> upload/update url
-  } else {
-    const match = oldImageUrl?.match(/\/([^/]+)\.png$/);
-    const preset = "collection_image";
-    // If found a publicId on oldImageUrl
-    if (match) {
-      const publicId = match[1];
-      try {
-        const { data } = await updateImage(selectedFile, publicId, preset);
-        const updatedUrl = data.secure_url;
-        return updatedUrl;
-      } catch (error) {
-        console.log("error: ", error);
-        // Can not update image return old image temporary Url
-        return oldImageUrl;
-      }
-      // If can't get publicId then upload image as new image
-    } else {
-      const { data } = await uploadImage(selectedFile, null, preset);
-      const updatedUrl = data.secure_url;
-      return updatedUrl;
-    }
-  }
-};

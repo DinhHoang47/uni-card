@@ -17,6 +17,8 @@ import { privateCollectionServ } from "@services/Private_CollectionService";
 import { Switch } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { addMessage } from "@redux/commonMessageSlice.js";
+import { handleSelectedImage } from "@lib/handleSelectedImage";
+import Spinner from "@public/assets/icons/spinner";
 
 export default function AddTermModal({
   displayExample,
@@ -38,6 +40,8 @@ export default function AddTermModal({
   // Fetched data
   // Local state
   const [coutinueInput, setContinueInput] = useState(false);
+  const fileInputRef = useRef(null);
+  const [loadingImage, setLoadingImage] = useState(false);
   // Input data
   const [term, setTerm] = useState("");
   const [definition1, setDefinition1] = useState("");
@@ -45,7 +49,7 @@ export default function AddTermModal({
   const [imageUrl, setImageUrl] = useState("");
   const [example, setExample] = useState("");
   // State
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState("");
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [selectedFileUrl, setSelectedFileUrl] = useState(null);
@@ -61,6 +65,9 @@ export default function AddTermModal({
     setImageUrl("");
     setSelectedFile(null);
     setSelectedFileUrl(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
   };
   const { data: cardList, mutate: mutateCardList } = useCard(collectionId);
   const trimmedTerm = term.trim();
@@ -117,6 +124,11 @@ export default function AddTermModal({
                       src={selectedFileUrl}
                     />
                   </div>
+                )}
+                {loadingImage && (
+                  <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                    <Spinner className="w-5 h-5 text-blue-500 animate-spin " />
+                  </span>
                 )}
                 {/* Absolute container */}
                 <div
@@ -232,13 +244,16 @@ export default function AddTermModal({
             <div className="space-y-1 flex flex-col ">
               <label className="">Image</label>
               <input
+                ref={fileInputRef}
                 onChange={(e) => {
-                  handleFileChange(
-                    e,
-                    setSelectedFile,
+                  handleSelectedImage({
+                    selectedFile: e.target.files[0],
+                    inputTarget: e.target.value,
                     setErrMsg,
-                    setSelectedFileUrl
-                  );
+                    setSelectedFile,
+                    setSelectedFileUrl,
+                    setLoadingImage,
+                  });
                 }}
                 type="file"
                 name="image"
@@ -263,7 +278,7 @@ export default function AddTermModal({
           </div>
           {/* Submit button */}
           <button
-            disabled={!trimmedTerm}
+            disabled={!trimmedTerm || loadingImage}
             onClick={(e) => {
               e.preventDefault();
               handleAddNew(
@@ -286,7 +301,7 @@ export default function AddTermModal({
               );
             }}
             className={`!mt-4 w-full h-10 text-white font-semibold rounded-md ${
-              !trimmedTerm ? "bg-blue-400" : "bg-blue-600"
+              !trimmedTerm || loadingImage ? "bg-blue-400" : "bg-blue-600"
             }`}
           >
             Add
@@ -306,31 +321,6 @@ export default function AddTermModal({
     </PortalModalWrapper>
   );
 }
-
-const handleFileChange = (
-  e,
-  setSelectedFile,
-  setErrMsg,
-  setSelectedFileUrl
-) => {
-  // Set selected file
-  setErrMsg("");
-  if (!e.target.files[0]) return;
-  const currentFile = e.target.files[0];
-  const maxSizeInBytes = MAX_COLLECTION_IMG_SIZE;
-  if (currentFile && currentFile.size > maxSizeInBytes) {
-    setErrMsg(`Maximum image size is ${MAX_COLLECTION_IMG_SIZE_TEXT}.`);
-    e.target.value = null;
-  } else {
-    setSelectedFile(currentFile);
-    // Get and set selected file local url
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setSelectedFileUrl(e.target.result);
-    };
-    reader.readAsDataURL(currentFile);
-  }
-};
 
 const handleAddNew = async (
   inputData,

@@ -21,7 +21,7 @@ export default function BackTooltip({ setIsOpenPopup, id }) {
         onClick={(e) => {
           e.stopPropagation();
         }}
-        className="absolute top-full bg-white px-2 py-2 rounded  border !ml-0 translate-y-2 shadow-md"
+        className="absolute top-full bg-white px-2 py-2 rounded  border !ml-0 translate-y-2 shadow-lg"
       >
         <div
           onClick={() => {}}
@@ -32,7 +32,7 @@ export default function BackTooltip({ setIsOpenPopup, id }) {
             href={`/collections/${id}`}
           >
             <ChevronLeftIcon className="h-6 w-6 hover:text-blue-500" />
-            <span>This collection</span>
+            <p className="w-28">This collection</p>
           </Link>
           <Link
             className="flex w-full items-center space-x-2 hover:text-blue-500"
