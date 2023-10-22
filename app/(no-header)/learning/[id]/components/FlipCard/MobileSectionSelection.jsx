@@ -4,7 +4,11 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import Mobile_SelectedSectionButton from "./Mobile_SelectedSectionButton";
 import Mobile_SectionSelectionList from "./Mobile_SectionSelectionList";
 
-export default function MobileSectionSelection({ buttonsArr }) {
+export default function MobileSectionSelection({
+  buttonArr,
+  currentSection,
+  setCurrentSection,
+}) {
   // Local state
   const [openMenu, setOpenMenu] = useState();
   return (
@@ -21,11 +25,15 @@ export default function MobileSectionSelection({ buttonsArr }) {
           openMenu ? "border-b-0 rounded-b-none" : ""
         }`}
       >
-        {!openMenu && <Mobile_SelectedSectionButton />}
+        {!openMenu && (
+          <Mobile_SelectedSectionButton currentSection={currentSection} />
+        )}
 
         {openMenu && (
           <Mobile_SectionSelectionList
-            buttonsArr={buttonsArr}
+            currentSection={currentSection}
+            setCurrentSection={setCurrentSection}
+            buttonArr={buttonArr}
             openMenu={openMenu}
             setOpenMenu={setOpenMenu}
           />

@@ -6,7 +6,7 @@ import SelectSectionButton from "./SelectSectionButton";
 export default function DesktopSectionSelection({
   openSelect,
   setOpenSelect,
-  buttonsArr,
+  buttonArr,
   setCurrentSection,
   currentSection,
 }) {
@@ -45,7 +45,7 @@ export default function DesktopSectionSelection({
           ref={containerRef}
           className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-12 xl:grid-cols-12 gap-2 overflow-hidden mt-2"
         >
-          {buttonsArr.map((item) => (
+          {buttonArr.map((item) => (
             <SelectSectionButton
               setCurrentSection={setCurrentSection}
               currentSection={currentSection}

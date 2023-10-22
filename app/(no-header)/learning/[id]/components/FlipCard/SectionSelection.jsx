@@ -9,24 +9,26 @@ export default function SectionSelection({
   collectionId,
   setCurrentSection,
   currentSection,
+  buttonArr,
 }) {
-  const { data: collectionData } = useCard(collectionId);
-  const buttonsArr = getButtonsArray(collectionData?.length);
-  if (collectionData?.length === 0) return <NoCard />;
   return (
     <>
       <div className="hidden sm:block w-full">
         <DesktopSectionSelection
           currentSection={currentSection}
           setCurrentSection={setCurrentSection}
-          buttonsArr={buttonsArr}
+          buttonArr={buttonArr}
           openSelect={openSelect}
           setOpenSelect={setOpenSelect}
         />
       </div>
       {/* Mobile Selection */}
       <div className="block sm:hidden w-full space-y-2 sm:space-y-4">
-        <MobileSectionSelection buttonsArr={buttonsArr} />
+        <MobileSectionSelection
+          currentSection={currentSection}
+          setCurrentSection={setCurrentSection}
+          buttonArr={buttonArr}
+        />
       </div>
     </>
   );
@@ -36,9 +38,9 @@ const NoCard = () => {
   return <div className="">No section to select</div>;
 };
 
-const getButtonsArray = (totalCard, cardPerPage = 10) => {
+const getbuttonArray = (totalCard, cardPerPage = 10) => {
   const totalPage = Math.ceil(totalCard / cardPerPage);
-  const buttonsArray = [];
+  const buttonArray = [];
   for (let index = 0; index < totalPage; index++) {
     const startNumber = index * cardPerPage + (index === 0 ? 1 : 0);
     const end = startNumber + cardPerPage - (index === 0 ? 1 : 0);
@@ -48,7 +50,7 @@ const getButtonsArray = (totalCard, cardPerPage = 10) => {
     } else {
       endNumber = totalCard;
     }
-    buttonsArray.push({ startNumber, endNumber });
+    buttonArray.push({ startNumber, endNumber });
   }
-  return buttonsArray;
+  return buttonArray;
 };
