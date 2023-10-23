@@ -44,7 +44,7 @@ const CardBack = ({ displayDef2, displayExample, displayImg }) => {
           {!displayDef2 && displayImg && <div></div>}
           {displayDef2 && (
             <div className="">
-              <p className="text-[10px]">/prəˌnʌn·siˈeɪ·ʃən/</p>
+              <p className="text-[10px]">Pronunciation</p>
             </div>
           )}
 

@@ -4,7 +4,8 @@ import ReactCardFlip from "react-card-flip";
 import styles from "../../styles.module.css";
 import Image from "next/image";
 
-export default function CardLearn({ data }) {
+export default function CardLearn({ data, displayOptions }) {
+  // Local state
   const [isFlipped, setIsFlipped] = useState(false);
   // const haveDefine2 = true;
   return (
@@ -16,7 +17,11 @@ export default function CardLearn({ data }) {
       >
         {/* Front */}
         <FrontSide data={data} setIsFlipped={setIsFlipped} />
-        <BackSide setIsFlipped={setIsFlipped} data={data} />
+        <BackSide
+          displayOptions={displayOptions}
+          setIsFlipped={setIsFlipped}
+          data={data}
+        />
         {/* Back */}
       </ReactCardFlip>
     </div>
@@ -30,15 +35,18 @@ const FrontSide = ({ data, setIsFlipped }) => {
       onClick={() => {
         setIsFlipped((pre) => !pre);
       }}
-      className={`bg-white relative overflow-hidden rounded-lg h-full  flex items-center justify-center p-2 border border-slate-400 `}
+      className={`w-full bg-white relative rounded-lg h-full  flex items-center justify-center p-2 border border-slate-400 `}
     >
-      <div className="text-xl">{term}</div>
+      <p className="w-full text-xl break-words text-center font-semibold">
+        {term}
+      </p>
       {/* Testing status tag */}
     </div>
   );
 };
 
-const BackSide = ({ data, setIsFlipped }) => {
+const BackSide = ({ data, setIsFlipped, displayOptions }) => {
+  const { displayImg, displayExample, displayDef2 } = displayOptions;
   const {
     definition_1: definition1,
     definition_2: definition2,
@@ -46,10 +54,12 @@ const BackSide = ({ data, setIsFlipped }) => {
     example,
   } = data;
   return (
-    <div className="bg-white relative border rounded-lg border-slate-400 flex flex-col items-center justify-center w-full h-full">
+    <div
+      className={`bg-white relative border rounded-lg border-slate-400 flex flex-col items-center justify-center w-full h-full`}
+    >
       {/* Back side background */}
       {/* Show image */}
-      {imageUrl && (
+      {imageUrl && displayImg && (
         <div className="relative w-14 h-14 flex items-center justify-center mb-4">
           <Image
             fill
@@ -66,32 +76,35 @@ const BackSide = ({ data, setIsFlipped }) => {
           setIsFlipped((pre) => !pre);
         }}
         className={`absolute top-0 left-0 h-full w-full flex flex-col rounded ${
-          !imageUrl ? "justify-center" : "justify-between"
-        } items-center text-[0.75rem]  py-1 `}
+          (!imageUrl || !displayImg) && (!example || !displayExample)
+            ? "justify-center"
+            : "justify-between"
+        } items-center text-[0.75rem]  p-2 `}
       >
-        {definition2 ? (
+        {definition2 && displayDef2 ? (
+          // break-words
           <p
             className={`${
               definition2 !== "" ? "" : "text-gray-300 "
-            }  max-w-full break-words line-clamp-3 `}
+            }  max-w-full break-words line-clamp-3 bg-transparent-white-07 text-center`}
           >
             {definition2 !== "" ? definition2 : "Definition 2"}
           </p>
         ) : (
-          <div></div>
+          <>{displayImg && imageUrl && <div></div>}</>
         )}
 
         <div className="w-full text-center">
           <p
-            className={`max-w-full break-words line-clamp-4 text-[0.75rem]  font-semibold`}
+            className={`max-w-full break-words line-clamp-4 ${`text-base`}  bg-transparent-white-07 font-semibold`}
           >
             {definition1}
           </p>
-          {example ? (
+          {example && displayExample ? (
             <p
               className={`${
                 example !== "" ? "" : "text-gray-300"
-              } max-w-full break-words line-clamp-3 text-xs`}
+              } max-w-full break-words line-clamp-3 text-xs bg-transparent-white-07`}
             >
               {example !== "" ? example : "Example"}
             </p>
@@ -141,7 +154,7 @@ const BackSide1 = () => {
             haveDefine2 ? "pb-4" : ""
           } `}
         >
-          <p className="text-center font-semibold">{data.definition_1}</p>
+          <p className="text-center">{data.definition_1}</p>
           <p className="text-center text-sm">{data.example}</p>
         </div>
       </div>

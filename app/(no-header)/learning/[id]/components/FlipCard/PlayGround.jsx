@@ -1,7 +1,11 @@
-import MobilePlayground from "../../MobilePlayground";
+import MobilePlayground from "./MobilePlayground";
 import Desktop_Playground_FlipCard from "./Desktop_Playground_FlipCard";
 
-export default function PlayGround({ setOpenSelect, currentCardArr }) {
+export default function PlayGround({
+  setOpenSelect,
+  currentCardArr,
+  displayOptions,
+}) {
   return (
     <>
       <div
@@ -12,14 +16,16 @@ export default function PlayGround({ setOpenSelect, currentCardArr }) {
       >
         {/* Desktop playground */}
         <Desktop_Playground_FlipCard
+          displayOptions={displayOptions}
           currentCardArr={currentCardArr}
           setOpenSelect={setOpenSelect}
         />
         {/* Mobile Playground  */}
         <div className="flex sm:hidden mt-4 overflow-hidden">
-          {/* Card */}
-          <MobilePlayground currentCardArr={currentCardArr} />
-          {/* Select Card Button */}
+          <MobilePlayground
+            displayOptions={displayOptions}
+            currentCardArr={currentCardArr}
+          />
         </div>
       </div>
     </>

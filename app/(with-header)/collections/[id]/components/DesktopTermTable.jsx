@@ -50,7 +50,7 @@ export default function DesktopTermTable({
           <li>Definition</li>
           {displayDef2 && (
             <li className="">
-              <p className="line-clamp-1">Definition 2</p>
+              <p className="line-clamp-1">Pronunciation</p>
             </li>
           )}
           {displayExample && <li>Example</li>}

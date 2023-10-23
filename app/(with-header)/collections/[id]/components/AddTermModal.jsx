@@ -54,6 +54,7 @@ export default function AddTermModal({
     setDefinition1("");
     setDefinition2("");
     setImageUrl("");
+    setExample("");
     setSelectedFile(null);
     setSelectedFileUrl(null);
     if (fileInputRef.current) {
@@ -133,7 +134,7 @@ export default function AddTermModal({
                         definition2 !== "" ? "" : "text-gray-300 "
                       }  max-w-full break-words line-clamp-3 `}
                     >
-                      {definition2 !== "" ? definition2 : "Definition 2"}
+                      {definition2 !== "" ? definition2 : "Pronunciation"}
                     </p>
                   ) : (
                     <div></div>
@@ -199,7 +200,7 @@ export default function AddTermModal({
           {/* Definition 2 */}
           {displayDef2 && (
             <div className="space-y-1 ">
-              <label className="">Definition 2</label>
+              <label className="">Pronunciation</label>
               <TextareaAutosize
                 onChange={(e) => {
                   setDefinition2(e.target.value);

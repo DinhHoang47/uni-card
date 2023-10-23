@@ -145,7 +145,7 @@ export default function AddNewCollectionModal({ hanger, router }) {
             ></TextareaAutosize>
           </div>
           {/* Tags */}
-          <div className="space-y-1 ">
+          <div className="space-y-1 max-w-[340px]">
             <label className="font-semibold">Tags</label>
             <MuiChipsInputStyled
               id="my-mui-chipsinput"

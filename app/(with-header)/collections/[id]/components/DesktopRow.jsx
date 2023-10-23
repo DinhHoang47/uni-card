@@ -139,7 +139,9 @@ export default function DesktopRow({
               }}
             />
           )}
-          {!editting && <span>{cardData.definition_1}</span>}
+          {!editting && (
+            <p className="break-words w-full">{cardData.definition_1}</p>
+          )}
         </li>
         {/* Def 2 */}
         {displayDef2 && (

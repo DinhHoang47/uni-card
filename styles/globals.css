@@ -307,12 +307,12 @@ html {
 }
 
 .arrow--left {
-  left: -24px;
+  left: 10px;
 }
 
 .arrow--right {
   left: auto;
-  right: -24px;
+  right: 10px;
 }
 
 .arrow--disabled {

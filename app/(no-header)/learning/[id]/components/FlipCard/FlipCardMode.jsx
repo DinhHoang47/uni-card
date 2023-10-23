@@ -3,9 +3,11 @@ import SectionSelection from "./SectionSelection";
 import DisplaySetting from "./DisplaySetting";
 import PlayGround from "./PlayGround";
 import { useCard } from "@lib/useCard";
+import { useCollection } from "@lib/useCollection";
 export default function FlipCardMode({ collectionId }) {
   // Fetched data
   const { data: cardList } = useCard(collectionId);
+  const { data: collectionData } = useCollection(collectionId);
   // Local state
   const [openSelect, setOpenSelect] = useState(true);
   const [currentSection, setCurrentSection] = useState({
@@ -14,6 +16,29 @@ export default function FlipCardMode({ collectionId }) {
   });
   const [currentCardArr, setCurrentCardArr] = useState([]);
   const [buttonArr, setButtonArr] = useState([]);
+  const [displayOptions, setDisplayOptions] = useState({
+    displayDef2: null,
+    displayImg: null,
+    displayExample: null,
+  });
+  const [initOptions, setInitOptions] = useState({
+    displayDef2: null,
+    displayExample: null,
+    displayImg: null,
+  });
+  // Set init data for displayOptions
+  useEffect(() => {
+    setDisplayOptions({
+      displayDef2: collectionData?.display_def_2,
+      displayExample: collectionData?.display_example,
+      displayImg: collectionData?.display_img,
+    });
+    setInitOptions({
+      displayDef2: collectionData?.display_def_2,
+      displayExample: collectionData?.display_example,
+      displayImg: collectionData?.display_img,
+    });
+  }, [collectionData]);
   // Set current card list for first render
   useEffect(() => {
     const buttons = getbuttonArray(cardList?.length, 10);
@@ -40,8 +65,13 @@ export default function FlipCardMode({ collectionId }) {
         setOpenSelect={setOpenSelect}
         buttonArr={buttonArr}
       />
-      <DisplaySetting openSelect={openSelect} />
+      <DisplaySetting
+        initOptions={initOptions}
+        setDisplayOptions={setDisplayOptions}
+        openSelect={openSelect}
+      />
       <PlayGround
+        displayOptions={displayOptions}
         currentCardArr={currentCardArr}
         setOpenSelect={setOpenSelect}
       />

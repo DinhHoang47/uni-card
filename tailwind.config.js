@@ -22,6 +22,9 @@ module.exports = {
         "text-secondary": "#9CA3AF",
         "primary-light-bg": "#EFF6FF",
         "transparent-04": "rgba(0, 0, 0, 0.4)",
+        "transparent-gray-05": "rgba(214, 210, 210, 0.5)",
+        "transparent-white-05": "rgba(255, 255, 255, 0.5)",
+        "transparent-white-07": "rgba(255, 255, 255, 0.7)",
       },
     },
     screens: {
