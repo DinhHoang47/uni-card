@@ -15,7 +15,7 @@ import { CloudArrowUpIcon } from "@heroicons/react/24/outline";
 
 import Image from "next/image";
 import { createPortal } from "react-dom";
-import CardPreview from "./CardPreview";
+import CardPreview from "./CardPreview_STALE";
 
 const initialRows = [
   {

@@ -69,9 +69,6 @@ export default function EditCollectionModal({
         description: trimmedDescription,
         tags: chips,
         imageUrl: updatedUrl,
-        display_def_2: displayDef2,
-        display_img: displayImg,
-        display_example: displayExample,
       };
       const optimizeUIData = {
         id: data.id,
@@ -83,9 +80,6 @@ export default function EditCollectionModal({
         updatedAt: data.updatedAt,
         description: trimmedDescription,
         userId: data.userId,
-        display_def_2: displayDef2,
-        display_img: displayImg,
-        display_example: displayExample,
       };
       const mutateOptions = {
         optimisticData: optimizeUIData,
@@ -204,31 +198,6 @@ export default function EditCollectionModal({
               name="image"
               accept="image/*"
               multiple={false}
-            />
-          </div>
-          {/* Switchs */}
-          <div className="space-y-1 max-w-[380px]">
-            <p>Card display setting</p>
-            <label className="">Def2</label>
-            <Switch
-              onChange={(e) => {
-                setDisplayDef2((pre) => !pre);
-              }}
-              checked={displayDef2}
-            />
-            <label className="">Img</label>
-            <Switch
-              onChange={(e) => {
-                setDisplayImg((pre) => !pre);
-              }}
-              checked={displayImg}
-            />
-            <label className="">Ex</label>
-            <Switch
-              onChange={(e) => {
-                setDisplayExample((pre) => !pre);
-              }}
-              checked={displayExample}
             />
           </div>
           {/* Error Message */}

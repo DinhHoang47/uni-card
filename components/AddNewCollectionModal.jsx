@@ -15,6 +15,8 @@ import { handleSelectedImage } from "@lib/handleSelectedImage";
 import Image from "next/image";
 import { useDispatch } from "react-redux";
 import { closeAddNewCollectionModal } from "@redux/modalSlice";
+import { Switch } from "@mui/material";
+import CardPreview from "./CardPreview";
 
 export default function AddNewCollectionModal({ hanger, router }) {
   //   Handle input chip
@@ -25,6 +27,9 @@ export default function AddNewCollectionModal({ hanger, router }) {
   const [description, setDescription] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileUrl, setSelectedFileUrl] = useState(null);
+  const [displayDef2, setDisplayDef2] = useState(false);
+  const [displayExample, setDisplayExample] = useState(true);
+  const [displayImg, setDisplayImg] = useState(false);
   // Loading and Error message state
   const [loadingImage, setLoadingImage] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -57,6 +62,9 @@ export default function AddNewCollectionModal({ hanger, router }) {
         description: trimmedDescription,
         tags: chips,
         imageUrl,
+        displayImg,
+        displayDef2,
+        displayExample,
       };
       const result = await privateCollectionServ.create(data);
       // Check if id exists in the result
@@ -154,42 +162,40 @@ export default function AddNewCollectionModal({ hanger, router }) {
               onDeleteChip={handleDeleteChip}
             ></MuiChipsInputStyled>
           </div>
-          {/* Image upload */}
-          <div className="space-y-1 flex flex-col ">
-            <label className="font-semibold">Image</label>
-            <div className="relative w-20 h-20">
-              {/*Show Selected image */}
-              {selectedFileUrl && (
-                <Image
-                  fill
-                  alt={`Collection Image`}
-                  style={{ objectFit: "contain" }}
-                  sizes="80px"
-                  src={selectedFileUrl}
-                />
-              )}
-
-              {loadingImage && (
-                <span className="absolute-center">
-                  <Spinner className="w-5 h-5 text-blue-600 animate-spin" />
-                </span>
-              )}
+          {/* Layout preview*/}
+          <div className="">
+            <label className="font-semibold">Card layout preview</label>
+            <div className="flex items-center">
+              <CardPreview
+                displayDef2={displayDef2}
+                displayExample={displayExample}
+                displayImg={displayImg}
+              />
             </div>
-            <input
+          </div>
+          {/* Switchs */}
+          <div className="space-y-1 max-w-[380px]">
+            <label className="">Ex</label>
+            <Switch
               onChange={(e) => {
-                handleSelectedImage({
-                  selectedFile: e.target.files[0],
-                  inputTarget: e.target.value,
-                  setErrMsg,
-                  setSelectedFile,
-                  setSelectedFileUrl,
-                  setLoadingImage,
-                });
+                setDisplayExample((pre) => !pre);
               }}
-              type="file"
-              name="image"
-              accept="image/*"
-              multiple={false}
+              checked={displayExample}
+            />
+            <label className="">Pron</label>
+            <Switch
+              onChange={(e) => {
+                setDisplayDef2((pre) => !pre);
+              }}
+              checked={displayDef2}
+            />
+
+            <label className="">Image</label>
+            <Switch
+              onChange={(e) => {
+                setDisplayImg((pre) => !pre);
+              }}
+              checked={displayImg}
             />
           </div>
           {/* Error Message */}
@@ -250,3 +256,51 @@ const MuiChipsInputStyled = styled(MuiChipsInput)`
     border: none;
   }
 `;
+
+const ImageInput = ({
+  selectedFileUrl,
+  loadingImage,
+  setSelectedFile,
+  setSelectedFileUrl,
+  setLoadingImage,
+}) => {
+  return (
+    <div className="space-y-1 flex flex-col ">
+      <label className="font-semibold">Image</label>
+      <div className="relative w-20 h-20">
+        {/*Show Selected image */}
+        {selectedFileUrl && (
+          <Image
+            fill
+            alt={`Collection Image`}
+            style={{ objectFit: "contain" }}
+            sizes="80px"
+            src={selectedFileUrl}
+          />
+        )}
+
+        {loadingImage && (
+          <span className="absolute-center">
+            <Spinner className="w-5 h-5 text-blue-600 animate-spin" />
+          </span>
+        )}
+      </div>
+      <input
+        onChange={(e) => {
+          handleSelectedImage({
+            selectedFile: e.target.files[0],
+            inputTarget: e.target.value,
+            setErrMsg,
+            setSelectedFile,
+            setSelectedFileUrl,
+            setLoadingImage,
+          });
+        }}
+        type="file"
+        name="image"
+        accept="image/*"
+        multiple={false}
+      />
+    </div>
+  );
+};
