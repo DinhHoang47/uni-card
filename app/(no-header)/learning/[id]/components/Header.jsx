@@ -10,8 +10,7 @@ import { useState } from "react";
 import LearningModeTooltip from "./LearningModeTooltip";
 import { useCollection } from "@lib/useCollection";
 
-export default function Header({ id, handleTest }) {
-  const collectionId = id;
+export default function Header({ collectionId, handleTest }) {
   // Fetched data
   const { data: collection } = useCollection(collectionId);
   // Local state
@@ -35,7 +34,7 @@ export default function Header({ id, handleTest }) {
           />
         </button>
         {isOpenPopup1 && (
-          <BackTooltip id={id} setIsOpenPopup={setIsOpenPopup1} />
+          <BackTooltip id={collectionId} setIsOpenPopup={setIsOpenPopup1} />
         )}
         <div className="flex items-center">
           <span className="font-semibold line-clamp-1">
@@ -73,7 +72,7 @@ export default function Header({ id, handleTest }) {
           }}
           className="px-5 bg-teal-500 text-white h-9 rounded-md"
         >
-          Test
+          Test this section
         </button>
       </div>
     </div>

@@ -1,7 +1,10 @@
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import BackTooltip from "./BackTooltip";
-export default function Header({ id, handleSubmit }) {
+import { useCollection } from "@lib/useCollection";
+export default function Header({ handleSubmit, collectionId, section }) {
+  const { data: collectionData } = useCollection(collectionId);
+  // Local state
   const [isOpenPopup1, setIsOpenPopup1] = useState();
   return (
     <div
@@ -21,12 +24,12 @@ export default function Header({ id, handleSubmit }) {
           />
         </button>
         {isOpenPopup1 && (
-          <BackTooltip id={id} setIsOpenPopup={setIsOpenPopup1} />
+          <BackTooltip id={collectionId} setIsOpenPopup={setIsOpenPopup1} />
         )}
         <div className="flex items-center">
           <span className="font-semibold line-clamp-1">
-            Collection title here Lorem ipsum dolor sit amet.{" "}
-            <span className="">1~2</span>
+            {collectionData?.title}
+            <span className="ml-2">{`(${section})`}</span>
           </span>
         </div>
       </div>

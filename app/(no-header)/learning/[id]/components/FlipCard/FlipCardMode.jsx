@@ -4,16 +4,17 @@ import DisplaySetting from "./DisplaySetting";
 import PlayGround from "./PlayGround";
 import { useCard } from "@lib/useCard";
 import { useCollection } from "@lib/useCollection";
-export default function FlipCardMode({ collectionId }) {
+export default function FlipCardMode({
+  collectionId,
+  currentSection,
+  setCurrentSection,
+}) {
   // Fetched data
   const { data: cardList } = useCard(collectionId);
   const { data: collectionData } = useCollection(collectionId);
   // Local state
   const [openSelect, setOpenSelect] = useState(true);
-  const [currentSection, setCurrentSection] = useState({
-    startNumber: 1,
-    endNumber: null,
-  });
+
   const [currentCardArr, setCurrentCardArr] = useState([]);
   const [buttonArr, setButtonArr] = useState([]);
   const [cardPerPage, setCardPerPage] = useState(10);
@@ -103,7 +104,7 @@ const getButtonArray = (totalCard, pageSize = 10) => {
   let startNumber = 0;
   let end = 0;
   for (let index = 0; index < totalPage; index++) {
-    startNumber = index * pageSize + (index === 0 ? 1 : 0);
+    startNumber = index * pageSize + 1;
     end = startNumber + pageSize - (index === 0 ? 1 : 0);
     if (end <= totalCard) {
       endNumber = end;

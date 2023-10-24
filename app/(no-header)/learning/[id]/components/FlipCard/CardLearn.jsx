@@ -76,7 +76,7 @@ const BackSide = ({ data, setIsFlipped, displayOptions }) => {
           setIsFlipped((pre) => !pre);
         }}
         className={`absolute top-0 left-0 h-full w-full flex flex-col rounded ${
-          (!imageUrl || !displayImg) && (!example || !displayExample)
+          (!imageUrl || !displayImg) && (!displayDef2 || !definition2)
             ? "justify-center"
             : "justify-between"
         } items-center text-[0.75rem]  p-2 `}

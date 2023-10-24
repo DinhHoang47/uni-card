@@ -6,8 +6,13 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import PortalModalWrapper from "@components/PortalModalWrapper";
 import { useEffect, useRef, useState } from "react";
 
-export default function SettingModal({ setIsOpen, id, hanger }) {
-  // Setting
+export default function SettingModal({
+  setIsOpen,
+  id,
+  hanger,
+  currentSection,
+}) {
+  // Local state
   const speedLevel = {
     slow: 15,
     moderate: 10,
@@ -21,7 +26,9 @@ export default function SettingModal({ setIsOpen, id, hanger }) {
 
   const handleTest = () => {
     setIsOpen(false);
-    router.push(`/testing/${id}?mode=${mode}&show=${show}&time=${speed}`);
+    router.push(
+      `/testing/${id}?section=${`${currentSection?.startNumber}:${currentSection?.endNumber}`}&mode=${mode}&show=${show}&time=${speed}`
+    );
   };
 
   return (
@@ -34,7 +41,7 @@ export default function SettingModal({ setIsOpen, id, hanger }) {
         {/* Option 1 */}
         <div className="">
           <div className="">
-            <p>Testing front or back</p>
+            <p className="font-semibold">Testing</p>
           </div>
           <div className="flex items-center space-x-4">
             {/* Front Option */}
@@ -54,7 +61,7 @@ export default function SettingModal({ setIsOpen, id, hanger }) {
                 }}
               />
               <div className="w-32 h-16 border border-black justify-center items-center flex rounded">
-                漢字
+                Term
               </div>
               <div
                 className={`h-5 w-5 rounded-full bg-zinc-200 ${styles.checkMark}`}
@@ -77,7 +84,7 @@ export default function SettingModal({ setIsOpen, id, hanger }) {
                 }}
               />
               <div className="w-32 h-16 border border-black justify-around items-center flex flex-col rounded text-xs">
-                <span>KANJI</span>
+                {/* <span>Pronunciation</span> */}
                 <span>Definition</span>
               </div>
               <div

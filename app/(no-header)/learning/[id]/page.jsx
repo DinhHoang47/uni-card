@@ -14,6 +14,10 @@ export default function CollectionLearn({ params }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const learningHangerRef = useRef(null);
+  const [currentSection, setCurrentSection] = useState({
+    startNumber: 1,
+    endNumber: null,
+  });
   // Handler
   const { mutate: mutateCardData } = useCard(collectionId);
   const handleTest = () => {
@@ -23,15 +27,19 @@ export default function CollectionLearn({ params }) {
     mutateCardData();
   }, [collectionId]);
   return (
-    <div className="w-full mt-14 space-y-4 sm:space-y-4 px-2 sm:px-8 ">
+    <div className="w-full mt-14 space-y-2 sm:space-y-2 px-2 sm:px-8 ">
       {/* Header */}
       <Header
         isOpenPopup={isOpenPopup}
         setIsOpenPopup={setIsOpenPopup}
-        id={collectionId}
+        collectionId={collectionId}
         handleTest={handleTest}
       />
-      <FlipCardMode collectionId={collectionId} />
+      <FlipCardMode
+        currentSection={currentSection}
+        setCurrentSection={setCurrentSection}
+        collectionId={collectionId}
+      />
       <div ref={learningHangerRef} id="learningHanger" className=""></div>
       {/* Setting Modal */}
       <CSSTransition
@@ -42,6 +50,7 @@ export default function CollectionLearn({ params }) {
         unmountOnExit
       >
         <SettingModal
+          currentSection={currentSection}
           hanger={"learningHanger"}
           setIsOpen={setIsOpen}
           id={collectionId}

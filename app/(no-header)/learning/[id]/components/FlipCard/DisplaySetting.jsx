@@ -74,7 +74,7 @@ export default function DisplaySetting({
           </div>
           {/* Page size setting */}
           <div className="flex justify-end relative">
-            <div className="flex absolute -translate-y-full sm:relative">
+            <div className="flex absolute sm:-translate-y-[36px] -translate-y-[72px] sm:relative">
               <label className="flex space-x-2" htmlFor="page-size">
                 <Square3Stack3D className={`h-6 w-6`} />
               </label>

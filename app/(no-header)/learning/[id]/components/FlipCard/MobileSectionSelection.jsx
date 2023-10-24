@@ -14,14 +14,14 @@ export default function MobileSectionSelection({
   return (
     <div className=" relative flex space-x-5 items-center pt-2">
       {/* Title */}
-      <p className="font-semibold select-none">Select section to learn</p>
+      <p className="font-semibold select-none">Section:</p>
       {/* Dropdown to select */}
       <div
         onClick={(e) => {
           e.stopPropagation();
           setOpenMenu((pre) => !pre);
         }}
-        className={`w-32 h-12 relative pl-1 pr-4 py-1 border border-gray-400 rounded ${
+        className={`w-32 h-12 relative pl-1 pr-4 py-1  rounded ${
           openMenu ? "border-b-0 rounded-b-none" : ""
         }`}
       >
@@ -41,7 +41,7 @@ export default function MobileSectionSelection({
         <ChevronDownIcon
           className={`${
             openMenu ? "" : "-rotate-90"
-          } h-4 w-4 stroke-2 absolute right-0 top-1/2 -translate-y-1/2 -translate-x-[1px]`}
+          } h-4 w-4 stroke-2 absolute right-0 top-1/2 -translate-y-1/2 -translate-x-[20px]`}
         />
       </div>
     </div>
