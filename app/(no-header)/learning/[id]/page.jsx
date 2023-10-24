@@ -23,7 +23,7 @@ export default function CollectionLearn({ params }) {
     mutateCardData();
   }, [collectionId]);
   return (
-    <div className="w-full mt-14 space-y-2 sm:space-y-4 px-2 sm:px-8 ">
+    <div className="w-full mt-14 space-y-4 sm:space-y-4 px-2 sm:px-8 ">
       {/* Header */}
       <Header
         isOpenPopup={isOpenPopup}

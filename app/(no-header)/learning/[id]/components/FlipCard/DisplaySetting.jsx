@@ -1,14 +1,20 @@
 import { useEffect, useState } from "react";
+import { Cog6ToothIcon } from "@heroicons/react/24/outline";
+import Square3Stack3D from "@public/assets/icons/Square3Stack3D";
 
-export default function DisplaySetting({ setDisplayOptions, initOptions }) {
+export default function DisplaySetting({
+  setDisplayOptions,
+  initOptions,
+  cardPerPage,
+  setCardPerPage,
+}) {
   // Local state
   return (
     <>
       <div className={`w-full space-y-4`}>
         {/* Setting & button */}
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 justify-between items-center">
-          {/* Setting */}
-
+        <div className="grid grid-cols-1 gap-0 sm:gap-2 sm:grid-cols-2 justify-between items-center">
+          {/* Display setting */}
           <div className="flex items-center space-x-3 font-semibold ">
             <p className="break-keep">Show:</p>
             {initOptions?.displayDef2 && (
@@ -66,7 +72,28 @@ export default function DisplaySetting({ setDisplayOptions, initOptions }) {
               </div>
             )}
           </div>
-          {/* Actions */}
+          {/* Page size setting */}
+          <div className="flex justify-end relative">
+            <div className="flex absolute -translate-y-full sm:relative">
+              <label className="flex space-x-2" htmlFor="page-size">
+                <Square3Stack3D className={`h-6 w-6`} />
+              </label>
+              <select
+                value={cardPerPage}
+                onChange={(e) => {
+                  setCardPerPage(e.target.value);
+                }}
+                className="px-2 bg-transparent outline-none"
+                name="page-size"
+                id="page-size"
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+              </select>
+            </div>
+          </div>
         </div>
       </div>
     </>

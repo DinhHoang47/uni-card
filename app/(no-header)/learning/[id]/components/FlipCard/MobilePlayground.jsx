@@ -37,7 +37,11 @@ export default function MobilePlayground({ currentCardArr, displayOptions }) {
         currentCardArr={currentCardArr}
       />
       <div className="card_selection p-2">
-        <SelectCardSection currentCardArr={currentCardArr} />
+        <SelectCardSection
+          instanceRef={instanceRef}
+          currentSlide={currentSlide}
+          currentCardArr={currentCardArr}
+        />
       </div>
     </div>
   );

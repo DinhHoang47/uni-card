@@ -12,7 +12,7 @@ export default function MobileSectionSelection({
   // Local state
   const [openMenu, setOpenMenu] = useState();
   return (
-    <div className=" relative flex justify-between items-center pt-2">
+    <div className=" relative flex space-x-5 items-center pt-2">
       {/* Title */}
       <p className="font-semibold select-none">Select section to learn</p>
       {/* Dropdown to select */}

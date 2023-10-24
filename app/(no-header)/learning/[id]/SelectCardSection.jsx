@@ -1,13 +1,19 @@
 import styles from "./styles.module.css";
-export default function SelectCardSection({ currentCardArr }) {
+export default function SelectCardSection({
+  currentCardArr,
+  currentSlide,
+  instanceRef,
+}) {
   return (
     <ul className="grid grid-cols-5 gap-2">
       {currentCardArr.map((item, index) => (
         <li
           key={`selectcardbtn-${index}`}
-          onClick={() => {}}
+          onClick={() => {
+            instanceRef.current?.moveToIdx(index);
+          }}
           className={`bg-white h-9 cursor-pointer rounded flex items-center px-1 border  ${
-            item.active === true ? `${styles.active}` : "border-slate-400"
+            currentSlide === index ? `${styles.active}` : "border-slate-400"
           } relative overflow-hidden`}
         >
           <p className="truncate text-xs w-full text-center">{item.term}</p>

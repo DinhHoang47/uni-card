@@ -66,10 +66,16 @@ const BackSide = ({ data, setIsFlipped, displayOptions }) => {
           setIsFlipped((pre) => !pre);
         }}
         className={`absolute top-0 left-0 h-full w-full flex flex-col rounded ${
-          (!imageUrl || !displayImg) && (!example || !displayExample)
+          (!imageUrl || !displayImg) && (!displayDef2 || !definition2)
             ? "justify-center"
             : "justify-between"
-        } items-center p-2 `}
+        } items-center px-4 ${
+          (displayDef2 || definition2) &&
+          (displayExample || example) &&
+          (!imageUrl || !displayImg)
+            ? "py-8"
+            : "py-4"
+        } `}
       >
         {definition2 && displayDef2 ? (
           // break-words
