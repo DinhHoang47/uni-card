@@ -3,7 +3,8 @@ import { updateImage, uploadImage } from "@services/CldService";
 export const getImageUrl = async (
   oldImageUrl,
   selectedFile,
-  preset = "collection_image"
+  preset = "collection_image",
+  imageId = null
 ) => {
   // If no selected file and no oldImageUrl
   if (!selectedFile && !oldImageUrl) {
@@ -28,7 +29,7 @@ export const getImageUrl = async (
       }
       // If can't get publicId then upload image as new image
     } else {
-      const { data } = await uploadImage(selectedFile, null, preset);
+      const { data } = await uploadImage(selectedFile, imageId, preset);
       const updatedUrl = data.secure_url;
       return updatedUrl;
     }

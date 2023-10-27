@@ -17,6 +17,7 @@ import useUser from "@lib/useUser";
 import StyledChips from "./StyledChips";
 import { getImageUrl } from "@utils/getImageUrl";
 import { handleSelectedImage } from "@lib/handleSelectedImage";
+import { generateUniqueName } from "@utils/generateUniqueName";
 
 export default function EditCollectionModal({
   setIsOpen,
@@ -60,8 +61,14 @@ export default function EditCollectionModal({
         return;
       }
       const preset = "collection_image";
-      const updatedUrl = await getImageUrl(imageUrl, selectedFile, preset);
       const trimmedTitle = title.trim();
+      const imageId = generateUniqueName(trimmedTitle.slice(0, 10));
+      const updatedUrl = await getImageUrl(
+        imageUrl,
+        selectedFile,
+        preset,
+        imageId
+      );
       const trimmedDescription = description.trim();
       // Data to update
       const dataToSend = {

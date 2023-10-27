@@ -15,8 +15,6 @@ export default function CollectionLearn({ params }) {
   const { id: collectionId } = params;
   const { user } = useUser("/collections");
   const { data: learningStatus } = useLearningStatus(collectionId);
-  console.log("learningStatus: ", learningStatus);
-  // console.log("data: ", data);
   // Local State
   const testingStatus = learningStatus?.test_result;
   const [isOpen, setIsOpen] = useState(false);

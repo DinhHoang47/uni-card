@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.css";
 import { privateUserServ } from "@services/Private_UserService";
+import { useLearningStatus } from "@lib/useLearningStatus";
 export default function TestingGround({
   testingMode,
   answerArr,
@@ -15,6 +16,8 @@ export default function TestingGround({
 }) {
   // Fetched data
   const totalQuiz = quizArr.length;
+  const { data: learningStatus, mutate: mutateLearningStatus } =
+    useLearningStatus(collectionId);
   // Local state
   const [answeredAllQuiz, setAnsweredAllQuiz] = useState(false);
   // Hanlder
@@ -33,10 +36,6 @@ export default function TestingGround({
       setAnsweredAllQuiz(false);
     }
   }, [JSON.stringify(answerArr)]);
-
-  useEffect(() => {
-    console.log(quizArr);
-  }, []);
 
   return (
     <div className="max-w-md mx-auto">
@@ -77,6 +76,8 @@ export default function TestingGround({
               answerArr={answerArr}
               setOpenResultModal={setOpenResultModal}
               collectionId={collectionId}
+              learningStatus={learningStatus}
+              mutateLearningStatus={mutateLearningStatus}
             />
           </div>
         </div>
@@ -145,6 +146,8 @@ const SubmitButton = ({
   setResultArr,
   setOpenResultModal,
   collectionId,
+  learningStatus,
+  mutateLearningStatus,
 }) => {
   return (
     <div className="w-full">
@@ -155,7 +158,9 @@ const SubmitButton = ({
             answerArr,
             setResultArr,
             setOpenResultModal,
-            collectionId
+            collectionId,
+            learningStatus,
+            mutateLearningStatus
           );
         }}
         disabled={!answeredAllQuiz}
@@ -174,8 +179,6 @@ const SelectionInput = ({
   currentQuizId,
   answerArr,
   setAnswerArr,
-  setCurrentQuiz,
-  totalQuiz,
 }) => {
   const currentAnswer = answerArr.find((ans) => ans.id === currentQuizId);
   const currentQuiz = quizArr.find((quiz) => quiz.id === currentQuizId);
@@ -215,14 +218,7 @@ const SelectionInput = ({
   );
 };
 
-const TypingInput = ({
-  setAnswerArr,
-  answerArr,
-  quizArr,
-  currentQuizId,
-  setCurrentQuiz,
-  totalQuiz,
-}) => {
+const TypingInput = ({ setAnswerArr, answerArr, currentQuizId }) => {
   // Fetched data
   const currentAns = answerArr.find((ans) => {
     return ans.id == currentQuizId;
@@ -377,8 +373,12 @@ const handleSubmitAns = async (
   answerArr,
   setResultArr,
   setOpenResultModal,
-  collectionId
+  collectionId,
+  learningStatus,
+  mutateLearningStatus
 ) => {
+  const updatedTestResult = [...learningStatus?.test_result];
+  // Check current input answer to generate the test result
   const resultArr = quizArr.map((quiz, index) => {
     if (answerArr[index].answer === null) {
       return { cardId: quiz.cardId, passed: false };
@@ -391,15 +391,33 @@ const handleSubmitAns = async (
       return { cardId: quiz.cardId, passed: false };
     }
   });
-  console.log(resultArr);
+  // Loop through current test result and set new test result , if not there yet push new record
+
+  resultArr.forEach((currentAns) => {
+    const foundAnsIndex = updatedTestResult.findIndex(
+      (previousAns) => previousAns.cardId === currentAns.cardId
+    );
+    // If found old result update it
+    if (foundAnsIndex !== -1) {
+      updatedTestResult[foundAnsIndex].passed = currentAns.passed;
+    } else {
+      // If not found old result then push new item to the result
+      updatedTestResult.push({
+        cardId: currentAns.cardId,
+        passed: currentAns.passed,
+      });
+    }
+  });
+
   const result = await privateUserServ()
-    .updateTestResult(collectionId, resultArr)
+    .updateTestResult(collectionId, updatedTestResult)
     .then((res) => {
       console.log(res.data);
     })
     .catch((err) => {
       console.log(err);
     });
+  mutateLearningStatus();
   setResultArr(resultArr);
   setOpenResultModal(true);
 };
