@@ -24,7 +24,11 @@ export default function Header({ handleSubmit, collectionId, section }) {
           />
         </button>
         {isOpenPopup1 && (
-          <BackTooltip id={collectionId} setIsOpenPopup={setIsOpenPopup1} />
+          <BackTooltip
+            id={collectionId}
+            setIsOpenPopup={setIsOpenPopup1}
+            backTo="learning"
+          />
         )}
         <div className="flex items-center">
           <span className="font-semibold line-clamp-1">
@@ -40,14 +44,6 @@ export default function Header({ handleSubmit, collectionId, section }) {
           <p className="hidden sm:inline-block">Time remaining</p>
           <span className="text-2xl">4:59</span>
         </div>
-        <button
-          onClick={() => {
-            handleSubmit();
-          }}
-          className="px-5 bg-teal-500 text-white h-9 rounded-md"
-        >
-          Submit
-        </button>
       </div>
     </div>
   );

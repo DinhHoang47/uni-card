@@ -1,38 +1,68 @@
 "use client";
-import { useEffect, useState } from "react";
-import DesktopTestingGround from "./desktop/DesktopTestingGround";
+import { useEffect, useRef, useState } from "react";
+import TestingGround from "./desktop/DesktopTestingGround";
 import { useSearchParams } from "next/navigation";
-import TestingGround_Choice from "./mobile/TestingGround_Choice";
-import TestingGround_Writing from "./mobile/TestingGround_Writing";
 import ResultModal from "./components/ResultModal";
 import Header from "./components/Header";
 import { CSSTransition } from "react-transition-group";
-import { isNumber } from "@mui/x-data-grid/internals";
 import { useCard } from "@lib/useCard";
 import { shuffleArray } from "@utils/arraySuffer";
+import { generate } from "random-words";
 
 export default function CollectionTest({ params }) {
+  const searchParams = useSearchParams();
+  // Validate setting in query string
+  const validSetting = {
+    input: ["typing", "multiple-choice"],
+    testing: ["term", "definition"],
+  };
+  const testingMode = searchParams.get("testing");
+  const inputMode = searchParams.get("input");
+  const checkValidParams = () => {
+    const validTestingMode = validSetting.testing.includes(testingMode);
+    const validInputMode = validSetting.input.includes(inputMode);
+    if (!validInputMode || !validTestingMode) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+  const valid = checkValidParams();
+  if (!valid) return <div className="text-center">Page not found</div>;
   // Fetched data
   const { id: collectionId } = params;
   const { data: cardData } = useCard(collectionId);
   // Local state
-  const searchParams = useSearchParams();
+  const resultModalHanger = useRef(null);
   const section = searchParams.get("section");
-  const testingMode = searchParams.get("mode");
-  const showMode = searchParams.get("show");
   const [isOpen, setIsOpen] = useState(false);
   const [currentSection, setCurrentSection] = useState({
     start: null,
     end: null,
   });
   const [quizArr, setQuizArr] = useState([]);
-  const [currentQuiz, setCurrentQuiz] = useState(0);
+  const [currentQuiz, setCurrentQuiz] = useState(1);
+  const [answerArr, setAnswerArr] = useState([]);
+  const [resultArr, setResultArr] = useState([]);
   // Handler
+  const handleRetest = () => {
+    // Init answer arra
+    const emptyAnswerArr = quizArr.map((item) => ({
+      id: item.id,
+      answer: null,
+      answerIndex: null,
+    }));
+    setAnswerArr(emptyAnswerArr);
+    setCurrentQuiz(1);
+    setResultArr([]);
+    setIsOpen(false);
+  };
 
   const handleSubmit = () => {
     setIsOpen(true);
   };
   // Side effect
+
   useEffect(() => {
     // Get and set current section, current card
     if (section) {
@@ -44,49 +74,58 @@ export default function CollectionTest({ params }) {
     }
   }, []);
   useEffect(() => {
-    // if()
     // Generate quiz array
     if (cardData && currentSection.start && currentSection.end) {
-      console.log(currentSection);
+      // Set quiz array
       const currentArr = getCurrentCardArr(cardData, currentSection);
       const quizArr = generateQuiz(currentArr);
       setQuizArr(quizArr);
+      // Init answer arra
+      const emptyAnswerArr = quizArr.map((item) => ({
+        id: item.id,
+        answer: null,
+        answerIndex: null,
+      }));
+      setAnswerArr(emptyAnswerArr);
     }
   }, [currentSection, cardData]);
-  useEffect(() => {
-    console.log(quizArr);
-  }, [quizArr]);
   return (
     <div className="w-full mt-14 space-y-2 sm:space-y-4 px-2 sm:px-8 ">
-      {/* Header */}
       <Header
         section={section}
         collectionId={collectionId}
         handleSubmit={handleSubmit}
       />
-      {/* Section */}
-      <div className="w-full">
-        {/* Desktop Tesing-ground */}
-        <DesktopTestingGround testingMode={testingMode} showMode={showMode} />
-        {/* Mobile Testing-ground  */}
-        <div className="flex sm:hidden mt-4 overflow-hidden">
-          {/* Checking testing mode pass through URL params */}
-          {testingMode === "writing" ? (
-            <TestingGround_Writing showMode={showMode} />
-          ) : (
-            <TestingGround_Choice showMode={showMode} />
-          )}
-        </div>
-      </div>
-      {/* Setting Modal */}
+      <TestingGround
+        quizArr={quizArr}
+        currentQuiz={currentQuiz}
+        setCurrentQuiz={setCurrentQuiz}
+        answerArr={answerArr}
+        setAnswerArr={setAnswerArr}
+        testingMode={testingMode}
+        inputMode={inputMode}
+        setResultArr={setResultArr}
+        setOpenResultModal={setIsOpen}
+        collectionId={collectionId}
+      />
       <CSSTransition
         classNames={"modal"}
         in={isOpen}
         timeout={200}
         unmountOnExit
+        nodeRef={resultModalHanger}
       >
-        <ResultModal isOpen={isOpen} setIsOpen={setIsOpen} id={params.id} />
+        <ResultModal
+          handleRetest={handleRetest}
+          hanger={"resultModalHanger"}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          id={params.id}
+          resultArr={resultArr}
+          collectionId={collectionId}
+        />
       </CSSTransition>
+      <div ref={resultModalHanger} id={"resultModalHanger"} className=""></div>
     </div>
   );
 }
@@ -102,7 +141,7 @@ const generateQuiz = (cardArr) => {
   const optionNum = 4;
   let quizArr = [];
   // Get all the anwser options from the card's definition or term
-  const allOptionArr = cardArr.map((item) => item.definition_1);
+  const allOptionArr = cardArr.map((item, index) => item.definition_1);
   quizArr = cardArr.map((item, index) => {
     // Get anwser options without current the correct one
     const allChoiceArr = allOptionArr
@@ -116,16 +155,40 @@ const generateQuiz = (cardArr) => {
     if (removedInvalidChoiceArr.length + 1 < optionNum) {
       const oweItems = optionNum - 1 - removedInvalidChoiceArr.length;
       for (let i = 0; i < oweItems; i++) {
-        removedInvalidChoiceArr.push(new Date());
+        removedInvalidChoiceArr.push(generate());
       }
     }
-    const validChoiceArr = [...removedInvalidChoiceArr, item.definition_1];
+    // Select random answer from removedInvalidChoiceArr
+    const randomValidChoice = getRandomAnswerArr(
+      removedInvalidChoiceArr,
+      optionNum - 1
+    );
+    const validChoiceArr = [...randomValidChoice, item.definition_1];
     const shuffledArr = shuffleArray(validChoiceArr);
     return {
+      id: index + 1,
       quiz: item.term,
       answer: item.definition_1,
       choices: shuffledArr,
+      cardId: item.id,
     };
   });
   return quizArr;
+};
+
+const getRandomAnswerArr = (arr, numItems) => {
+  if (numItems > arr.length) {
+    return [];
+  }
+  const randomItems = [];
+  const usedIndices = [];
+  for (let i = 0; i < numItems; i++) {
+    let randomIndex;
+    do {
+      randomIndex = Math.floor(Math.random() * arr.length);
+    } while (usedIndices.includes(randomIndex));
+    usedIndices.push(randomIndex);
+    randomItems.push(arr[randomIndex]);
+  }
+  return randomItems;
 };

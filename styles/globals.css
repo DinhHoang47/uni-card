@@ -12,6 +12,7 @@
 :root {
   --test-passed-color: #4ade80;
   --test-failed-color: #facc15;
+  --test-not-color: #cbcbcb;
   --test-not-yet-color: #d9d9d9;
   --tailwind-gray-300: #d1d5db;
   --tailwind-blue-600: #2563eb;

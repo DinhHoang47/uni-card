@@ -10,6 +10,9 @@ export default function SectionSelection({
   setCurrentSection,
   currentSection,
   buttonArr,
+  testingStatus,
+  currentCardArr,
+  cardArr,
 }) {
   return (
     <>
@@ -20,11 +23,15 @@ export default function SectionSelection({
           buttonArr={buttonArr}
           openSelect={openSelect}
           setOpenSelect={setOpenSelect}
+          testingStatus={testingStatus}
+          currentCardArr={currentCardArr}
+          cardArr={cardArr}
         />
       </div>
       {/* Mobile Selection */}
       <div className="block sm:hidden w-full space-y-2 sm:space-y-4">
         <MobileSectionSelection
+          testingStatus={testingStatus}
           currentSection={currentSection}
           setCurrentSection={setCurrentSection}
           buttonArr={buttonArr}

@@ -5,8 +5,13 @@ class PrivateUserService extends PrivateService {
     super();
   }
   getUser(url) {
-    console.log("url: ", url);
     return this.get(url);
+  }
+  getTestResult(id) {
+    return this.get(`user/collections/${id}/test-result`);
+  }
+  updateTestResult(id, data) {
+    return this.post(`user/collections/${id}/test-result`, data);
   }
 }
 

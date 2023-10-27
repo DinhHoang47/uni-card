@@ -6,11 +6,19 @@ import Header from "./components/Header";
 import { CSSTransition } from "react-transition-group";
 import FlipCardMode from "./components/FlipCard/FlipCardMode";
 import { useCard } from "@lib/useCard";
+import useUser from "@lib/useUser";
+import { privateUserServ } from "@services/Private_UserService";
+import { useLearningStatus } from "@lib/useLearningStatus";
 
 export default function CollectionLearn({ params }) {
   // Fetched data
   const { id: collectionId } = params;
+  const { user } = useUser("/collections");
+  const { data: learningStatus } = useLearningStatus(collectionId);
+  console.log("learningStatus: ", learningStatus);
+  // console.log("data: ", data);
   // Local State
+  const testingStatus = learningStatus?.test_result;
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const learningHangerRef = useRef(null);
@@ -36,6 +44,7 @@ export default function CollectionLearn({ params }) {
         handleTest={handleTest}
       />
       <FlipCardMode
+        testingStatus={testingStatus}
         currentSection={currentSection}
         setCurrentSection={setCurrentSection}
         collectionId={collectionId}

@@ -9,6 +9,9 @@ export default function DesktopSectionSelection({
   buttonArr,
   setCurrentSection,
   currentSection,
+  testingStatus,
+  currentCardArr,
+  cardArr,
 }) {
   const containerRef = useRef(null);
   return (
@@ -47,10 +50,13 @@ export default function DesktopSectionSelection({
         >
           {buttonArr.map((item) => (
             <SelectSectionButton
+              currentCardArr={currentCardArr}
+              testingStatus={testingStatus}
               setCurrentSection={setCurrentSection}
               currentSection={currentSection}
               data={item}
               key={`button-${item.startNumber}`}
+              cardArr={cardArr}
             />
           ))}
         </ul>

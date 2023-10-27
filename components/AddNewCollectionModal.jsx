@@ -19,8 +19,6 @@ import { Switch } from "@mui/material";
 import CardPreview from "./CardPreview";
 
 export default function AddNewCollectionModal({ hanger, router }) {
-  //   Handle input chip
-
   // Input states
   const [chips, setChips] = useState([]);
   const [title, setTitle] = useState("");

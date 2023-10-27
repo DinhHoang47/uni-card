@@ -9,7 +9,6 @@ export default function Mobile_SectionSelectionList({
   currentSection,
   setCurrentSection,
 }) {
-  console.log(buttonArr);
   useEffect(() => {
     const closeMobileSectionMenu = () => {
       setOpenMenu(false);

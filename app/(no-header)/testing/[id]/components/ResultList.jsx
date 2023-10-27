@@ -115,7 +115,7 @@ export default function ResultList() {
         key={`button-list-${i}`}
         className={`${
           i > 0 ? "mt-2" : ""
-        } flex items-center space-x-2 sm:space-x-3 ${
+        } flex items-center space-x-2 justify-center sm:space-x-3 ${
           renderLength < buttonPerRow ? "" : ""
         }`}
       >

@@ -52,6 +52,10 @@
   background-color: var(--test-failed-color);
 }
 
+.testingStatusList li[status="notTested"] {
+  background-color: var(--test-not-color);
+}
+
 /* Cards style */
 .statusFlag {
   background-color: var(--test-not-yet-color);

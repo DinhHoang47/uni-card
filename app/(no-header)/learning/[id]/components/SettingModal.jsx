@@ -20,14 +20,14 @@ export default function SettingModal({
   };
 
   const router = useRouter();
-  const [mode, setMode] = useState("choice");
-  const [show, setShow] = useState("back");
+  const [mode, setMode] = useState("multiple-choice");
+  const [testing, setTesting] = useState("term");
   const [speed, setSpeed] = useState(speedLevel.moderate);
 
   const handleTest = () => {
     setIsOpen(false);
     router.push(
-      `/testing/${id}?section=${`${currentSection?.startNumber}:${currentSection?.endNumber}`}&mode=${mode}&show=${show}&time=${speed}`
+      `/testing/${id}?section=${`${currentSection?.startNumber}:${currentSection?.endNumber}`}&input=${mode}&testing=${testing}&time=${speed}`
     );
   };
 
@@ -43,21 +43,21 @@ export default function SettingModal({
           <div className="">
             <p className="font-semibold">Testing</p>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center justify-center space-x-4">
             {/* Front Option */}
             <label
-              htmlFor="showModeRadio-One"
+              htmlFor="testingModeRadio-One"
               className={`${styles.container} flex flex-col items-center justify-center space-y-2 cursor-pointer`}
             >
               <input
-                checked={show === "back"}
+                checked={testing === "term"}
                 className="h-0 w-0 opacity-0"
-                id="showModeRadio-One"
+                id="testingModeRadio-One"
                 type="radio"
-                name="showMode"
-                value={"back"}
+                name="testingMode"
+                value={"term"}
                 onChange={(e) => {
-                  setShow(e.target.value);
+                  setTesting(e.target.value);
                 }}
               />
               <div className="w-32 h-16 border border-black justify-center items-center flex rounded">
@@ -69,21 +69,21 @@ export default function SettingModal({
             </label>
             {/* Back Option */}
             <label
-              htmlFor="showModeRadio-Two"
+              htmlFor="testingModeRadio-Two"
               className={`${styles.container} flex flex-col items-center justify-center space-y-2 cursor-pointer`}
             >
               <input
-                checked={show === "front"}
+                checked={testing === "definition"}
                 className="h-0 w-0 opacity-0"
-                id="showModeRadio-Two"
+                id="testingModeRadio-Two"
                 type="radio"
                 name="showMode"
-                value={"front"}
+                value={"definition"}
                 onChange={(e) => {
-                  setShow(e.target.value);
+                  setTesting(e.target.value);
                 }}
               />
-              <div className="w-32 h-16 border border-black justify-around items-center flex flex-col rounded text-xs">
+              <div className="w-32 h-16 border border-black justify-around items-center flex flex-col rounded ">
                 {/* <span>Pronunciation</span> */}
                 <span>Definition</span>
               </div>
@@ -96,20 +96,20 @@ export default function SettingModal({
         {/* Option 2 */}
         <div className="">
           <div className="">
-            <p>Mode</p>
+            <p className="font-semibold">Input type</p>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center justify-center space-x-4">
             <label
               htmlFor="inputModeRadio-One"
               className={`${styles.container} flex flex-col items-center justify-center space-y-2 cursor-pointer`}
             >
               <input
-                checked={mode === "writing"}
+                checked={mode === "typing"}
                 className="h-0 w-0 opacity-0"
                 id="inputModeRadio-One"
                 type="radio"
                 name="inputMode"
-                value={"writing"}
+                value={"typing"}
                 onChange={(e) => {
                   setMode(e.target.value);
                 }}
@@ -121,7 +121,7 @@ export default function SettingModal({
                   height={36}
                   src={"/assets/images/text-box.png"}
                 />
-                <p className="text-xs">Writing</p>
+                <p className="text-xs">typing</p>
               </div>
               <div
                 className={`h-5 w-5 rounded-full bg-zinc-200 ${styles.checkMark}`}
@@ -136,15 +136,15 @@ export default function SettingModal({
                 id="inputModeRadio-Two"
                 type="radio"
                 name="inputMode"
-                checked={mode === "choice"}
-                value={"choice"}
+                checked={mode === "multiple-choice"}
+                value={"multiple-choice"}
                 onChange={(e) => {
                   setMode(e.target.value);
                 }}
               />
               <div className="w-32 justify-center items-center flex flex-col">
                 <Image
-                  alt="writing-image"
+                  alt="typing-image"
                   width={36}
                   height={36}
                   src={"/assets/images/test.png"}
@@ -160,7 +160,7 @@ export default function SettingModal({
         {/* Option 3 */}
         <div className="">
           <div className="">
-            <p>Speed</p>
+            <p className="font-semibold">Speed</p>
           </div>
           <div className="flex items-center justify-between space-x-4">
             {/* Slow */}
@@ -210,7 +210,7 @@ export default function SettingModal({
               />
               <div className="w-16  justify-center items-center flex flex-col">
                 <Image
-                  alt="writing-image"
+                  alt="typing-image"
                   width={36}
                   height={36}
                   src={"/assets/images/hare.png"}
@@ -239,7 +239,7 @@ export default function SettingModal({
               />
               <div className="w-16  justify-center items-center flex flex-col">
                 <Image
-                  alt="writing-image"
+                  alt="typing-image"
                   width={36}
                   height={36}
                   src={"/assets/images/cheetah.png"}

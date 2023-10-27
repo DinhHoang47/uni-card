@@ -4,10 +4,13 @@ import {
   UserIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { useEffect } from "react";
 
-export default function BackTooltip({ setIsOpenPopup, id }) {
+export default function BackTooltip({ setIsOpenPopup, id, backTo }) {
+  // Handler
+  const router = useRouter();
   useEffect(() => {
     const closeThisPopup = () => {
       setIsOpenPopup(false);
@@ -21,19 +24,29 @@ export default function BackTooltip({ setIsOpenPopup, id }) {
         onClick={(e) => {
           e.stopPropagation();
         }}
-        className="absolute top-full bg-white px-2 py-2 rounded  border !ml-0 translate-y-2 shadow-md"
+        className="absolute top-full bg-white px-2 py-2 rounded  border !ml-0 translate-y-2 shadow-md min-w-max"
       >
         <div
           onClick={() => {}}
           className="flex flex-col items-start space-y-2 cursor-pointer "
         >
-          <Link
+          <button
             className="flex w-full items-center space-x-2 hover:text-blue-500"
-            href={`/collections/${id}`}
+            onClick={() => {
+              if (!backTo) {
+                router.push(`/collections/${id}`);
+              } else {
+                router.push(`/${backTo}/${id}`);
+              }
+            }}
           >
             <ChevronLeftIcon className="h-6 w-6 hover:text-blue-500" />
-            <span>This collection</span>
-          </Link>
+            {backTo ? (
+              <span>Back to {backTo}</span>
+            ) : (
+              <span>This collection</span>
+            )}
+          </button>
           <Link
             className="flex w-full items-center space-x-2 hover:text-blue-500"
             href={"/mypage"}

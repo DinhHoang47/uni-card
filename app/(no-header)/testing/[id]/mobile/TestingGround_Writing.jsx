@@ -8,7 +8,7 @@ import AnswerInput_2 from "../components/AnswerInput_2";
 import AnswerInput_1 from "../components/AnswerInput_1";
 import NextButton from "../components/NextButton";
 
-export default function TestingGround_Writing({ showMode }) {
+export default function TestingGround_Typing({ showMode }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [sliderRef, instanceRef] = useKeenSlider({

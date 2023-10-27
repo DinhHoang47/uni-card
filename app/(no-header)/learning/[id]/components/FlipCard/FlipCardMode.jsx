@@ -8,13 +8,13 @@ export default function FlipCardMode({
   collectionId,
   currentSection,
   setCurrentSection,
+  testingStatus,
 }) {
   // Fetched data
   const { data: cardList } = useCard(collectionId);
   const { data: collectionData } = useCollection(collectionId);
   // Local state
   const [openSelect, setOpenSelect] = useState(true);
-
   const [currentCardArr, setCurrentCardArr] = useState([]);
   const [buttonArr, setButtonArr] = useState([]);
   const [cardPerPage, setCardPerPage] = useState(10);
@@ -70,6 +70,9 @@ export default function FlipCardMode({
         openSelect={openSelect}
         setOpenSelect={setOpenSelect}
         buttonArr={buttonArr}
+        testingStatus={testingStatus}
+        currentCardArr={currentCardArr}
+        cardArr={cardList}
       />
       <DisplaySetting
         cardPerPage={cardPerPage}
@@ -105,7 +108,7 @@ const getButtonArray = (totalCard, pageSize = 10) => {
   let end = 0;
   for (let index = 0; index < totalPage; index++) {
     startNumber = index * pageSize + 1;
-    end = startNumber + pageSize - (index === 0 ? 1 : 0);
+    end = startNumber + pageSize - 1;
     if (end <= totalCard) {
       endNumber = end;
     } else {

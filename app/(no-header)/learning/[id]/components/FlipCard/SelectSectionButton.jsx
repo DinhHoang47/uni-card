@@ -1,12 +1,22 @@
+import styles from "../styles.module.css";
+
 export default function SelectSectionButton({
   data,
   setCurrentSection,
   currentSection,
+  currentCardArr,
+  testingStatus,
+  cardArr,
 }) {
+  // Local state
   let selected = false;
   if (currentSection?.startNumber === data?.startNumber) {
     selected = true;
   }
+  const thisButtonCardArr = cardArr.slice(
+    data?.startNumber - 1,
+    data?.endNumber
+  );
   return (
     <li
       onClick={() => {
@@ -27,18 +37,42 @@ export default function SelectSectionButton({
         <span className="text-xs">~</span>
         {data?.endNumber}
       </span>
-      {/* <ul className={`${styles.testingStatusList} w-full h-2 flex`}>
-        <li status="failed"></li>
-        <li status="passed"></li>
-        <li status="passed"></li>
-        <li status="passed"></li>
-        <li status="passed"></li>
-        <li status="passed"></li>
-        <li status="passed"></li>
-        <li status="passed"></li>
-        <li status="passed"></li>
-        <li status="failed"></li>
-      </ul> */}
+      <StatusIndicator
+        currentCardArr={thisButtonCardArr}
+        testingStatus={testingStatus}
+      />
     </li>
   );
 }
+
+const StatusIndicator = ({ currentCardArr, testingStatus }) => {
+  let notTestedNums = 0;
+  let passedTestNums = 0;
+  let failedTestNums = 0;
+  currentCardArr.forEach((card) => {
+    const foundResult = testingStatus?.find((item) => {
+      return item.cardId === card.id;
+    });
+    if (foundResult) {
+      if (foundResult.passed === true) {
+        passedTestNums++;
+      } else {
+        failedTestNums++;
+      }
+    } else {
+      notTestedNums++;
+    }
+  });
+  const statusArr = Array(passedTestNums)
+    .fill("passed")
+    .concat(Array(failedTestNums).fill("failed"))
+    .concat(Array(notTestedNums).fill("notTested"));
+  return (
+    <ul className={`${styles.testingStatusList} w-full h-2 flex`}>
+      {currentCardArr.map((item, index) => {
+        const status = statusArr[index];
+        return <li key={item.id} status={status}></li>;
+      })}
+    </ul>
+  );
+};

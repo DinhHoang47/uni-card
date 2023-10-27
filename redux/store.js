@@ -6,6 +6,7 @@ import authReducer from "./authSlice";
 import rightSideBarReducer from "./rightSideBarSlice";
 import commonMessageReducer from "./commonMessageSlice";
 import modalReducer from "./modalSlice";
+import learningStatusReducer from "./learningStatusSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     rightSidebar: rightSideBarReducer,
     commonMessage: commonMessageReducer,
     modal: modalReducer,
+    learningStatus: learningStatusReducer,
   },
   middleware: [thunk],
   devTools: true,
