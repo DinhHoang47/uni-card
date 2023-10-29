@@ -347,6 +347,7 @@ html {
     width: 350px;
   }
 }
+
 .modal-enter .modalContent {
   opacity: 0;
   transform: scale(0.8);

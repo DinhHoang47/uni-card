@@ -1,12 +1,20 @@
+import { StatusIndicator } from "./ButtonStatusIndicator";
+
 export default function Mobile_SectionSelectButton({
   data,
   setCurrentSection,
   currentSection,
+  testingStatus,
+  cardArr,
 }) {
   let selected = false;
   if (currentSection?.startNumber === data?.startNumber) {
     selected = true;
   }
+  const thisButtonCardArr = cardArr.slice(
+    data?.startNumber - 1,
+    data?.endNumber
+  );
   return (
     <li
       onClick={() => {
@@ -27,18 +35,10 @@ export default function Mobile_SectionSelectButton({
         <span className="text-xs">~</span>
         {data?.endNumber}
       </span>
-      {/* <ul className={`${styles.testingStatusList} w-full h-2 flex`}>
-          <li status="failed"></li>
-          <li status="passed"></li>
-          <li status="passed"></li>
-          <li status="passed"></li>
-          <li status="passed"></li>
-          <li status="passed"></li>
-          <li status="passed"></li>
-          <li status="passed"></li>
-          <li status="passed"></li>
-          <li status="failed"></li>
-        </ul> */}
+      <StatusIndicator
+        currentCardArr={thisButtonCardArr}
+        testingStatus={testingStatus}
+      />
     </li>
   );
 }

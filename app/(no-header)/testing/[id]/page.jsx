@@ -78,7 +78,7 @@ export default function CollectionTest({ params }) {
     if (cardData && currentSection.start && currentSection.end) {
       // Set quiz array
       const currentArr = getCurrentCardArr(cardData, currentSection);
-      const quizArr = generateQuiz(currentArr);
+      const quizArr = generateQuiz(currentArr, testingMode);
       setQuizArr(quizArr);
       // Init answer arra
       const emptyAnswerArr = quizArr.map((item) => ({
@@ -136,12 +136,19 @@ const getCurrentCardArr = (cardArr, currentSection) => {
   return cardArr.slice(startIndex, endIndex);
 };
 
-const generateQuiz = (cardArr) => {
+const generateQuiz = (cardArr, testingMode) => {
+  console.log(testingMode);
   // Define total answer number
   const optionNum = 4;
   let quizArr = [];
   // Get all the anwser options from the card's definition or term
-  const allOptionArr = cardArr.map((item, index) => item.definition_1);
+  const allOptionArr = cardArr.map((item, index) => {
+    if (testingMode === "term") {
+      return item.definition_1;
+    } else if (testingMode === "definition") {
+      return item.term;
+    }
+  });
   quizArr = cardArr.map((item, index) => {
     // Get anwser options without current the correct one
     const allChoiceArr = allOptionArr
@@ -163,12 +170,26 @@ const generateQuiz = (cardArr) => {
       removedInvalidChoiceArr,
       optionNum - 1
     );
-    const validChoiceArr = [...randomValidChoice, item.definition_1];
+    // push the correct answer to answer array
+    let correctAns;
+    if (testingMode === "term") {
+      correctAns = item.definition_1;
+    } else if (testingMode === "definition") {
+      correctAns = item.term;
+    }
+    const validChoiceArr = [...randomValidChoice, correctAns];
     const shuffledArr = shuffleArray(validChoiceArr);
+    // Set quiz
+    let quiz;
+    if (testingMode === "term") {
+      quiz = item.term;
+    } else if (testingMode === "definition") {
+      quiz = item.definition_1;
+    }
     return {
       id: index + 1,
-      quiz: item.term,
-      answer: item.definition_1,
+      quiz: quiz,
+      answer: correctAns,
       choices: shuffledArr,
       cardId: item.id,
     };

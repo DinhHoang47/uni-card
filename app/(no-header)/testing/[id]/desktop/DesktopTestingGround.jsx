@@ -411,9 +411,7 @@ const handleSubmitAns = async (
 
   const result = await privateUserServ()
     .updateTestResult(collectionId, updatedTestResult)
-    .then((res) => {
-      console.log(res.data);
-    })
+    .then((res) => {})
     .catch((err) => {
       console.log(err);
     });

@@ -1,13 +1,31 @@
 "use client";
 import { useState } from "react";
 import ReactCardFlip from "react-card-flip";
-import styles from "../../styles.module.css";
 import Image from "next/image";
+import styles from "./styles.module.css";
 
-export default function CardLearn({ data, displayOptions }) {
+export default function CardLearn({
+  data,
+  displayOptions,
+  statusArray,
+  isDisplayStatus,
+}) {
   // Local state
+  // const [currentStatus, setCurrentStatus] = useState("notTestedYet");
   const [isFlipped, setIsFlipped] = useState(false);
-  // const haveDefine2 = true;
+  let currentStatus = "notTestedYet";
+  // Handler
+  const updateStatus = () => {
+    const foundStatus = statusArray?.find((item) => {
+      return item.cardId === data.id;
+    });
+    if (foundStatus && foundStatus.passed) {
+      currentStatus = "passed";
+    } else if (foundStatus && !foundStatus.passed) {
+      currentStatus = "failed";
+    }
+  };
+  updateStatus();
   return (
     <div className="h-40 rounded-lg cursor-pointer ">
       <ReactCardFlip
@@ -16,7 +34,12 @@ export default function CardLearn({ data, displayOptions }) {
         containerStyle={{ height: "100%", borderRadius: "8px" }}
       >
         {/* Front */}
-        <FrontSide data={data} setIsFlipped={setIsFlipped} />
+        <FrontSide
+          isDisplayStatus={isDisplayStatus}
+          currentStatus={currentStatus}
+          data={data}
+          setIsFlipped={setIsFlipped}
+        />
         <BackSide
           displayOptions={displayOptions}
           setIsFlipped={setIsFlipped}
@@ -28,19 +51,25 @@ export default function CardLearn({ data, displayOptions }) {
   );
 }
 
-const FrontSide = ({ data, setIsFlipped }) => {
+const FrontSide = ({ data, setIsFlipped, currentStatus, isDisplayStatus }) => {
   const { term } = data;
   return (
     <div
       onClick={() => {
         setIsFlipped((pre) => !pre);
       }}
-      className={`w-full bg-white relative rounded-lg h-full  flex items-center justify-center p-2 border border-slate-400 `}
+      className={`w-full bg-white relative rounded-lg h-full  flex items-center justify-center p-2 border border-slate-400 overflow-hidden `}
     >
       <p className="w-full text-xl break-words text-center font-semibold">
         {term}
       </p>
       {/* Testing status tag */}
+      {isDisplayStatus && (
+        <div
+          status={currentStatus}
+          className={`${styles.statusFlag} absolute bottom-0 right-0 rotate-45 translate-x-1/2 translate-y-1/2 w-5 h-5 `}
+        ></div>
+      )}
     </div>
   );
 };
@@ -111,51 +140,6 @@ const BackSide = ({ data, setIsFlipped, displayOptions }) => {
           ) : (
             <>{imageUrl && <div className="mb-3"></div>}</>
           )}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const BackSide1 = () => {
-  return (
-    <div
-      onClick={() => {
-        setIsFlipped((pre) => !pre);
-      }}
-      className="relative overflow-hidden w-full h-full rounded bg-white p-2 border border-slate-400"
-    >
-      {/* Back side background */}
-      <div
-        style={{
-          backgroundImage: `url(${``})`,
-          backgroundSize: `160px 160px`,
-          backgroundRepeat: `no-repeat`,
-          backgroundPosition: `center`,
-        }}
-        className={`h-full opacity-70 flex items-center`}
-      ></div>
-      {/* Absolute container */}
-      <div
-        className={`absolute top-0 left-0 h-full w-full flex flex-col ${
-          haveDefine2 ? "justify-between" : "justify-center"
-        } rounded p-2`}
-      >
-        {haveDefine2 ? (
-          <div className=" text-gray-700 bg-white bg-opacity-90">
-            <p className="text-center">{data.definition_2}</p>
-          </div>
-        ) : (
-          <></>
-        )}
-
-        <div
-          className={`text-gray-950  bg-white bg-opacity-70 space-y-1 ${
-            haveDefine2 ? "pb-4" : ""
-          } `}
-        >
-          <p className="text-center">{data.definition_1}</p>
-          <p className="text-center text-sm">{data.example}</p>
         </div>
       </div>
     </div>

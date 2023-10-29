@@ -11,6 +11,8 @@ import { CSSTransition } from "react-transition-group";
 import { useRef, useState } from "react";
 import useUser from "@lib/useUser.js";
 import * as api from "../../app/api/index.js";
+import { useSWRConfig } from "swr";
+import { useLike } from "@lib/useLike.js";
 
 export default function RightSidebar({ currentPath, pathname }) {
   const router = useRouter();
@@ -20,9 +22,13 @@ export default function RightSidebar({ currentPath, pathname }) {
   const [callBackOnExisted, setCallBackOnExisted] = useState(() => () => {});
   const nodeRef = useRef(null);
   const { user, mutateUser } = useUser();
+  const { mutate } = useSWRConfig();
   const handleLogout = async () => {
     const { data: user } = await api.LogOut();
     mutateUser(user, false);
+    mutate((key) => true, undefined, {
+      revalidate: true,
+    });
     dispatch(closeSidebar());
   };
   const handleSignIn = () => {

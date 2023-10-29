@@ -45,32 +45,10 @@ export default function Header({ collectionId, handleTest }) {
       {/* Actions */}
       <div className="flex space-x-2 relative">
         <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsOpenPopup2((pre) => !pre);
-          }}
-          className=" flex items-center pl-4 pr-2 bg-blue-600 text-white h-9 rounded-md"
-        >
-          <span className="hidden sm:inline-block">Mode</span>
-          <span className="inline-block sm:hidden">
-            <Cog6ToothIcon className=" h-5 w-5" />
-          </span>
-          <span>
-            <ChevronDownIcon
-              className={`${
-                isOpenPopup2 ? "" : "-rotate-90"
-              } h-4 w-4 text-white transition-all `}
-            />
-          </span>
-        </button>
-        {isOpenPopup2 && (
-          <LearningModeTooltip setIsOpenPopup={setIsOpenPopup2} />
-        )}
-        <button
           onClick={() => {
             handleTest();
           }}
-          className="px-5 bg-teal-500 text-white h-9 rounded-md"
+          className="px-5 bg-teal-500 text-white h-10 rounded-md"
         >
           Test this section
         </button>
@@ -78,3 +56,30 @@ export default function Header({ collectionId, handleTest }) {
     </div>
   );
 }
+
+const ChangeLearningModeButton = () => {
+  return (
+    <>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpenPopup2((pre) => !pre);
+        }}
+        className=" flex items-center pl-4 pr-2 bg-blue-600 text-white h-9 rounded-md"
+      >
+        <span className="hidden sm:inline-block">Mode</span>
+        <span className="inline-block sm:hidden">
+          <Cog6ToothIcon className=" h-5 w-5" />
+        </span>
+        <span>
+          <ChevronDownIcon
+            className={`${
+              isOpenPopup2 ? "" : "-rotate-90"
+            } h-4 w-4 text-white transition-all `}
+          />
+        </span>
+      </button>
+      {isOpenPopup2 && <LearningModeTooltip setIsOpenPopup={setIsOpenPopup2} />}
+    </>
+  );
+};

@@ -8,6 +8,9 @@ export default function MobileSectionSelection({
   buttonArr,
   currentSection,
   setCurrentSection,
+  currentCardArr,
+  testingStatus,
+  cardArr,
 }) {
   // Local state
   const [openMenu, setOpenMenu] = useState();
@@ -26,7 +29,11 @@ export default function MobileSectionSelection({
         }`}
       >
         {!openMenu && (
-          <Mobile_SelectedSectionButton currentSection={currentSection} />
+          <Mobile_SelectedSectionButton
+            currentSection={currentSection}
+            cardArr={cardArr}
+            testingStatus={testingStatus}
+          />
         )}
 
         {openMenu && (
@@ -36,6 +43,9 @@ export default function MobileSectionSelection({
             buttonArr={buttonArr}
             openMenu={openMenu}
             setOpenMenu={setOpenMenu}
+            currentCardArr={currentCardArr}
+            testingStatus={testingStatus}
+            cardArr={cardArr}
           />
         )}
         <ChevronDownIcon

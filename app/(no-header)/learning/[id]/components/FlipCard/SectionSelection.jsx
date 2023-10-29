@@ -35,6 +35,7 @@ export default function SectionSelection({
           currentSection={currentSection}
           setCurrentSection={setCurrentSection}
           buttonArr={buttonArr}
+          cardArr={cardArr}
         />
       </div>
     </>

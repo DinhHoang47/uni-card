@@ -4,15 +4,18 @@ import DisplaySetting from "./DisplaySetting";
 import PlayGround from "./PlayGround";
 import { useCard } from "@lib/useCard";
 import { useCollection } from "@lib/useCollection";
+import { useLearningStatus } from "@lib/useLearningStatus";
 export default function FlipCardMode({
   collectionId,
   currentSection,
   setCurrentSection,
   testingStatus,
+  setIsOpenLearningConfig,
 }) {
   // Fetched data
   const { data: cardList } = useCard(collectionId);
   const { data: collectionData } = useCollection(collectionId);
+  const { data: learningStatus } = useLearningStatus(collectionId);
   // Local state
   const [openSelect, setOpenSelect] = useState(true);
   const [currentCardArr, setCurrentCardArr] = useState([]);
@@ -61,6 +64,12 @@ export default function FlipCardMode({
     JSON.stringify(currentSection),
     cardPerPage,
   ]);
+  // Update page size fetched from cloud
+  useEffect(() => {
+    if (learningStatus?.flip_mode_page_size) {
+      setCardPerPage(learningStatus.flip_mode_page_size);
+    }
+  }, [learningStatus]);
   return (
     <>
       <SectionSelection
@@ -80,8 +89,10 @@ export default function FlipCardMode({
         initOptions={initOptions}
         setDisplayOptions={setDisplayOptions}
         openSelect={openSelect}
+        setIsOpenLearningConfig={setIsOpenLearningConfig}
       />
       <PlayGround
+        collectionId={collectionId}
         displayOptions={displayOptions}
         currentCardArr={currentCardArr}
         setOpenSelect={setOpenSelect}

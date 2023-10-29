@@ -33,7 +33,7 @@ export default function UserMenu({ closeTooltip, ...props }) {
               const { data: user } = await api.LogOut();
               mutateUser(user, false);
               closeTooltip();
-              mutate((key) => key !== "likedPosts", undefined, {
+              mutate((key) => true, undefined, {
                 revalidate: true,
               });
             }}

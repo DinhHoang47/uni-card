@@ -27,7 +27,7 @@ export default function MyCollectionsList() {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-10">
         {posts.map((post) => (
-          <CollectionCard user = {user} data={...post} key={`post-${post.id}`} />
+          <CollectionCard user = {user} data={...post} key={post.id} />
         ))}
       </div>
     );

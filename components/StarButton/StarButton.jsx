@@ -6,7 +6,8 @@ import { open } from "@redux/authModalSlice";
 import { privateCollectionServ } from "@services/Private_CollectionService";
 import { publicCollectionServ } from "@services/Public_CollectionService";
 import { useDispatch } from "react-redux";
-import useSWR from "swr";
+import useSWRMutation from "swr/mutation";
+import { useEffect, useState } from "react";
 
 const fetchLike = ([url, id]) =>
   publicCollectionServ
@@ -14,18 +15,27 @@ const fetchLike = ([url, id]) =>
     .then((res) => res.data)
     .catch((err) => err);
 
-export default function StarButton({ collectionId, userId }) {
-  const dispatch = useDispatch();
-  const { data, mutate } = useSWR(
-    ["collections/id/likes", collectionId],
-    fetchLike,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
-  );
+export default function StarButton({ collectionId, userId, likes }) {
+  // Fetched data
   const { user } = useUser();
+  const { liked, likedPosts, likedPostsMutate } = useLike(
+    collectionId,
+    user?.isLoggedIn
+  );
+  // Manual mutate to get new likes
+  const { data: likesN, trigger } = useSWRMutation(
+    ["collections/id/likes", collectionId],
+    fetchLike
+  );
+  useEffect(() => {
+    if (likesN !== undefined) {
+      setCurrentLikes(likesN.likeCount);
+    }
+  }, [likesN]);
+  // Local state
+  const [currentLikes, setCurrentLikes] = useState(likes);
+  // Handler
+  const dispatch = useDispatch();
   const handleLike = async () => {
     try {
       // Clone current liked post array
@@ -44,17 +54,11 @@ export default function StarButton({ collectionId, userId }) {
       const result = await privateCollectionServ
         .like(collectionId)
         .then((res) => res.data);
-
-      mutate();
+      trigger();
     } catch (error) {
       console.log(error);
     }
   };
-
-  const { liked, likedPosts, likedPostsMutate } = useLike(
-    collectionId,
-    user?.isLoggedIn
-  );
 
   return (
     <>
@@ -70,7 +74,7 @@ export default function StarButton({ collectionId, userId }) {
               liked && "fill-yellow-400"
             } hover:shadow-[0_0.5rem_0.5rem_-0.4rem_rgba(251,235,55,1)] `}
           />
-          <span className="font-satoshi">{data?.likeCount}</span>
+          <span className="font-satoshi">{currentLikes}</span>
         </div>
       </button>
     </>

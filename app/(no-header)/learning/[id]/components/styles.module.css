@@ -57,17 +57,6 @@
 }
 
 /* Cards style */
-.statusFlag {
-  background-color: var(--test-not-yet-color);
-}
-
-.statusFlag[status="passed"] {
-  background-color: var(--test-passed-color);
-}
-
-.statusFlag[status="failed"] {
-  background-color: var(--test-failed-color);
-}
 
 .mobileSectionList > li {
   width: 112px;

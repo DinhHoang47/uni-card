@@ -2,9 +2,14 @@
 import { useKeenSlider } from "keen-slider/react";
 import { useEffect, useState } from "react";
 import MobileCardLearn from "./MobileCardLearn";
-import SelectCardSection from "../../SelectCardSection";
+import SelectCardSection from "./SelectCardSection";
 
-export default function MobilePlayground({ currentCardArr, displayOptions }) {
+export default function MobilePlayground({
+  currentCardArr,
+  displayOptions,
+  isDisplayStatus,
+  statusArray,
+}) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loaded, setLoaded] = useState(false);
   // Local state
@@ -38,9 +43,11 @@ export default function MobilePlayground({ currentCardArr, displayOptions }) {
       />
       <div className="card_selection p-2">
         <SelectCardSection
+          statusArray={statusArray}
           instanceRef={instanceRef}
           currentSlide={currentSlide}
           currentCardArr={currentCardArr}
+          isDisplayStatus={isDisplayStatus}
         />
       </div>
     </div>

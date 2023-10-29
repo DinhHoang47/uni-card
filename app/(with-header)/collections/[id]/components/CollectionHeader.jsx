@@ -30,13 +30,12 @@ export default function CollectionHeader({
       {/* Collection Info */}
       <div className="flex items-center space-x-2">
         {/* Collection Image */}
-        <div className="w-20 h-20 border rounded border-gray-200 flex items-center flex-shrink-0">
+        <div className="relative w-20 h-20 border rounded border-gray-200 flex items-center flex-shrink-0">
           <Image
+            style={{ objectFit: "contain" }}
+            fill
             alt={`collection-${data.title}-image`}
-            style={{ width: "100%", height: "auto" }}
-            width={0}
-            height={0}
-            sizes="100vw"
+            sizes="80px"
             src={
               imageUrl
                 ? `${imageUrl}`

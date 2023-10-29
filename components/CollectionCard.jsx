@@ -11,16 +11,15 @@ export default function CollectionCard({ user, data }) {
           <div className="flex justify-between">
             <div className="flex flex-col">
               <h5 className="font-semibold line-clamp-2">{data?.title}</h5>
-              <p className="text_secondary">101 terms</p>
+              <p className="text_secondary">{`${data?.totalCard} terms`}</p>
             </div>
             <div className="">
-              <div className="w-14 h-14 rounded border border-gray-200">
+              <div className="relative w-14 h-14 rounded border border-gray-200">
                 <Image
+                  fill
                   alt={`collection-default-img`}
-                  style={{ width: "100%", height: "auto" }}
-                  width={0}
-                  height={0}
-                  sizes="100vw"
+                  style={{ objectFit: "contain" }}
+                  sizes="56px"
                   src={
                     data?.imageUrl ||
                     `/assets/images/collection-default-img.png`
@@ -48,7 +47,7 @@ export default function CollectionCard({ user, data }) {
               }}
               className="px-2"
             >
-              <StarButton collectionId={data?.id} />
+              <StarButton collectionId={data?.id} likes={data.totalLike} />
             </div>
           </div>
         </div>

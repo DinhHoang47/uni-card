@@ -1,4 +1,14 @@
-export default function Mobile_SelectedSectionButton({ currentSection }) {
+import { StatusIndicator } from "./ButtonStatusIndicator";
+
+export default function Mobile_SelectedSectionButton({
+  currentSection,
+  cardArr,
+  testingStatus,
+}) {
+  const thisButtonCardArr = cardArr?.slice(
+    currentSection?.startNumber - 1,
+    currentSection?.endNumber
+  );
   return (
     <div
       onTransitionEnd={(e) => {
@@ -9,18 +19,10 @@ export default function Mobile_SelectedSectionButton({ currentSection }) {
       <p className="text-sm font-semibold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         {currentSection?.startNumber}~{currentSection?.endNumber}
       </p>
-      {/* <ul className={`${styles.testingStatusList} w-full h-2 flex`}>
-        <li status="failed"></li>
-        <li status="passed"></li>
-        <li status="passed"></li>
-        <li status="passed"></li>
-        <li status="passed"></li>
-        <li status="passed"></li>
-        <li status="passed"></li>
-        <li status="passed"></li>
-        <li status="passed"></li>
-        <li status="failed"></li>
-      </ul> */}
+      <StatusIndicator
+        testingStatus={testingStatus}
+        currentCardArr={thisButtonCardArr}
+      />
     </div>
   );
 }

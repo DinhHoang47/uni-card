@@ -4,10 +4,12 @@ import Mobile_SectionSelectButton from "./Mobile_SectionSelectButton";
 
 export default function Mobile_SectionSelectionList({
   buttonArr,
-  openMenu,
   setOpenMenu,
   currentSection,
   setCurrentSection,
+  currentCardArr,
+  testingStatus,
+  cardArr,
 }) {
   useEffect(() => {
     const closeMobileSectionMenu = () => {
@@ -26,6 +28,8 @@ export default function Mobile_SectionSelectionList({
           setCurrentSection={setCurrentSection}
           key={index}
           data={item}
+          cardArr={cardArr}
+          testingStatus={testingStatus}
         />
       ))}
     </ul>

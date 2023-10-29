@@ -21,7 +21,7 @@ export default function BackTooltip({ setIsOpenPopup, id }) {
         onClick={(e) => {
           e.stopPropagation();
         }}
-        className="absolute top-full bg-white px-2 py-2 rounded  border !ml-0 translate-y-2 shadow-lg"
+        className="absolute top-full bg-white px-2 py-2 rounded  border !ml-0 translate-y-2 shadow-lg z-20"
       >
         <div
           onClick={() => {}}

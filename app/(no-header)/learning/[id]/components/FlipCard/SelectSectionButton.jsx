@@ -4,7 +4,6 @@ export default function SelectSectionButton({
   data,
   setCurrentSection,
   currentSection,
-  currentCardArr,
   testingStatus,
   cardArr,
 }) {

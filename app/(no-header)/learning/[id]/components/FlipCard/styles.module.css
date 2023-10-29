@@ -1,0 +1,20 @@
+.statusFlag {
+  background-color: var(--test-not-yet-color);
+}
+
+.statusFlag[status="notTestedYet"] {
+  background-color: var(--test-not-yet-color);
+}
+
+.statusFlag[status="passed"] {
+  background-color: var(--test-passed-color);
+}
+
+.statusFlag[status="failed"] {
+  background-color: var(--test-failed-color);
+}
+
+.active {
+  border-color: #3d7dec;
+  border-width: 2px;
+}

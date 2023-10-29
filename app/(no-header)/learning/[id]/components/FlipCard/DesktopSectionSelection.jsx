@@ -50,7 +50,6 @@ export default function DesktopSectionSelection({
         >
           {buttonArr.map((item) => (
             <SelectSectionButton
-              currentCardArr={currentCardArr}
               testingStatus={testingStatus}
               setCurrentSection={setCurrentSection}
               currentSection={currentSection}
