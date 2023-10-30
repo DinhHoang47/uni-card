@@ -23,7 +23,7 @@ import UserMenu from "./UserMenu";
 import Script from "next/script";
 import GoogleOneTap from "./GoogleOneTap";
 import CommonMessage from "@components/CommonMessage/CommonMessage";
-
+import unicardLogo from "@public/assets/images/unicard-logo.png";
 export default function Nav() {
   // States
   const [currentPath, setCurrentPath] = useState("");
@@ -103,6 +103,11 @@ export default function Nav() {
         {/* Destop Menu */}
         <div className="hidden lg:flex h-full ">
           <Link href="/" className="flex gap-2 items-center">
+            <Image
+              style={{ width: "40px" }}
+              alt="Unicard logo"
+              src={unicardLogo}
+            />
             <p className="logo_text font-vina text-xl">UniCard</p>
           </Link>
           <div className="flex ml-5 space-x-4 font-semibold">
@@ -129,19 +134,11 @@ export default function Nav() {
           </div>
         </div>
         {/* Mobile Menu */}
-        <div className="flex lg:hidden h-full items-center space-x-2">
-          <div
-            className="flex items-center justify-center h-10 w-10 rounded-ful cursor-pointer"
-            onClick={() => {
-              dispatch(openSidebar());
-            }}
-          >
-            <Bars4Icon className="h-6 w-6 text-gray-400" />
-          </div>
-          <Link href="/" className="flex gap-2 items-center">
-            <p className="logo_text font-vina text-xl">UniCard</p>
-          </Link>
-        </div>
+        <MobileMenu
+          unicardLogo={unicardLogo}
+          dispatch={dispatch}
+          openSidebar={openSidebar}
+        />
         {/* Desktop Search Bar */}
         <div className="hidden sm:flex w-1/3  md:w-1/3 ">
           <div className="flex space-x-2 items-center w-full h-10 px-4  rounded-full bg-blue-50">
@@ -281,3 +278,29 @@ export default function Nav() {
     </div>
   );
 }
+
+const MobileMenu = ({ unicardLogo, dispatch, openSidebar }) => {
+  return (
+    <div className="flex lg:hidden h-full items-center space-x-2">
+      {/* Hidden sidebar temporarily */}
+      {/* <MobileMenuIcon dispatch={dispatch} openSidebar={openSidebar} /> */}
+      <Link href="/" className="ml-2 flex gap-2 items-center">
+        <Image style={{ width: "40px" }} alt="Unicard logo" src={unicardLogo} />
+        <p className="logo_text font-vina text-xl">UniCard</p>
+      </Link>
+    </div>
+  );
+};
+
+const MobileMenuIcon = () => {
+  return (
+    <div
+      className="flex items-center justify-center h-10 w-10 rounded-ful cursor-pointer"
+      onClick={() => {
+        dispatch(openSidebar());
+      }}
+    >
+      <Bars4Icon className="h-6 w-6 text-gray-400" />
+    </div>
+  );
+};

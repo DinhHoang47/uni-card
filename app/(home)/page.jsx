@@ -14,7 +14,7 @@ export default function Home() {
       </p>
       <div className="">
         <Link
-          href={"/collections"}
+          href={"/auth"}
           className="flex items-center justify-center bg-blue-600 font-semibold text-white h-10 px-5 rounded-md mt-10"
         >
           Get start

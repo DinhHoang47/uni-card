@@ -4,6 +4,7 @@ import * as api from "../../app/api/index.js";
 import { mutate, useSWRConfig } from "swr";
 import { useDispatch } from "react-redux";
 import { close as closeAuthModal } from "../../redux/authModalSlice.js";
+import { useRouter } from "next/navigation.js";
 
 async function handleCredentialResponse(
   response,
@@ -50,7 +51,7 @@ export default function GoogleSignInButton() {
       )}
 
       <div
-        className=" flex items-center justify-center"
+        className="relative flex items-center justify-center"
         id="googleSignInBtn"
       ></div>
     </div>

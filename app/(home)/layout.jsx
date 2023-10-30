@@ -6,5 +6,5 @@ export const meta = {
 };
 
 export default async function RootLayout(props) {
-  return <main className="w-full pb-14">{props.children}</main>;
+  return <main className="">{props.children}</main>;
 }
