@@ -16,6 +16,9 @@ class PrivateUserService extends PrivateService {
   updateLearningSetting(id, data) {
     return this.post(`user/collections/${id}/setting`, data);
   }
+  getLearningCollections() {
+    return this.get(`user/learning/collections`);
+  }
 }
 
 export const privateUserServ = () => {

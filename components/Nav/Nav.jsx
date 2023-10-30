@@ -40,7 +40,7 @@ export default function Nav() {
   const pathname = usePathname();
 
   const { user, mutateUser } = useUser();
-
+  // Handler
   const handleChange = (e) => {
     e.preventDefault();
     setSearchValue(e.target.value);
@@ -99,7 +99,7 @@ export default function Nav() {
         src="https://accounts.google.com/gsi/client"
       ></Script>
       <GoogleOneTap />
-      <nav className="flex-between h-16 w-full md:px-8">
+      <nav className="flex-between h-16 w-full md:px-4 lg:px-8">
         {/* Destop Menu */}
         <div className="hidden lg:flex h-full ">
           <Link href="/" className="flex gap-2 items-center">
@@ -110,34 +110,13 @@ export default function Nav() {
             />
             <p className="logo_text font-vina text-xl">UniCard</p>
           </Link>
-          <div className="flex ml-5 space-x-4 font-semibold">
-            <Link
-              className={`flex items-center menu_item ${
-                currentPath === "/collections" ? "active" : ""
-              }`}
-              href="/collections"
-            >
-              <p className=" ">Collections</p>
-            </Link>
-            {
-              <>
-                <Link
-                  href="/mypage"
-                  className={`flex items-center menu_item ${
-                    currentPath === "/mypage" ? "active" : ""
-                  }`}
-                >
-                  <p className="">My Page</p>
-                </Link>
-              </>
-            }
-          </div>
+          <DesktopNavList currentPath={currentPath} />
         </div>
         {/* Mobile Menu */}
         <MobileMenu
-          unicardLogo={unicardLogo}
           dispatch={dispatch}
           openSidebar={openSidebar}
+          unicardLogo={unicardLogo}
         />
         {/* Desktop Search Bar */}
         <div className="hidden sm:flex w-1/3  md:w-1/3 ">
@@ -283,16 +262,16 @@ const MobileMenu = ({ unicardLogo, dispatch, openSidebar }) => {
   return (
     <div className="flex lg:hidden h-full items-center space-x-2">
       {/* Hidden sidebar temporarily */}
-      {/* <MobileMenuIcon dispatch={dispatch} openSidebar={openSidebar} /> */}
-      <Link href="/" className="ml-2 flex gap-2 items-center">
-        <Image style={{ width: "40px" }} alt="Unicard logo" src={unicardLogo} />
+      <MobileMenuIcon dispatch={dispatch} openSidebar={openSidebar} />
+      <Link href="/" className="ml-2 sm:ml-0 flex gap-2 items-center">
+        <Image alt="Unicard logo" style={{ width: "40px" }} src={unicardLogo} />
         <p className="logo_text font-vina text-xl">UniCard</p>
       </Link>
     </div>
   );
 };
 
-const MobileMenuIcon = () => {
+const MobileMenuIcon = ({ dispatch, openSidebar }) => {
   return (
     <div
       className="flex items-center justify-center h-10 w-10 rounded-ful cursor-pointer"
@@ -301,6 +280,33 @@ const MobileMenuIcon = () => {
       }}
     >
       <Bars4Icon className="h-6 w-6 text-gray-400" />
+    </div>
+  );
+};
+
+const DesktopNavList = ({ currentPath }) => {
+  return (
+    <div className="flex ml-5 space-x-4 font-semibold">
+      {/* <Link
+        className={`flex items-center menu_item ${
+          currentPath === "/collections" ? "active" : ""
+        }`}
+        href="/collections"
+      >
+        <p className=" ">Collections</p>
+      </Link> */}
+      {
+        <>
+          <Link
+            href="/mypage"
+            className={`flex items-center menu_item ${
+              currentPath === "/mypage" ? "active" : ""
+            }`}
+          >
+            <p className="">My Page</p>
+          </Link>
+        </>
+      }
     </div>
   );
 };

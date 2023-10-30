@@ -22,12 +22,12 @@ export default function MyCollectionsList() {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });
-  if (isLoading || userIsLoading) return <SkeletionLoading />;
+  if (isLoading || userIsLoading) return  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 sm:gap-10"><SkeletionLoading /></div>
   if (posts) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-10">
         {posts.map((post) => (
-          <CollectionCard user = {user} data={...post} key={post.id} />
+          <CollectionCard data={...post} key={post.id} />
         ))}
       </div>
     );

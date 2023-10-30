@@ -41,13 +41,13 @@ export default function BackTooltip({ setIsOpenPopup, id }) {
             <UserIcon className="h-6 w-6" />
             <span>Mypage</span>
           </Link>
-          <Link
+          {/* <Link
             className="flex w-full items-center space-x-2 hover:text-blue-500"
             href={"/collections"}
           >
             <HomeIcon className="h-6 w-6" />
             <span>Home</span>
-          </Link>
+          </Link> */}
         </div>
       </div>
     </>

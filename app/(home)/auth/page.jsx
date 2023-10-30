@@ -7,13 +7,24 @@ import Image from "next/image";
 import { Player } from "@lottiefiles/react-lottie-player";
 import animation from "@public/assets/images/auth-page-animation.json";
 import useUser from "@lib/useUser";
+import XSpinner from "@components/Spinner/XSpinner";
 
 export default function Auth() {
   const [displayButton, setDisplayButton] = useState(false);
-  const { user } = useUser("/mypage", true);
+  const { user, userIsLoading } = useUser("/mypage", true);
   useEffect(() => {
     setDisplayButton(true);
   }, []);
+  if (userIsLoading) {
+    return (
+      <div className="flex items-center justify-center w-screen h-screen">
+        <XSpinner />
+      </div>
+    );
+  }
+  if (user?.isLoggedIn) {
+    return <div className="">Logged in. Redirect</div>;
+  }
   return (
     <div className="w-full h-screen flex items-center justify-center bg-blue-50">
       <div className="max-w-4xl mx-10 w-full flex h-[540px] bg-white border border-slate-200 rounded-lg shadow-lg p-2">

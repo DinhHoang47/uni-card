@@ -3,7 +3,7 @@ import { StarIcon } from "@heroicons/react/24/outline";
 import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import StarButton from "./StarButton/StarButton";
-export default function CollectionCard({ user, data }) {
+export default function CollectionCard({ data }) {
   if (data) {
     return (
       <Link href={`/collections/${data?.id}`}>
@@ -11,7 +11,7 @@ export default function CollectionCard({ user, data }) {
           <div className="flex justify-between">
             <div className="flex flex-col">
               <h5 className="font-semibold line-clamp-2">{data?.title}</h5>
-              <p className="text_secondary">{`${data?.totalCard} terms`}</p>
+              <p className="text_secondary">{`${data?.total_card} terms`}</p>
             </div>
             <div className="">
               <div className="relative w-14 h-14 rounded border border-gray-200">
@@ -36,9 +36,11 @@ export default function CollectionCard({ user, data }) {
                 className="rounded-full"
                 width={24}
                 height={24}
-                src={user?.imageUrl || "/assets/images/user.png"}
+                src={data.user?.imageUrl || "/assets/images/user.png"}
               />
-              <span className="font-semibold text-sm">{user?.username}</span>
+              <span className="font-semibold text-sm">
+                {data.user?.username}
+              </span>
             </div>
             {/* Actions */}
             <div
@@ -47,7 +49,7 @@ export default function CollectionCard({ user, data }) {
               }}
               className="px-2"
             >
-              <StarButton collectionId={data?.id} likes={data.totalLike} />
+              <StarButton collectionId={data?.id} likes={data.total_like} />
             </div>
           </div>
         </div>

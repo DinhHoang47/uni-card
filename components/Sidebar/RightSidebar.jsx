@@ -70,7 +70,7 @@ export default function RightSidebar({ currentPath, pathname }) {
             </button>
           </div>
           <ul className="relative space-y-5 font-semibold text-gray-400">
-            <li
+            {/* <li
               onClick={() => {
                 router.push("/collections");
                 dispatch(closeSidebar());
@@ -80,7 +80,7 @@ export default function RightSidebar({ currentPath, pathname }) {
               }`}
             >
               <button>Collections</button>
-            </li>
+            </li> */}
             <li
               onClick={() => {
                 router.push("/mypage");
