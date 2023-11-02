@@ -9,19 +9,23 @@
 }
 
 .tableHeadGridFull {
-  grid-template: none / 50px 1fr 1fr 1fr 1fr 1fr 80px;
+  grid-template: none / 50px 1fr 1fr 1fr 1fr 1fr 1fr;
 }
 
 .tableHeadGridCol6 {
-  grid-template: none / 50px 1fr 1fr 1fr 1fr 80px;
+  grid-template: none / 50px 1fr 1fr 1fr 1fr 1fr;
 }
 
 .tableHeadGridCol5 {
-  grid-template: none / 50px 1fr 1fr 1fr 80px;
+  grid-template: none / 50px 1fr 1fr 1fr 1fr;
 }
 
 .tableHeadGridCol4 {
-  grid-template: none / 50px 1fr 1fr 80px;
+  grid-template: none / 50px 1fr 1fr 1fr;
+}
+
+.tableHeadGridCol3 {
+  grid-template: none / 50px 1fr 1fr;
 }
 
 .tableHeadGridUnset {
@@ -67,19 +71,23 @@
 }
 
 .rowItemsGridFull {
-  grid-template: none / 50px 1fr 1fr 1fr 1fr 1fr 80px;
+  grid-template: none / 50px 1fr 1fr 1fr 1fr 1fr 1fr;
 }
 
 .rowItemsGridCol6 {
-  grid-template: none / 50px 1fr 1fr 1fr 1fr 80px;
+  grid-template: none / 50px 1fr 1fr 1fr 1fr 1fr;
 }
 
 .rowItemsGridCol5 {
-  grid-template: none / 50px 1fr 1fr 1fr 80px;
+  grid-template: none / 50px 1fr 1fr 1fr 1fr;
 }
 
 .rowItemsGridCol4 {
-  grid-template: none / 50px 1fr 1fr 80px;
+  grid-template: none / 50px 1fr 1fr 1fr;
+}
+
+.rowItemsGridCol3 {
+  grid-template: none / 50px 1fr 1fr;
 }
 
 .rowItemsGridColUnset {
@@ -113,10 +121,6 @@
 
 .rowItem:first-child {
   justify-content: center;
-}
-
-.rowItem:last-child {
-  justify-content: space-around;
 }
 
 .rowItem[datafield="image"] {

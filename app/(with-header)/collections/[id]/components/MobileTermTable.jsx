@@ -8,6 +8,7 @@ export default function MobileTermTable({
   displayDef2,
   setTermModalOpen,
   onUpdateRow,
+  isOwner,
 }) {
   return (
     <div className="">
@@ -15,6 +16,7 @@ export default function MobileTermTable({
         <ul className="space-y-4">
           {cardList.map((card) => (
             <MobileRow
+              isOwner={isOwner}
               key={`mobile-card-${card.id}`}
               cardData={card}
               displayExample={displayExample}

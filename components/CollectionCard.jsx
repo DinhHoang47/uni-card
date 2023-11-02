@@ -11,7 +11,7 @@ export default function CollectionCard({ data }) {
           <div className="flex justify-between">
             <div className="flex flex-col">
               <h5 className="font-semibold line-clamp-2">{data?.title}</h5>
-              <p className="text_secondary">{`${data?.total_card} terms`}</p>
+              <p className="text_secondary">{`${data?.total_card} cards`}</p>
             </div>
             <div className="">
               <div className="relative w-14 h-14 rounded border border-gray-200">

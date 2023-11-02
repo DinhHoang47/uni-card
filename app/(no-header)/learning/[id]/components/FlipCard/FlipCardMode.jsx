@@ -14,7 +14,8 @@ export default function FlipCardMode({
 }) {
   // Fetched data
   const { data: cardList } = useCard(collectionId);
-  const { data: collectionData } = useCollection(collectionId);
+  const { data: collectionData, isLoading: collectionIsLoading } =
+    useCollection(collectionId);
   const { data: learningStatus } = useLearningStatus(collectionId);
   // Local state
   const [openSelect, setOpenSelect] = useState(true);
@@ -70,6 +71,7 @@ export default function FlipCardMode({
       setCardPerPage(learningStatus.flip_mode_page_size);
     }
   }, [learningStatus]);
+  if (cardList?.length === 0) return <div className="">No cards to study</div>;
   return (
     <>
       <SectionSelection

@@ -422,13 +422,18 @@ html {
   max-height: 0px;
 }
 .height-change-animate-enter-active {
-  max-height: 300px;
-  transition: all 400ms;
+  max-height: 192px;
+  transition: all 100000ms;
 }
+
+.height-change-animate-enter-done {
+  max-height: 192px;
+}
+
 .height-change-animate-exit {
-  max-height: 300px;
+  max-height: 192px;
 }
 .height-change-animate-exit-active {
   max-height: 0px;
-  transition: all 400ms;
+  transition: all 300ms;
 }

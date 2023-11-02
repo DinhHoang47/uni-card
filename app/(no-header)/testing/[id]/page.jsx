@@ -8,6 +8,9 @@ import { CSSTransition } from "react-transition-group";
 import { useCard } from "@lib/useCard";
 import { shuffleArray } from "@utils/arraySuffer";
 import { generate } from "random-words";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+
+import Link from "next/link";
 
 export default function CollectionTest({ params }) {
   const searchParams = useSearchParams();
@@ -45,6 +48,7 @@ export default function CollectionTest({ params }) {
   const [answerArr, setAnswerArr] = useState([]);
   const [resultArr, setResultArr] = useState([]);
   // Handler
+
   const handleRetest = () => {
     // Init answer arra
     const emptyAnswerArr = quizArr.map((item) => ({
@@ -89,6 +93,7 @@ export default function CollectionTest({ params }) {
       setAnswerArr(emptyAnswerArr);
     }
   }, [currentSection, cardData]);
+  if (cardData?.length === 0) return <NoCard />;
   return (
     <div className="w-full mt-14 space-y-2 sm:space-y-4 px-2 sm:px-8 ">
       <Header
@@ -130,6 +135,22 @@ export default function CollectionTest({ params }) {
   );
 }
 
+const NoCard = () => {
+  return (
+    <div className="flex flex-col items-center justify-center flex-1 space-y-2 ">
+      <p>No cards to test</p>
+
+      <Link
+        className="flex items-center space-x-2 hover:text-blue-600"
+        href={"/mypage"}
+      >
+        <ArrowLeftIcon className="h-4 w-4 " />
+        <span>My page </span>
+      </Link>
+    </div>
+  );
+};
+
 const getCurrentCardArr = (cardArr, currentSection) => {
   const startIndex = currentSection.start - 1;
   const endIndex = currentSection.end;
@@ -137,7 +158,6 @@ const getCurrentCardArr = (cardArr, currentSection) => {
 };
 
 const generateQuiz = (cardArr, testingMode) => {
-  console.log(testingMode);
   // Define total answer number
   const optionNum = 4;
   let quizArr = [];

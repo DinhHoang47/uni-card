@@ -23,6 +23,7 @@ export default function MobileRow({
   displayExample,
   onDeleteRow,
   onUpdateRow,
+  isOwner,
 }) {
   // Local state
   const [editted, setEditted] = useState(false);
@@ -264,39 +265,41 @@ export default function MobileRow({
         </div>
       )}
       {/* Actions */}
-      <div className="absolute top-full right-0 !mt-0 -translate-y-8  flex items-center space-x-4 mr-6">
-        {!editting && (
-          <>
-            <button>
-              <PencilIcon
-                onClick={handleEdit}
-                className="h-5 w-5 text-blue-500"
-              />
-            </button>
-          </>
-        )}
-        {editting && (
-          <>
-            <button
-              onClick={() => {
-                handleDelete(cardData.id);
-              }}
-            >
-              <TrashIcon className="h-5 w-5 text-red-400" />
-            </button>
-            <button
-              disabled={loadingImage}
-              title="Save"
-              className="flex items-center"
-              onClick={() => {
-                handleUpdate(cardData.id);
-              }}
-            >
-              <CheckCircleIcon className="h-6 w-6 text-blue-500" />
-            </button>
-          </>
-        )}
-      </div>
+      {isOwner && (
+        <div className="absolute top-full right-0 !mt-0 -translate-y-8  flex items-center space-x-4 mr-6">
+          {!editting && (
+            <>
+              <button>
+                <PencilIcon
+                  onClick={handleEdit}
+                  className="h-5 w-5 text-blue-500"
+                />
+              </button>
+            </>
+          )}
+          {editting && (
+            <>
+              <button
+                onClick={() => {
+                  handleDelete(cardData.id);
+                }}
+              >
+                <TrashIcon className="h-5 w-5 text-red-400" />
+              </button>
+              <button
+                disabled={loadingImage}
+                title="Save"
+                className="flex items-center"
+                onClick={() => {
+                  handleUpdate(cardData.id);
+                }}
+              >
+                <CheckCircleIcon className="h-6 w-6 text-blue-500" />
+              </button>
+            </>
+          )}
+        </div>
+      )}
     </li>
   );
 }

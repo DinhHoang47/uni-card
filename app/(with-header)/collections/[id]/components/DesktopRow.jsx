@@ -20,12 +20,17 @@ export default function DesktopRow({
   onDeleteRow,
   onUpdateRow,
   rowIndex,
+  isOwner,
 }) {
   // States
   // Fetched data
   // Local data
   const totalCol =
-    4 + (displayImg ? 1 : 0) + (displayDef2 ? 1 : 0) + (displayExample ? 1 : 0);
+    3 +
+    (displayImg ? 1 : 0) +
+    (displayDef2 ? 1 : 0) +
+    (displayExample ? 1 : 0) +
+    (isOwner ? 1 : 0);
   const [editting, setEditting] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
@@ -75,6 +80,7 @@ export default function DesktopRow({
     } else {
       setEditted(false);
     }
+    setErrMsg("");
   }, [term, definition1, definition2, example, selectedFileUrl]);
   // Dynamic variable
   let rowItemsGridTemp;
@@ -90,6 +96,9 @@ export default function DesktopRow({
       break;
     case 4:
       rowItemsGridTemp = styles.rowItemsGridCol4;
+      break;
+    case 3:
+      rowItemsGridTemp = styles.rowItemsGridCol3;
       break;
     default:
       rowItemsGridTemp = styles.rowItemsGridColUnset;
@@ -183,7 +192,6 @@ export default function DesktopRow({
             {!editting && <p className="break-all">{cardData.example}</p>}
           </li>
         )}
-
         {/* Card Image */}
         {displayImg && (
           <li datafield="image" className={`${styles.rowItem} relative`}>
@@ -280,52 +288,66 @@ export default function DesktopRow({
             )}
           </li>
         )}
-        <li className={`${styles.rowItem}`}>
-          {!editting && (
-            <>
-              <button
-                title="Edit"
-                className="flex items-center"
-                onClick={() => {
-                  !loading && handleEdit();
-                }}
-              >
-                {loading ? (
-                  <CloudArrowUpIcon
-                    title="Uploading please wait."
-                    className="h-5 w-5 text-blue-600 animate-bounce cursor-default"
+        {/* Edit button */}
+        {isOwner && (
+          <li
+            className={`${styles.rowItem} flex items-center justify-center space-x-4`}
+          >
+            {!editting && (
+              <>
+                <button
+                  title="Edit"
+                  className="flex items-center"
+                  onClick={() => {
+                    !loading && handleEdit();
+                  }}
+                >
+                  {loading ? (
+                    <CloudArrowUpIcon
+                      title="Uploading please wait."
+                      className="h-5 w-5 text-blue-600 animate-bounce cursor-default"
+                    />
+                  ) : (
+                    <PencilIcon className="h-5 w-5 text-blue-500" />
+                  )}
+                </button>
+              </>
+            )}
+            {editting && (
+              <>
+                <button
+                  disabled={loadingImage}
+                  title="Delete"
+                  className="flex items-center"
+                  onClick={() => {
+                    onDeleteRow(cardData.id);
+                  }}
+                >
+                  <TrashIcon className="h-5 w-5 text-red-400" />
+                </button>
+                <button
+                  disabled={loadingImage}
+                  title="Save"
+                  className="flex items-center"
+                  onClick={() => {
+                    const validTerm = term.trim();
+                    if (!validTerm) {
+                      setErrMsg("Term is required.");
+                    } else {
+                      handleUpdate(cardData.id);
+                    }
+                  }}
+                >
+                  <CheckCircleIcon
+                    className={`h-6 w-6  ${
+                      loadingImage || !term ? "text-blue-300" : "text-blue-500"
+                    }`}
                   />
-                ) : (
-                  <PencilIcon className="h-5 w-5 text-blue-500" />
-                )}
-              </button>
-            </>
-          )}
-          {editting && (
-            <>
-              <button
-                disabled={loadingImage}
-                title="Delete"
-                className="flex items-center"
-                onClick={() => {
-                  onDeleteRow(cardData.id);
-                }}
-              >
-                <TrashIcon className="h-5 w-5 text-red-400" />
-              </button>
-              <button
-                disabled={loadingImage}
-                title="Save"
-                className="flex items-center"
-                onClick={() => {
-                  handleUpdate(cardData.id);
-                }}
-              >
-                <CheckCircleIcon className="h-6 w-6 text-blue-500" />
-              </button>
-            </>
-          )}
-        </li>
+                </button>
+              </>
+            )}
+          </li>
+        )}
       </ul>
       {/* Error message */}
       {errMsg !== "" && (

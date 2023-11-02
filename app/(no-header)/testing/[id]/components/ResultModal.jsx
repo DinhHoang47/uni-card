@@ -28,11 +28,11 @@ export default function ResultModal({
         <Granding resultArr={resultArr} />
         <ResultList resultArr={resultArr} />
         <div className="space-y-2">
-          <div className="">
-            <button className="h-10 w-full bg-teal-400 text-white rounded-md">
-              Next section
-            </button>
-          </div>
+          {/* <div className="">
+              <button className="h-10 w-full bg-teal-400 text-white rounded-md">
+                Next section
+              </button>
+            </div> */}
           <div className="flex space-x-2">
             <button
               onClick={() => {
@@ -73,16 +73,18 @@ function ResultList({ resultArr }) {
           renderLength < buttonPerRow ? "" : ""
         }`}
       >
-        {renderData.map((item, index) => (
-          <li
-            key={`card-select-btn-${index + buttonPerRow * i}`}
-            className={`h-7 w-7 border-2 flex items-center justify-center rounded border-slate-400 cursor-pointer ${
-              item.passed ? styles.correct : styles.fail
-            }`}
-          >
-            {index + 1 + buttonPerRow * i}
-          </li>
-        ))}
+        {renderData.map((item, index) => {
+          return (
+            <li
+              key={`card-select-btn-${index + buttonPerRow * i}`}
+              className={`h-7 w-7 border-2 flex items-center justify-center rounded border-slate-400 cursor-pointer ${
+                item.r === 1 ? styles.correct : styles.fail
+              }`}
+            >
+              {index + 1 + buttonPerRow * i}
+            </li>
+          );
+        })}
       </ul>
     );
     Rows.push(Row);
@@ -121,7 +123,7 @@ const Granding = ({ resultArr }) => {
   };
   const totalQuiz = resultArr.length;
   const passedQuiz = resultArr.reduce((accumulator, item) => {
-    if (item.passed) {
+    if (item.r === 1) {
       return accumulator + 1;
     }
     return accumulator;

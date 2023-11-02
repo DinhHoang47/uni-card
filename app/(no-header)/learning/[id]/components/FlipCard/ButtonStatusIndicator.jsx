@@ -6,10 +6,10 @@ export const StatusIndicator = ({ currentCardArr, testingStatus }) => {
   let failedTestNums = 0;
   currentCardArr?.forEach((card) => {
     const foundResult = testingStatus?.find((item) => {
-      return item.cardId === card.id;
+      return item.c === card.id;
     });
     if (foundResult) {
-      if (foundResult.passed === true) {
+      if (foundResult.r === 1) {
         passedTestNums++;
       } else {
         failedTestNums++;

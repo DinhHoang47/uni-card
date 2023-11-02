@@ -1,4 +1,3 @@
-import LearningCollections from "./components/LearningCollections";
 import MyCollections from "./components/MyCollections";
 import Streak from "./components/Streak";
 import UserInfo from "./components/UserInfo";
@@ -10,7 +9,6 @@ export default function MyPage() {
       <UserInfo />
       {/* <Streak /> */}
       <MyCollections />
-      <LearningCollections />
     </div>
   );
 }

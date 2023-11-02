@@ -40,10 +40,10 @@ export default function Header({ handleSubmit, collectionId, section }) {
       {/* Actions */}
       <div className="flex space-x-4 relative">
         {/* Timer */}
-        <div className="flex items-center space-x-2">
+        {/* <div className="flex items-center space-x-2">
           <p className="hidden sm:inline-block">Time remaining</p>
           <span className="text-2xl">4:59</span>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -9,13 +9,15 @@ import {
 import { useState } from "react";
 import LearningModeTooltip from "./LearningModeTooltip";
 import { useCollection } from "@lib/useCollection";
+import { useCard } from "@lib/useCard";
 
 export default function Header({ collectionId, handleTest }) {
   // Fetched data
   const { data: collection } = useCollection(collectionId);
+  const { data: cardList } = useCard(collectionId);
+  const disableTest = cardList?.length === 0;
   // Local state
   const [isOpenPopup1, setIsOpenPopup1] = useState();
-  const [isOpenPopup2, setIsOpenPopup2] = useState();
   return (
     <div
       id="learning-header"
@@ -44,14 +46,16 @@ export default function Header({ collectionId, handleTest }) {
       </div>
       {/* Actions */}
       <div className="flex space-x-2 relative">
-        <button
-          onClick={() => {
-            handleTest();
-          }}
-          className="px-5 bg-teal-500 text-white h-10 rounded-md"
-        >
-          Test this section
-        </button>
+        {!disableTest && (
+          <button
+            onClick={() => {
+              handleTest();
+            }}
+            className="px-5 bg-teal-500 text-white h-10 rounded-md"
+          >
+            Test
+          </button>
+        )}
       </div>
     </div>
   );

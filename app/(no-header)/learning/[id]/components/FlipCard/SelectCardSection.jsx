@@ -9,12 +9,12 @@ export default function SelectCardSection({
   // Add learning status to card
   const updatedCardArr = currentCardArr.map((card) => {
     let testingStatus = "notTestedYet";
-    const foundStatus = statusArray?.find(
-      (status) => status.cardId === card.id
-    );
-    if (foundStatus && foundStatus.passed) {
+    const foundStatus = statusArray?.find((status) => {
+      return status.c === card.id;
+    });
+    if (foundStatus && foundStatus.r === 1) {
       testingStatus = "passed";
-    } else if (foundStatus && !foundStatus.passed) {
+    } else if (foundStatus && foundStatus.r !== 1) {
       testingStatus = "failed";
     }
     return { ...card, status: testingStatus };

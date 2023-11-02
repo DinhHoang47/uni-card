@@ -12,11 +12,16 @@ export default function DesktopTermTable({
   setTermModalOpen,
   onDeleteRow,
   onUpdateRow,
+  isOwner,
 }) {
   // Fetched data
   // Local variable
   let totalCol =
-    4 + (displayDef2 ? 1 : 0) + (displayImg ? 1 : 0) + (displayExample ? 1 : 0);
+    3 +
+    (displayDef2 ? 1 : 0) +
+    (displayImg ? 1 : 0) +
+    (displayExample ? 1 : 0) +
+    (isOwner ? 1 : 0);
   let tableHeaderGridTemp;
   // Dynamic table styles
   switch (totalCol) {
@@ -31,6 +36,9 @@ export default function DesktopTermTable({
       break;
     case 4:
       tableHeaderGridTemp = styles.tableHeadGridCol4;
+      break;
+    case 3:
+      tableHeaderGridTemp = styles.tableHeadGridCol3;
       break;
     default:
       tableHeaderGridTemp = styles.tableHeadGridUnset;
@@ -59,13 +67,18 @@ export default function DesktopTermTable({
               <p className="text-center w-full">Image</p>
             </li>
           )}
-          <li></li>
+          {isOwner && (
+            <li>
+              <p className="text-center w-full">Actions</p>
+            </li>
+          )}
         </ul>
       </div>
       <div className="mt-2">
         <ul className={`${styles.rows}`}>
           {cardList.map((card, index) => (
             <DesktopRow
+              isOwner={isOwner}
               rowIndex={index}
               key={`card-${card.id}`}
               cardData={card}

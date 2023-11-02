@@ -23,8 +23,11 @@ module.exports = {
         "primary-light-bg": "#EFF6FF",
         "transparent-04": "rgba(0, 0, 0, 0.4)",
         "transparent-gray-05": "rgba(214, 210, 210, 0.5)",
+        "transparent-gray-05-2": "rgba(86, 92, 105, 0.5)",
+        "transparent-gray-06": "rgba(86, 92, 105, 0.6)",
         "transparent-white-05": "rgba(255, 255, 255, 0.5)",
         "transparent-white-07": "rgba(255, 255, 255, 0.7)",
+        "transparent-blue-06": "rgba(115, 161, 230, 0.6)",
       },
     },
     screens: {

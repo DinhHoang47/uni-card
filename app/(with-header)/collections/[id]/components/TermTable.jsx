@@ -9,6 +9,7 @@ import { privateCardServ } from "@services/Private_CardService";
 import { useDispatch } from "react-redux";
 import { addMessage } from "@redux/commonMessageSlice";
 import { getImageUrl } from "@utils/getImageUrl";
+import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
 
 export default function TermTable({
   displayExample,
@@ -16,6 +17,8 @@ export default function TermTable({
   displayImg,
   collectionId,
   setTermModalOpen,
+  isOwner,
+  setIsImportModalOpen,
 }) {
   // Fetched data
   const { error, data, loading, mutate } = useCard(collectionId);
@@ -38,9 +41,22 @@ export default function TermTable({
     return (
       <>
         <div className="flex items-center justify-between">
-          <h4 className="font-semibold">Terms</h4>
+          <h4 className="font-semibold">Cards</h4>
+
+          {isOwner && (
+            <button
+              onClick={() => {
+                setIsImportModalOpen(true);
+              }}
+              className="flex items-center space-x-1 hover:text-blue-600 font-semibold"
+            >
+              <DocumentArrowUpIcon className="h-5 w-5 " />
+              <span>Import</span>
+            </button>
+          )}
         </div>
-        <AddTermButton setTermModalOpen={setTermModalOpen} />
+        {isOwner && <AddTermButton setTermModalOpen={setTermModalOpen} />}
+
         {/* Show message if no card */}
         {totalCard === 0 && <NoCard />}
         {/* Card table */}
@@ -48,6 +64,7 @@ export default function TermTable({
           <>
             <div className="hidden sm:block">
               <DesktopTermTable
+                isOwner={isOwner}
                 onUpdateRow={onUpdateRow}
                 onDeleteRow={onDeleteRow}
                 cardList={data}
@@ -59,6 +76,7 @@ export default function TermTable({
             </div>
             <div className="block sm:hidden">
               <MobileTermTable
+                isOwner={isOwner}
                 onUpdateRow={onUpdateRow}
                 cardList={data}
                 displayImg={displayImg}
@@ -101,7 +119,7 @@ const ErrorMessage = () => {
   return (
     <>
       <div className="flex items-center justify-between">
-        <h4 className="font-semibold">Terms</h4>
+        <h4 className="font-semibold">Cards</h4>
       </div>
       <div className="">Can not find cards. Try later.</div>
     </>
