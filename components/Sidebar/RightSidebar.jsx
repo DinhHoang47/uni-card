@@ -59,7 +59,7 @@ export default function RightSidebar({ currentPath, pathname }) {
         <div
           className={`sidebarContainer max-w-xs flex flex-col space-y-8 absolute top-0 left-0 -translate-x-full w-2/3 h-screen bg-white px-2 pt-2 transition-all duration-500`}
         >
-          <div className="flex justify-end">
+          <div className="flex justify-end pt-1">
             <button
               onClick={() => {
                 dispatch(closeSidebar());

@@ -13,6 +13,9 @@ class PublicCollectionServ extends BaseService {
   getCardList(id) {
     return this.get(`collections/${id}/cards`);
   }
+  searchCollection(keyword, page) {
+    return this.get(`search?keyword=${keyword}&page=${page}`);
+  }
 }
 
 export const publicCollectionServ = new PublicCollectionServ();

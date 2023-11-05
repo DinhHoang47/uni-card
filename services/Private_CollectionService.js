@@ -25,6 +25,9 @@ class PrivateCollectionService extends PrivateService {
   createCard = (id, data) => {
     return this.post(`collections/${id}/card`, data);
   };
+  importCard = (id, data) => {
+    return this.post(`collections/${id}/cards`, data);
+  };
 }
 
 export const privateCollectionServ = (() => {

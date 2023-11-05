@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
-import TestConfigModal from "./components/SettingModal";
 import Header from "./components/Header";
 import { CSSTransition } from "react-transition-group";
 import FlipCardMode from "./components/FlipCard/FlipCardMode";
@@ -11,11 +10,13 @@ import { privateUserServ } from "@services/Private_UserService";
 import { useLearningStatus } from "@lib/useLearningStatus";
 import LearningSettingModal from "./components/FlipCard/LearningSettingModal";
 import XSpinner from "@components/Spinner/XSpinner";
+import TestConfigModal from "./components/SettingModal";
 
 export default function CollectionLearn({ params }) {
   // Fetched data
   const { id: collectionId } = params;
   const { user, userIsLoading } = useUser("/auth");
+  const { data } = useCard(collectionId);
   const { data: learningStatus, mutate: mutateLearningStatus } =
     useLearningStatus(collectionId);
   // Local State

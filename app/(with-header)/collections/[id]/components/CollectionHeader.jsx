@@ -8,6 +8,7 @@ import Link from "next/link";
 import SettingTooltip from "./SettingTooltip";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import useUser from "@lib/useUser";
 
 export default function CollectionHeader({
   data,
@@ -15,8 +16,9 @@ export default function CollectionHeader({
   setIsCollectionModalOpen,
 }) {
   // Fetched data
+  const { user: currentUser } = useUser();
   const { imageUrl, title, userId, likes } = data;
-
+  const isOwner = currentUser?.id === userId;
   // Local state
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   // Handler
@@ -50,15 +52,18 @@ export default function CollectionHeader({
             <h4 className="font-semibold line-clamp-3">{title}</h4>
             {/* Actions */}
             <div className="absolute  top-full right-0 -translate-x-10 sm:right-0 sm:top-0 sm:translate-x-10 sm:-translate-y-1">
-              <button
-                className=""
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsOpenPopup((pre) => !pre);
-                }}
-              >
-                <EllipsisHorizontalIcon className="h-8 w-8 text-gray-500 hover:text-gray-700" />
-              </button>
+              {isOwner && (
+                <button
+                  className=""
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsOpenPopup((pre) => !pre);
+                  }}
+                >
+                  <EllipsisHorizontalIcon className="h-8 w-8 text-gray-500 hover:text-gray-700" />
+                </button>
+              )}
+
               {isOpenPopup && (
                 <SettingTooltip
                   collectionData={data}
@@ -72,7 +77,7 @@ export default function CollectionHeader({
           <StarButton
             userId={userId}
             likes={likes}
-            collectionId={parseInt(collectionId)}
+            collectionId={collectionId}
           />
           {/* User */}
           <UserLink id={userId} />

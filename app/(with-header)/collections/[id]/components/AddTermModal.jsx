@@ -5,10 +5,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { TextareaAutosize } from "@mui/base";
 import { v4 as uuid } from "uuid";
 
-import {
-  MAX_COLLECTION_IMG_SIZE,
-  MAX_COLLECTION_IMG_SIZE_TEXT,
-} from "@utils/config";
+import { FREE_USER_CODE, FREE_USER_MAX_CARD_NUM } from "@utils/config";
 import Image from "next/image";
 import { useCard } from "@lib/useCard";
 import { uploadImage } from "@services/CldService";
@@ -27,6 +24,8 @@ export default function AddTermModal({
   setTermModalOpen,
   collectionId,
   hanger,
+  totalCard,
+  userType,
 }) {
   // Fetched data
   // Local state
@@ -44,10 +43,14 @@ export default function AddTermModal({
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [selectedFileUrl, setSelectedFileUrl] = useState(null);
+  let reachedMaxCard = false;
+  if (userType === FREE_USER_CODE) {
+    reachedMaxCard = totalCard >= FREE_USER_MAX_CARD_NUM;
+  }
   // Handler
   const dispatch = useDispatch();
   const showInputSuccessMsg = () => {
-    dispatch(addMessage({ text: "Term added", variation: "success" }));
+    dispatch(addMessage({ text: "Card added", variation: "success" }));
   };
   const clearInputData = () => {
     setTerm("");
@@ -68,7 +71,7 @@ export default function AddTermModal({
     <PortalModalWrapper mountTarget={hanger}>
       {/* Main Container */}
       <div className="bg-white relative rounded-md p-6">
-        <h3 className="font-semibold text-xl text-center">Add Term</h3>
+        <h3 className="font-semibold text-xl text-center">Add Card</h3>
         {/* Preview*/}
         <div className=" space-y-2 ">
           <h4 className="">Preview</h4>
@@ -267,10 +270,16 @@ export default function AddTermModal({
           {/* Error Message */}
           <div className="">
             <p className="text-red-500 text-sm">{errMsg}</p>
+            {reachedMaxCard && (
+              <p className="text-orange-500 text-sm">
+                You've reached the maximum {FREE_USER_MAX_CARD_NUM} cards per
+                collection for a free user.
+              </p>
+            )}
           </div>
           {/* Submit button */}
           <button
-            disabled={!trimmedTerm || loadingImage}
+            disabled={!trimmedTerm || loadingImage || reachedMaxCard}
             onClick={(e) => {
               e.preventDefault();
               handleAddNew(
@@ -293,7 +302,9 @@ export default function AddTermModal({
               );
             }}
             className={`!mt-4 w-full h-10 text-white font-semibold rounded-md ${
-              !trimmedTerm || loadingImage ? "bg-blue-400" : "bg-blue-600"
+              !trimmedTerm || loadingImage || reachedMaxCard
+                ? "bg-blue-400"
+                : "bg-blue-600"
             }`}
           >
             Add
@@ -352,18 +363,24 @@ const handleAddNew = async (
   const options = {
     optimisticData: [...cardList, optimisticNewCardData],
     rollbackOnError(error) {
+      console.log("error: ", error);
       // If it's timeout abort error, don't rollback
       return error.name !== "AbortError";
     },
     revalidate: false,
   };
   mutateCardList(
-    updateFn(cardList, newCardData, selectedFile, collectionId),
+    updateFn(
+      cardList,
+      newCardData,
+      selectedFile,
+      collectionId,
+      showInputSuccessMsg
+    ),
     options
   );
   // Close modal if not set continue input
   !continueInput && setTermModalOpen(false);
-  showInputSuccessMsg();
   clearInputData();
 };
 
@@ -371,7 +388,8 @@ const updateFn = async (
   oldCardList,
   newCardData,
   selectedFile,
-  collectionId
+  collectionId,
+  showInputSuccessMsg
 ) => {
   const { term, definition_1, definition_2, example } = newCardData;
   let imageUrl = null;
@@ -394,14 +412,15 @@ const updateFn = async (
     example: example,
     image_url: imageUrl,
   };
-
-  const fetchedCard = await privateCollectionServ
-    .createCard(collectionId, dataToSend)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((error) => {
-      throw new Error();
-    });
-  return [...oldCardList, fetchedCard];
+  try {
+    const fetchedCard = await privateCollectionServ
+      .createCard(collectionId, dataToSend)
+      .then((res) => {
+        return res.data;
+      });
+    showInputSuccessMsg();
+    return [...oldCardList, fetchedCard];
+  } catch (error) {
+    return [...oldCardList];
+  }
 };

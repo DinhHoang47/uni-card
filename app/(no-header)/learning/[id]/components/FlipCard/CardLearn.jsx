@@ -17,11 +17,11 @@ export default function CardLearn({
   // Handler
   const updateStatus = () => {
     const foundStatus = statusArray?.find((item) => {
-      return item.cardId === data.id;
+      return item.c === data.id;
     });
-    if (foundStatus && foundStatus.passed) {
+    if (foundStatus && foundStatus.r === 1) {
       currentStatus = "passed";
-    } else if (foundStatus && !foundStatus.passed) {
+    } else if (foundStatus && foundStatus.r === 0) {
       currentStatus = "failed";
     }
   };

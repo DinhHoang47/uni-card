@@ -10,14 +10,21 @@ import XSpinner from "@components/Spinner/XSpinner";
 import CollectionHeader from "./components/CollectionHeader";
 import Link from "next/link";
 import TermTable from "./components/TermTable";
+import useUser from "@lib/useUser";
+import ImportCardModal from "./components/ImportCardModal";
+import { useCard } from "@lib/useCard";
 
 export default function CollectionDetail({ params }) {
   // Fetch data
+  const { user: currentUser } = useUser();
   const { data, error, isLoading, mutate } = useCollection(params.id);
+  const { data: cardData } = useCard(params.id);
   // Local state
-  const [isTermModalOpen, setTermModalOpen] = useState(false);
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
+  const [isTermModalOpen, setTermModalOpen] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const collectionHangerRef = useRef(null);
+  const totalCard = cardData?.length;
   if (error) {
     return <div className="">Collection not found</div>;
   }
@@ -28,9 +35,10 @@ export default function CollectionDetail({ params }) {
       </div>
     );
   if (data) {
-    const { tags, description } = data;
+    const { tags, description, userId } = data;
+    const isOwner = currentUser?.id === userId;
     return (
-      <div className="w-full my-4 space-y-8 px-2 sm:px-8  relative">
+      <div className="w-full my-6 space-y-8 px-2 sm:px-8  relative">
         {/* Section */}
         <div className="w-full space-y-4">
           <CollectionHeader
@@ -61,7 +69,7 @@ export default function CollectionDetail({ params }) {
                     <Link
                       href={"#"}
                       key={`tag-${tag}-${index}`}
-                      className=" px-2 rounded shadow-sm bg-blue-100 hover:text-blue-500"
+                      className=" px-2 rounded shadow-sm bg-blue-100 hover:text-blue-500 line-clamp-3"
                     >
                       #{tag}
                     </Link>
@@ -73,11 +81,13 @@ export default function CollectionDetail({ params }) {
         {/* Section */}
         <div className="space-y-4">
           <TermTable
+            isOwner={isOwner}
             displayExample={data.display_example}
             displayImg={data.display_img}
             displayDef2={data.display_def_2}
             collectionId={data.id}
             setTermModalOpen={setTermModalOpen}
+            setIsImportModalOpen={setIsImportModalOpen}
           />
         </div>
         <div ref={collectionHangerRef} id="collectionHanger"></div>
@@ -96,6 +106,8 @@ export default function CollectionDetail({ params }) {
             displayImg={data.display_img}
             setTermModalOpen={setTermModalOpen}
             collectionId={data.id}
+            totalCard={totalCard}
+            userType={currentUser?.type}
           />
         </CSSTransition>
         {/* Edit collection detail modal */}
@@ -111,6 +123,24 @@ export default function CollectionDetail({ params }) {
             mutateCollection={mutate}
             data={data}
             setIsOpen={setIsCollectionModalOpen}
+          />
+        </CSSTransition>
+        <CSSTransition
+          nodeRef={collectionHangerRef}
+          classNames={"modal"}
+          in={isImportModalOpen}
+          timeout={200}
+          unmountOnExit
+        >
+          <ImportCardModal
+            hanger={"collectionHanger"}
+            collectionId={params.id}
+            mutateCollection={mutate}
+            setIsOpen={setIsImportModalOpen}
+            displayExample={data.display_example}
+            displayDef2={data.display_def_2}
+            totalCard={totalCard}
+            userType={currentUser?.type}
           />
         </CSSTransition>
       </div>

@@ -46,7 +46,7 @@ export default function DesktopSectionSelection({
       >
         <ul
           ref={containerRef}
-          className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-12 xl:grid-cols-12 gap-2 overflow-hidden mt-2"
+          className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-12 xl:grid-cols-12 gap-2 overflow-hidden mt-2 h-48 overflow-y-scroll"
         >
           {buttonArr.map((item) => (
             <SelectSectionButton

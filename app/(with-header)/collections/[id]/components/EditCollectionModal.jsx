@@ -34,22 +34,18 @@ export default function EditCollectionModal({
   const [chips, setChips] = useState(data.tags);
   const [title, setTitle] = useState(data.title);
   const [description, setDescription] = useState(data.description);
-  const [displayDef2, setDisplayDef2] = useState(data.display_def_2);
-  const [displayExample, setDisplayExample] = useState(data.display_example);
-  const [displayImg, setDisplayImg] = useState(data.display_img);
   const [imageUrl, setImageUrl] = useState(data.imageUrl);
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileUrl, setSelectedFileUrl] = useState(null);
   // Loading and Error message state
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
-  // Clear error message
+
+  // Handler
+  // Effect
   useEffect(() => {
     setErrMsg("");
   }, [title, selectedFile, description, chips]);
-  // Handle update collection
-  // const { mutate: mutateCollection } = useCollection(data.id);
-
   const handleUpdate = async () => {
     setLoading(true);
     try {
@@ -130,7 +126,7 @@ export default function EditCollectionModal({
         >
           {/* Collection title */}
           <div className="space-y-1 ">
-            <label className="">Title</label>
+            <label className="font-semibold">Title</label>
             <input
               maxLength={225}
               value={title}
@@ -140,7 +136,7 @@ export default function EditCollectionModal({
           </div>
           {/* Description max length 100 */}
           <div className="space-y-1 ">
-            <label className="">Description</label>
+            <label className="font-semibold">Description</label>
             <TextareaAutosize
               placeholder="No description"
               value={description}
@@ -154,32 +150,30 @@ export default function EditCollectionModal({
           </div>
           {/* Tags */}
           <div className="space-y-1 max-w-[380px]">
-            <label className="">Tags</label>
+            <label className="font-semibold">Tags</label>
             <StyledChips chips={chips} setChips={setChips} />
           </div>
           {/* Image upload */}
           <div className="space-y-1 flex flex-col ">
-            <label className="">Image</label>
+            <label className="font-semibold">Image</label>
             {/*Show Current Image if no image selected */}
             <div className="relative w-20 h-20">
               {data.imageUrl && !selectedFileUrl && (
                 <Image
+                  fill
                   alt={`collection-${data.title}-image`}
-                  style={{ width: "100%", height: "auto" }}
-                  width={0}
-                  height={0}
-                  sizes="100vw"
+                  style={{ objectFit: "contain" }}
+                  sizes="80px"
                   src={data.imageUrl}
                 />
               )}
               {/*Show Selected image */}
               {selectedFileUrl && (
                 <Image
+                  fill
                   alt={`collection-${data.title}-image`}
-                  style={{ width: "100%", height: "auto" }}
-                  width={0}
-                  height={0}
-                  sizes="100vw"
+                  style={{ objectFit: "contain" }}
+                  sizes="80px"
                   src={selectedFileUrl}
                 />
               )}

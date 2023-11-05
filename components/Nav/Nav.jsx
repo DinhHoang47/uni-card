@@ -34,6 +34,7 @@ export default function Nav() {
   );
   const searchContainerRef = useRef();
   const navhangerRef = useRef(null);
+  const inputRef = useRef(null);
   // Redux global state
   // Route
   const router = useRouter();
@@ -49,12 +50,20 @@ export default function Nav() {
   const handleKeydown = (e) => {
     if (e.key === "Enter") {
       handleSubmit(e);
+      if (!searchContainerRef.current.classList.contains("invisible")) {
+        toggleSearchModal();
+      }
+      e.target.blur();
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    router.push(`/search?query=${searchValue}`);
+    if (searchValue.trim() !== "") {
+      router.push(`/search?keyword=${searchValue.trim()}`);
+    }
+    setSearchValue("");
+    inputRef.current.blur();
   };
 
   // Underline current tab base on URL
@@ -121,18 +130,24 @@ export default function Nav() {
         {/* Desktop Search Bar */}
         <div className="hidden sm:flex w-1/3  md:w-1/3 ">
           <div className="flex space-x-2 items-center w-full h-10 px-4  rounded-full bg-blue-50">
-            <label htmlFor="search-input">
-              <MagnifyingGlassIcon className="h-6 w-6 text-slate-700 " />
-            </label>
             <input
+              maxLength={225}
+              ref={inputRef}
               value={searchValue}
               onKeyDown={handleKeydown}
               onChange={handleChange}
               id="search-input"
               className=" h-full w-full bg-transparent outline-none"
               type="search"
-              placeholder="Collections, Terms"
+              placeholder="Collection, Tag ..."
             />
+            <label
+              className="cursor-pointer "
+              onClick={handleSubmit}
+              htmlFor="search-input"
+            >
+              <MagnifyingGlassIcon className="h-6 w-6 text-slate-700 hover:text-blue-600" />
+            </label>
           </div>
         </div>
         {/* Desktop Navigation */}
@@ -200,31 +215,40 @@ export default function Nav() {
       {/* Search Modal*/}
       <div
         onClick={toggleSearchModal}
-        className="search_modal invisible absolute flex flex-col top-0 left-0 w-screen h-screen bg-white px-4 pt-2"
+        className="search_modal invisible absolute flex top-0 left-0 w-full h-screen bg-transparent-04"
         ref={searchContainerRef}
       >
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-          className="flex "
-        >
-          <button
-            onClick={toggleSearchModal}
-            className="h-10 w-10 rounded-full"
+        <div className="w-full h-16 bg-white flex space-x-4 px-4 shadow-md">
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            className="flex flex-1 items-center"
           >
-            <ArrowLeftIcon className="h-6 w-6 text-gray-500" />
+            <button
+              onClick={toggleSearchModal}
+              className="h-10 w-10 rounded-full"
+            >
+              <ArrowLeftIcon className="h-6 w-6 text-gray-500" />
+            </button>
+            <form className="h-10 w-10 bg-blue-50 px-4 rounded-full grow">
+              <input
+                ref={inputRef}
+                value={searchValue}
+                onChange={handleChange}
+                onKeyDown={handleKeydown}
+                type="search"
+                placeholder="Search collections, topic"
+                className="w-full h-full bg-blue-50 outline-none  "
+              />
+            </form>
+          </div>
+          <button
+            onClick={handleSubmit}
+            className="w-8 flex items-center justify-center"
+          >
+            <MagnifyingGlassIcon className="h-6 w-6 stroke-2" />
           </button>
-          <form className="h-10 w-10 bg-blue-50 px-4 rounded-full grow">
-            <input
-              value={searchValue}
-              onChange={handleChange}
-              onKeyDown={handleKeydown}
-              type="search"
-              placeholder="Search collections, topic"
-              className="w-full h-full bg-blue-50 outline-none  "
-            />
-          </form>
         </div>
       </div>
       {/* Hanger for modal */}
@@ -291,7 +315,7 @@ const DesktopNavList = ({ currentPath }) => {
         className={`flex items-center menu_item ${
           currentPath === "/collections" ? "active" : ""
         }`}
-        href="/collections"
+        href="#"
       >
         <p className=" ">Collections</p>
       </Link> */}

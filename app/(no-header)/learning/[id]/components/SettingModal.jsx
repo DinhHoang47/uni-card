@@ -6,7 +6,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import PortalModalWrapper from "@components/PortalModalWrapper";
 import { useEffect, useRef, useState } from "react";
 
-export default function SettingModal({
+export default function TestConfigModal({
   setIsOpen,
   id,
   hanger,
@@ -157,101 +157,8 @@ export default function SettingModal({
             </label>
           </div>
         </div>
-        {/* Option 3 */}
-        <div className="">
-          <div className="">
-            <p className="font-semibold">Speed</p>
-          </div>
-          <div className="flex items-center justify-between space-x-4">
-            {/* Slow */}
-            <label
-              htmlFor="speedModeRadio-One"
-              className={`${styles.container} flex flex-col items-center justify-center space-y-2 cursor-pointer`}
-            >
-              <input
-                checked={speed === speedLevel.slow}
-                className="h-0 w-0 opacity-0"
-                id="speedModeRadio-One"
-                type="radio"
-                name="speedMode"
-                value={speedLevel.slow}
-                onChange={(e) => {
-                  setSpeed(e.target.value * 1);
-                }}
-              />
-              <div className="w-16  justify-center items-center flex flex-col">
-                <Image
-                  alt="text-box-image"
-                  width={36}
-                  height={36}
-                  src={"/assets/images/turtle.png"}
-                />
-                <p className="text-xs">Slow</p>
-              </div>
-              <div
-                className={`h-5 w-5 rounded-full bg-zinc-200 ${styles.checkMark}`}
-              ></div>
-            </label>
-            {/* Moderate */}
-            <label
-              htmlFor="speedModeRadio-Two"
-              className={`${styles.container} flex flex-col items-center justify-center space-y-2 cursor-pointer`}
-            >
-              <input
-                className="h-0 w-0 opacity-0"
-                id="speedModeRadio-Two"
-                type="radio"
-                name="speedMode"
-                checked={speed === speedLevel.moderate}
-                value={speedLevel.moderate}
-                onChange={(e) => {
-                  setSpeed(e.target.value * 1);
-                }}
-              />
-              <div className="w-16  justify-center items-center flex flex-col">
-                <Image
-                  alt="typing-image"
-                  width={36}
-                  height={36}
-                  src={"/assets/images/hare.png"}
-                />
-                <p className="text-xs">Moderate</p>
-              </div>
-              <div
-                className={`h-5 w-5 rounded-full bg-zinc-200 ${styles.checkMark}`}
-              ></div>
-            </label>
-            {/* Fast */}
-            <label
-              htmlFor="speedModeRadio-Three"
-              className={`${styles.container} flex flex-col items-center justify-center space-y-2 cursor-pointer`}
-            >
-              <input
-                className="h-0 w-0 opacity-0"
-                id="speedModeRadio-Three"
-                type="radio"
-                name="speedMode"
-                checked={speed === speedLevel.fast}
-                value={speedLevel.fast}
-                onChange={(e) => {
-                  setSpeed(e.target.value * 1);
-                }}
-              />
-              <div className="w-16  justify-center items-center flex flex-col">
-                <Image
-                  alt="typing-image"
-                  width={36}
-                  height={36}
-                  src={"/assets/images/cheetah.png"}
-                />
-                <p className="text-xs">Fast</p>
-              </div>
-              <div
-                className={`h-5 w-5 rounded-full bg-zinc-200 ${styles.checkMark}`}
-              ></div>
-            </label>
-          </div>
-        </div>
+        {/* Option 3 - Setting Speed */}
+
         {/* Actions */}
         <div className="!mt-8">
           <button
@@ -272,3 +179,102 @@ export default function SettingModal({
     </PortalModalWrapper>
   );
 }
+
+const SpeedSetting = () => {
+  return (
+    <div className="">
+      <div className="">
+        <p className="font-semibold">Speed</p>
+      </div>
+      <div className="flex items-center justify-between space-x-4">
+        {/* Slow */}
+        <label
+          htmlFor="speedModeRadio-One"
+          className={`${styles.container} flex flex-col items-center justify-center space-y-2 cursor-pointer`}
+        >
+          <input
+            checked={speed === speedLevel.slow}
+            className="h-0 w-0 opacity-0"
+            id="speedModeRadio-One"
+            type="radio"
+            name="speedMode"
+            value={speedLevel.slow}
+            onChange={(e) => {
+              setSpeed(e.target.value * 1);
+            }}
+          />
+          <div className="w-16  justify-center items-center flex flex-col">
+            <Image
+              alt="text-box-image"
+              width={36}
+              height={36}
+              src={"/assets/images/turtle.png"}
+            />
+            <p className="text-xs">Slow</p>
+          </div>
+          <div
+            className={`h-5 w-5 rounded-full bg-zinc-200 ${styles.checkMark}`}
+          ></div>
+        </label>
+        {/* Moderate */}
+        <label
+          htmlFor="speedModeRadio-Two"
+          className={`${styles.container} flex flex-col items-center justify-center space-y-2 cursor-pointer`}
+        >
+          <input
+            className="h-0 w-0 opacity-0"
+            id="speedModeRadio-Two"
+            type="radio"
+            name="speedMode"
+            checked={speed === speedLevel.moderate}
+            value={speedLevel.moderate}
+            onChange={(e) => {
+              setSpeed(e.target.value * 1);
+            }}
+          />
+          <div className="w-16  justify-center items-center flex flex-col">
+            <Image
+              alt="typing-image"
+              width={36}
+              height={36}
+              src={"/assets/images/hare.png"}
+            />
+            <p className="text-xs">Moderate</p>
+          </div>
+          <div
+            className={`h-5 w-5 rounded-full bg-zinc-200 ${styles.checkMark}`}
+          ></div>
+        </label>
+        {/* Fast */}
+        <label
+          htmlFor="speedModeRadio-Three"
+          className={`${styles.container} flex flex-col items-center justify-center space-y-2 cursor-pointer`}
+        >
+          <input
+            className="h-0 w-0 opacity-0"
+            id="speedModeRadio-Three"
+            type="radio"
+            name="speedMode"
+            checked={speed === speedLevel.fast}
+            value={speedLevel.fast}
+            onChange={(e) => {
+              setSpeed(e.target.value * 1);
+            }}
+          />
+          <div className="w-16  justify-center items-center flex flex-col">
+            <Image
+              alt="typing-image"
+              width={36}
+              height={36}
+              src={"/assets/images/cheetah.png"}
+            />
+            <p className="text-xs">Fast</p>
+          </div>
+          <div
+            className={`h-5 w-5 rounded-full bg-zinc-200 ${styles.checkMark}`}
+          ></div>
+        </label>
+      </div>
+    </div>
+  );
+};

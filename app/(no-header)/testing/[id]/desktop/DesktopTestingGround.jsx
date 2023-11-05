@@ -381,30 +381,30 @@ const handleSubmitAns = async (
   // Check current input answer to generate the test result
   const resultArr = quizArr.map((quiz, index) => {
     if (answerArr[index].answer === null) {
-      return { cardId: quiz.cardId, passed: false };
+      return { c: quiz.cardId, r: 0 };
     }
     const correctAns = quiz.answer.toLowerCase();
     const inputAns = answerArr[index].answer.toLowerCase();
     if (correctAns === inputAns) {
-      return { cardId: quiz.cardId, passed: true };
+      return { c: quiz.cardId, r: 1 };
     } else {
-      return { cardId: quiz.cardId, passed: false };
+      return { c: quiz.cardId, r: 0 };
     }
   });
   // Loop through current test result and set new test result , if not there yet push new record
 
   resultArr.forEach((currentAns) => {
     const foundAnsIndex = updatedTestResult.findIndex(
-      (previousAns) => previousAns.cardId === currentAns.cardId
+      (previousAns) => previousAns.c === currentAns.c
     );
     // If found old result update it
     if (foundAnsIndex !== -1) {
-      updatedTestResult[foundAnsIndex].passed = currentAns.passed;
+      updatedTestResult[foundAnsIndex].p = currentAns.p;
     } else {
       // If not found old result then push new item to the result
       updatedTestResult.push({
-        cardId: currentAns.cardId,
-        passed: currentAns.passed,
+        c: currentAns.c,
+        r: currentAns.r,
       });
     }
   });
