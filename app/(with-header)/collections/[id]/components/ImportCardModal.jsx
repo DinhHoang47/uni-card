@@ -2,7 +2,7 @@ import PortalModalWrapper from "@components/PortalModalWrapper";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useCard } from "@lib/useCard";
 import { TextareaAutosize } from "@mui/base";
-import Spinner from "@public/assets/icons/spinner";
+import Spinner from "@public/assets/icons/MySpinner";
 import { addMessage } from "@redux/commonMessageSlice";
 import { privateCollectionServ } from "@services/Private_CollectionService";
 import { FREE_USER_CODE, FREE_USER_MAX_CARD_NUM } from "@utils/config";
