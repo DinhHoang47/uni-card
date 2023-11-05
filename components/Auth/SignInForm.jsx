@@ -5,7 +5,7 @@ import {
   EyeIcon,
   EyeSlashIcon,
 } from "@heroicons/react/24/outline";
-import Spinner from "@public/assets/icons/spinner";
+import Spinner from "@public/assets/icons/MySpinner.jsx";
 import * as api from "../../app/api/index.js";
 import useUser from "@lib/useUser.js";
 import { close } from "../../redux/authModalSlice";

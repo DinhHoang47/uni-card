@@ -7,7 +7,7 @@ import { MuiChipsInput } from "mui-chips-input";
 import PortalModalWrapper from "@components/PortalModalWrapper";
 import { TextareaAutosize } from "@mui/base";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import Spinner from "@public/assets/icons/spinner";
+import Spinner from "@public/assets/icons/MySpinner";
 import { uploadImage } from "@services/CldService";
 import { generateUniqueName } from "@utils/generateUniqueName";
 import { useSWRConfig } from "swr";

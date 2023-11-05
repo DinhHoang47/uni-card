@@ -10,7 +10,7 @@ import { DocumentArrowUpIcon } from "@heroicons/react/20/solid";
 
 import { TextareaAutosize } from "@mui/base";
 import { handleSelectedImage } from "@lib/handleSelectedImage";
-import Spinner from "@public/assets/icons/spinner";
+import Spinner from "@public/assets/icons/MySpinner";
 
 export default function DesktopRow({
   cardData,
