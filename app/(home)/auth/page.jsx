@@ -8,6 +8,7 @@ import { Player } from "@lottiefiles/react-lottie-player";
 import animation from "@public/assets/images/auth-page-animation.json";
 import useUser from "@lib/useUser";
 import XSpinner from "@components/Spinner/XSpinner";
+import { ChevronDoubleRightIcon } from "@heroicons/react/24/outline";
 
 export default function Auth() {
   const [displayButton, setDisplayButton] = useState(false);
@@ -23,7 +24,15 @@ export default function Auth() {
     );
   }
   if (user?.isLoggedIn) {
-    return <div className="">Logged in. Redirect</div>;
+    return (
+      <div className="w-full h-screen my-auto flex items-center justify-center">
+        <p className="font-semibold">Logged in. Redirect</p>
+
+        <span className="ml-2">
+          <ChevronDoubleRightIcon className="h-5 w-5 font-semibold text-blue-600 animate-[bounceLeft_1s_ease-in-out_infinite]" />
+        </span>
+      </div>
+    );
   }
   return (
     <div className="w-full h-screen flex items-center justify-center bg-blue-50">

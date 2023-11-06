@@ -10,6 +10,10 @@ import OtherFeature1Image from "@public/assets/images/Other-Feature-Image-1.png"
 import OtherFeature2Image from "@public/assets/images/Other-Feature-Image-2.png";
 import OtherFeature3Image from "@public/assets/images/Other-Feature-Image-3.png";
 import OtherFeature4Image from "@public/assets/images/Other-Feature-Image-4.png";
+import InstagramIcon from "@public/assets/icons/icon-instagram.svg";
+import FacebookIcon from "@public/assets/icons/icon-facebook.svg";
+import TwitterIcon from "@public/assets/icons/icon-twitter.svg";
+
 import AmberButton from "@components/Buttons/AmberButton";
 
 export default function Home() {
@@ -21,6 +25,7 @@ export default function Home() {
       <OtherFeatures />
       <CallToActions />
       <SocialSection />
+      <HomeFooter />
     </div>
   );
 }
@@ -29,7 +34,7 @@ const Nav = () => {
   return (
     <div className="max-w-3xl flex justify-between w-full h-14 items-center px-4">
       <div className="flex items-center space-x-2 select-none">
-        <Image alt="Unicard logo" className="w-10" src={Logo} />
+        <Image sizes="40px" alt="Unicard logo" className="w-10" src={Logo} />
         <h1 className="logo_text font-vina text-xl">UniCard</h1>
       </div>
       <div className="">
@@ -149,7 +154,7 @@ const Feature = ({ number, title, description, image }) => {
       <h4 className="font-semibold text-3xl text-center">{title}</h4>
       <p className="text-center max-w-md text-lg">{description}</p>
       <div className="w-96">
-        <Image quality={100} src={image} alt="Feature Image" />
+        <Image sizes="384px" quality={100} src={image} alt="Feature Image" />
       </div>
     </div>
   );
@@ -181,10 +186,11 @@ const OtherFeatures = () => {
 
 const OtherFeatureItem = ({ image, title, description }) => {
   return (
-    <div className="flex items-center space-x-8 max-w-xl w-full mx-auto">
+    <div className="flex items-center space-x-8 max-w-xl w-full mx-auto select-none">
       <div className="w-16 h-16 flex items-center justify-center rounded-full bg-blue-200 shrink-0">
         <div className="relative w-8 h-8 ">
           <Image
+            sizes="32px"
             fill
             style={{ objectFit: "contain" }}
             alt="Other Feature"
@@ -208,6 +214,7 @@ const CallToActions = () => {
           <div className="relative w-14 h-14">
             <Image
               fill
+              sizes="56px"
               style={{ objectFit: "contain" }}
               alt="Unicard logo"
               src={Logo}
@@ -227,7 +234,7 @@ const CallToActions = () => {
 const CTAButton = () => {
   return (
     <Link
-      className="h-12 bg-blue-500 font-semibold text-white rounded px-4 flex items-center"
+      className="h-12 bg-blue-500 hover:bg-blue-600 transition-all shadow font-semibold text-white rounded px-4 flex items-center"
       href={"/auth"}
     >
       {" "}
@@ -238,11 +245,51 @@ const CTAButton = () => {
 
 const SocialSection = () => {
   return (
-    <div className="w-full">
-      <h4>Follow us</h4>
-      <div className="">
-        <Link href={"#"}>Fb</Link>
+    <div className="w-full flex flex-col items-center space-y-4 py-10">
+      <h4 className="text-4xl font-semibold">Follow us</h4>
+      <div className="flex space-x-8">
+        <Link href={"#"}>
+          <div className="relative w-8 h-8">
+            <Image
+              sizes="32px"
+              alt="Facebook icon"
+              src={FacebookIcon}
+              fill
+              style={{ objectFit: "contain" }}
+            />
+          </div>
+        </Link>
+        <Link href={"#"}>
+          <div className="relative w-8 h-8">
+            <Image
+              sizes="32px"
+              alt="Instagram Icon"
+              src={InstagramIcon}
+              fill
+              style={{ objectFit: "contain" }}
+            />
+          </div>
+        </Link>
+        <Link href={"#"}>
+          <div className="relative w-8 h-8">
+            <Image
+              sizes="32px"
+              alt="Twitter Icon"
+              src={TwitterIcon}
+              fill
+              style={{ objectFit: "contain" }}
+            />
+          </div>
+        </Link>
       </div>
+    </div>
+  );
+};
+
+const HomeFooter = () => {
+  return (
+    <div className=" w-full border-t">
+      <div className="max-w-3xl p-4 mx-auto text-gray-400">2023 © Unicard</div>
     </div>
   );
 };

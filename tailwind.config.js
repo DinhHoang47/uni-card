@@ -29,6 +29,12 @@ module.exports = {
         "transparent-white-07": "rgba(255, 255, 255, 0.7)",
         "transparent-blue-06": "rgba(115, 161, 230, 0.6)",
       },
+      keyframes: {
+        bounceLeft: {
+          from: { transform: `translateX(0)` },
+          to: { transform: `translateX(100%)` },
+        },
+      },
     },
     screens: {
       sm: "640px",
