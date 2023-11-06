@@ -30,9 +30,9 @@ export default function AnswerInput_Choice() {
           key={`input-answer-${index}`}
           className={`${
             item.selected === true ? styles.selected : "border-slate-400"
-          } cursor-pointer bg-white px-1 py-2 h-full rounded-md  border flex items-center justify-center text-center line-clamp-2 `}
+          } cursor-pointer bg-white px-1 py-2 h-full rounded-md  border flex items-center justify-center text-center`}
         >
-          <p className="line-clamp-2">{item.answer}</p>
+          <p className="">{item.answer}</p>
         </li>
       ))}
     </ul>

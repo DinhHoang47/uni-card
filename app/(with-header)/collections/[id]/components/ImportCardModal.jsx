@@ -64,9 +64,9 @@ export default function ImportCardModal({
         userType === FREE_USER_CODE
       ) {
         setErrMsg(
-          `You reached max ${FREE_USER_MAX_CARD_NUM} cards per collection for free user.\nOnly ${
+          `The maximum of ${FREE_USER_MAX_CARD_NUM} cards per collection for free users.\n You can only insert ${
             FREE_USER_MAX_CARD_NUM - totalCard
-          } cards left.`
+          } cards.`
         );
         setLoading(false);
         return;
@@ -159,7 +159,7 @@ export default function ImportCardModal({
             setNewLineBy={setNewLineBy}
           /> */}
           {/* Error Message */}
-          <div className="">
+          <div className="w-full">
             <p className="text-red-500 text-sm whitespace-pre-wrap">{errMsg}</p>
             {reachedMaxCard && (
               <p className="text-orange-500 text-sm">

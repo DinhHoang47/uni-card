@@ -17,9 +17,9 @@ export default function MobileCardLearn({ data, displayOptions }) {
           onClick={() => {
             setIsFlipped((pre) => !pre);
           }}
-          className="rounded-lg h-full bg-white flex items-center justify-center p-10 border border-slate-400"
+          className="rounded-lg h-full w-full bg-white flex items-center justify-center p-10 border border-slate-400"
         >
-          <div className="text-4xl">{data.term}</div>
+          <div className="text-2xl">{data.term}</div>
           <div className="absolute bottom-0 right-0 -translate-x-1 ">
             <p className="text-xs text-gray-400">Flip</p>
           </div>
@@ -50,7 +50,7 @@ const BackSide = ({ data, setIsFlipped, displayOptions }) => {
       {/* Back side background */}
       {/* Show image */}
       {imageUrl && displayImg && (
-        <div className="relative w-20 h-20 flex items-center justify-center mb-4">
+        <div className="absolute top-0 right-0 w-12 h-12 mr-8 mt-8 flex items-center justify-center mb-4">
           <Image
             fill
             sizes={"80px"}
@@ -68,7 +68,7 @@ const BackSide = ({ data, setIsFlipped, displayOptions }) => {
         className={`absolute top-0 left-0 h-full w-full flex flex-col rounded ${
           (!imageUrl || !displayImg) && (!displayDef2 || !definition2)
             ? "justify-center"
-            : "justify-between"
+            : "justify-around"
         } items-center px-4 ${
           (displayDef2 || definition2) &&
           (displayExample || example) &&
@@ -82,7 +82,7 @@ const BackSide = ({ data, setIsFlipped, displayOptions }) => {
           <p
             className={`${
               definition2 !== "" ? "" : "text-gray-300 "
-            }  max-w-full break-words line-clamp-3 bg-transparent-white-07 text-center`}
+            }  max-w-full break-words line-clamp-3 bg-transparent-white-07 text-center text-lg`}
           >
             {definition2}
           </p>
@@ -91,16 +91,14 @@ const BackSide = ({ data, setIsFlipped, displayOptions }) => {
         )}
 
         <div className="w-full text-center">
-          <p
-            className={`max-w-full break-words line-clamp-4 bg-transparent-white-07 font-semibold text-lg`}
-          >
+          <p className={`break-words bg-transparent-white-07 text-2xl`}>
             {definition1}
           </p>
           {example && displayExample ? (
             <p
               className={`${
                 example !== "" ? "" : "text-gray-300"
-              } max-w-full break-words line-clamp-3 bg-transparent-white-07`}
+              } max-w-full break-words line-clamp-3 bg-transparent-white-07 w-full`}
             >
               {example}
             </p>

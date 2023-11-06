@@ -58,9 +58,9 @@ const FrontSide = ({ data, setIsFlipped, currentStatus, isDisplayStatus }) => {
       onClick={() => {
         setIsFlipped((pre) => !pre);
       }}
-      className={`w-full bg-white relative rounded-lg h-full  flex items-center justify-center p-2 border border-slate-400 overflow-hidden `}
+      className={`w-full bg-white relative rounded-lg h-full  flex items-center justify-center p-2 border-2 border-slate-400 overflow-hidden `}
     >
-      <p className="w-full text-xl break-words text-center font-semibold">
+      <p className="w-full text-xl break-words text-center font-medium text-slate-950">
         {term}
       </p>
       {/* Testing status tag */}
@@ -84,12 +84,12 @@ const BackSide = ({ data, setIsFlipped, displayOptions }) => {
   } = data;
   return (
     <div
-      className={`bg-white relative border rounded-lg border-slate-400 flex flex-col items-center justify-center w-full h-full`}
+      className={`bg-white relative border-2 rounded-lg border-slate-400 flex flex-col items-center justify-center w-full h-full`}
     >
       {/* Back side background */}
       {/* Show image */}
       {imageUrl && displayImg && (
-        <div className="relative w-14 h-14 flex items-center justify-center mb-4">
+        <div className="absolute top-0 right-0 w-10 h-10 mr-2 mt-2 flex items-center justify-center mb-4">
           <Image
             fill
             sizes={"80px"}
@@ -107,15 +107,15 @@ const BackSide = ({ data, setIsFlipped, displayOptions }) => {
         className={`absolute top-0 left-0 h-full w-full flex flex-col rounded ${
           (!imageUrl || !displayImg) && (!displayDef2 || !definition2)
             ? "justify-center"
-            : "justify-between"
+            : "justify-around"
         } items-center text-[0.75rem]  p-2 `}
       >
         {definition2 && displayDef2 ? (
           // break-words
           <p
-            className={`${
-              definition2 !== "" ? "" : "text-gray-300 "
-            }  max-w-full break-words line-clamp-3 bg-transparent-white-07 text-center`}
+            className={`${definition2 !== "" ? "" : "text-gray-300 "} ${
+              displayImg && imageUrl ? "" : ""
+            } text-lg break-words line-clamp-3 bg-transparent-white-07 text-center`}
           >
             {definition2 !== "" ? definition2 : "Definition 2"}
           </p>
@@ -123,9 +123,9 @@ const BackSide = ({ data, setIsFlipped, displayOptions }) => {
           <>{displayImg && imageUrl && <div></div>}</>
         )}
 
-        <div className="w-full text-center">
+        <div className="w-full text-center space-y-2">
           <p
-            className={`max-w-full break-words line-clamp-4 ${`text-base`}  bg-transparent-white-07 font-semibold`}
+            className={`max-w-full break-words line-clamp-4 text-lg font-semibold  bg-transparent-white-07`}
           >
             {definition1}
           </p>

@@ -17,8 +17,14 @@ import { useDispatch } from "react-redux";
 import { closeAddNewCollectionModal } from "@redux/modalSlice";
 import { Switch } from "@mui/material";
 import CardPreview from "./CardPreview";
+import { useTotalCollections } from "@lib/useTotalCollections";
+import useUser from "@lib/useUser";
+import { FREE_USER_CODE, FREE_USER_MAX_COLLECTION_NUM } from "@utils/config";
 
 export default function AddNewCollectionModal({ hanger, router }) {
+  // Fetched data
+  const { data: usersCollectionNum } = useTotalCollections();
+  const { user } = useUser();
   // Input states
   const [chips, setChips] = useState([]);
   const [title, setTitle] = useState("");
@@ -32,6 +38,10 @@ export default function AddNewCollectionModal({ hanger, router }) {
   const [loadingImage, setLoadingImage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
+  let reachedMaxCollection = false;
+  if (user.type === FREE_USER_CODE) {
+    reachedMaxCollection = usersCollectionNum >= FREE_USER_MAX_COLLECTION_NUM;
+  }
   // Handler add new collection   -------------------------------
   const dispatch = useDispatch();
   const { mutate } = useSWRConfig();
@@ -112,7 +122,7 @@ export default function AddNewCollectionModal({ hanger, router }) {
 
   return (
     <PortalModalWrapper mountTarget={hanger}>
-      <div className="bg-white relative rounded-md p-6">
+      <div className="bg-white relative rounded-md p-6 max-w-min">
         {/* Title */}
         <h3 className="font-semibold text-xl text-center">Create new</h3>
 
@@ -197,8 +207,14 @@ export default function AddNewCollectionModal({ hanger, router }) {
             />
           </div>
           {/* Error Message */}
-          <div className="">
+          <div className="w-full">
             <p className="text-red-500 text-sm">{errMsg}</p>
+            {reachedMaxCollection && (
+              <p className="text-orange-500 text-sm">
+                You have reached the maximum of {FREE_USER_MAX_COLLECTION_NUM}{" "}
+                collection numbers for free users.
+              </p>
+            )}
           </div>
           {/* Submit button */}
           <button
@@ -206,9 +222,9 @@ export default function AddNewCollectionModal({ hanger, router }) {
               e.preventDefault();
               handleAddNew();
             }}
-            disabled={loading || !title || loadingImage}
+            disabled={loading || !title || loadingImage || reachedMaxCollection}
             className={`${
-              !trimmedTitle || loading || loadingImage
+              !trimmedTitle || loading || loadingImage || reachedMaxCollection
                 ? "bg-blue-400"
                 : "bg-blue-600"
             }  w-full h-10 rounded inline-flex items-center justify-center px-4 py-2 font-semibold leading-6 text-sm shadow transition ease-in-out duration-150 text-white`}

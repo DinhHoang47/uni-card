@@ -147,7 +147,7 @@ export default function AddTermModal({
                     <p
                       className={`${
                         definition1 !== "" ? "" : "text-gray-300"
-                      } max-w-full break-words line-clamp-4 text-[0.75rem]  font-semibold`}
+                      } max-w-full break-words line-clamp-4 text-[0.75rem]`}
                     >
                       {definition1 !== "" ? definition1 : "Definition"}
                     </p>

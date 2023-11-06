@@ -287,8 +287,17 @@ const MobileMenu = ({ unicardLogo, dispatch, openSidebar }) => {
     <div className="flex lg:hidden h-full items-center space-x-2">
       {/* Hidden sidebar temporarily */}
       <MobileMenuIcon dispatch={dispatch} openSidebar={openSidebar} />
-      <Link href="/" className="ml-2 sm:ml-0 flex gap-2 items-center">
-        <Image alt="Unicard logo" style={{ width: "40px" }} src={unicardLogo} />
+      <Link href="/" className="relative ml-2 sm:ml-0 flex gap-2 items-center">
+        <div className="relative w-10 h-10">
+          <Image
+            fill
+            sizes="40px"
+            alt="Unicard logo"
+            style={{ objectFit: "contain" }}
+            src={unicardLogo}
+          />
+        </div>
+
         <p className="logo_text font-vina text-xl">UniCard</p>
       </Link>
     </div>

@@ -83,10 +83,15 @@ const KeenSlider = ({
   currentCardArr,
   displayOptions,
 }) => {
+  useEffect(() => {}, [currentCardArr]);
   return (
     <>
-      <div className="relative py-1">
-        <div ref={sliderRef} className="keen-slider">
+      <div className="relative py-1 w-full">
+        <div
+          key={currentCardArr[0]?.id}
+          ref={sliderRef}
+          className="keen-slider"
+        >
           {currentCardArr?.map((item) => (
             <div key={item.id} className="keen-slider__slide">
               <MobileCardLearn displayOptions={displayOptions} data={item} />

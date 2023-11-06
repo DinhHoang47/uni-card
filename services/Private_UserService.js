@@ -19,6 +19,9 @@ class PrivateUserService extends PrivateService {
   getLearningCollections() {
     return this.get(`user/learning/collections`);
   }
+  getTotalCollections() {
+    return this.get(`user/total/collections`);
+  }
 }
 
 export const privateUserServ = () => {

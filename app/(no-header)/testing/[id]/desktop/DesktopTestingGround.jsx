@@ -209,9 +209,9 @@ const SelectionInput = ({
             index === currentAnswer?.answerIndex
               ? styles.selected
               : "border-slate-400"
-          } cursor-pointer bg-white px-1 py-2 h-full rounded-md  border flex items-center justify-center text-center line-clamp-2 `}
+          } cursor-pointer bg-white px-1 py-2 h-full rounded-md  border flex items-center justify-center text-center`}
         >
-          <p className="line-clamp-2">{item}</p>
+          <p className="">{item}</p>
         </li>
       ))}
     </ul>

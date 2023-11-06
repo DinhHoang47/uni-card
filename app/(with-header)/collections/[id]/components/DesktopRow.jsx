@@ -165,7 +165,7 @@ export default function DesktopRow({
                 onChange={(e) => {
                   setDefition2(e.target.value);
                 }}
-                value={definition2}
+                value={definition2 || ""}
                 className={styles.autoSizeTextArea}
               />
             )}
@@ -183,7 +183,7 @@ export default function DesktopRow({
               <TextareaAutosize
                 maxLength={225}
                 className={styles.autoSizeTextArea}
-                value={example}
+                value={example || ""}
                 onChange={(e) => {
                   setExample(e.target.value);
                 }}
@@ -198,7 +198,7 @@ export default function DesktopRow({
             {!editting && cardData.image_url && (
               <div className="relative w-12 h-12">
                 <Image
-                  sizes="40px"
+                  sizes="80px"
                   fill
                   style={{ objectFit: "contain" }}
                   alt="card-image"
