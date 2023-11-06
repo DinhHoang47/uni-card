@@ -15,7 +15,7 @@ import { Switch } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { addMessage } from "@redux/commonMessageSlice.js";
 import { handleSelectedImage } from "@lib/handleSelectedImage";
-import Spinner from "@public/assets/icons/spinner";
+import Spinner from "@public/assets/icons/MySpinner";
 
 export default function AddTermModal({
   displayExample,

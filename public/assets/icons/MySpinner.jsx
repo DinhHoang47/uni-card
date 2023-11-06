@@ -1,4 +1,4 @@
-const Spinner = (props) => (
+const MySpinner = (props) => (
   <svg
     className={props.className}
     xmlns="http://www.w3.org/2000/svg"
@@ -20,4 +20,4 @@ const Spinner = (props) => (
     ></path>
   </svg>
 );
-export default Spinner;
+export default MySpinner;

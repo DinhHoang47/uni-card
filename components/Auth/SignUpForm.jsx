@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import * as api from "../../app/api/index.js";
-import Spinner from "@public/assets/icons/spinner";
+import Spinner from "@public/assets/icons/MySpinner.jsx";
 //Username alphanumeric string that may include _ and – having a length of 3 to 16 characters.
 const USER_REGEX = /^[a-z0-9_-]{3,16}$/;
 // Moderate: Should have 1 lowercase letter, 1 uppercase letter, 1 number, and be at least 8 characters long

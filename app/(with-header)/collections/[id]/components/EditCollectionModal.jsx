@@ -12,7 +12,7 @@ import {
 } from "@utils/config";
 import { updateImage, uploadImage } from "@services/CldService";
 import { privateCollectionServ } from "@services/Private_CollectionService";
-import Spinner from "@public/assets/icons/spinner";
+import Spinner from "@public/assets/icons/MySpinner";
 import useUser from "@lib/useUser";
 import StyledChips from "./StyledChips";
 import { getImageUrl } from "@utils/getImageUrl";
