@@ -77,6 +77,7 @@ export default function FlipCardMode({
     return (
       <>
         <SectionSelection
+          key={buttonArr[0]?.startNumber}
           currentSection={currentSection}
           setCurrentSection={setCurrentSection}
           collectionId={collectionId}
@@ -96,6 +97,7 @@ export default function FlipCardMode({
           setIsOpenLearningConfig={setIsOpenLearningConfig}
         />
         <PlayGround
+          key={buttonArr[0].startNumber}
           collectionId={collectionId}
           displayOptions={displayOptions}
           currentCardArr={currentCardArr}
