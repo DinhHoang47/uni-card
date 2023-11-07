@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "http://localhost:8080/" });
+const API = axios.create({ baseURL: "https://api-unicard.onrender.com/" });
 
 export const signUp = (userData) => {
   return API.post(`register`, userData, {
@@ -24,17 +24,6 @@ export const LogOut = () => {
       withCredentials: true,
     }
   );
-};
-
-export const getCollection = (id) => {
-  return API.get(`collections/${id}`);
-};
-
-export const getUser = (url) => {
-  return API.get(url, {
-    headers: {},
-    withCredentials: true,
-  });
 };
 
 export const googleSignIn = (credential) => {
