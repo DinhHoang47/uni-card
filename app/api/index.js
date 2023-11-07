@@ -26,17 +26,6 @@ export const LogOut = () => {
   );
 };
 
-export const getCollection = (id) => {
-  return API.get(`collections/${id}`);
-};
-
-export const getUser = (url) => {
-  return API.get(url, {
-    headers: {},
-    withCredentials: true,
-  });
-};
-
 export const googleSignIn = (credential) => {
   return API.post("auth/googleSignIn", credential, {
     headers: { "Content-Type": "application/json" },
