@@ -1,5 +1,4 @@
 "use client";
-
 import GoogleSignInButton from "@components/Auth/GoogleSignInButton";
 import { useEffect, useState } from "react";
 import unicardLogo from "@public/assets/images/unicard-logo.png";

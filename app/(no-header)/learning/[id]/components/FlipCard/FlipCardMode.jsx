@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef, useState } from "react";
 import SectionSelection from "./SectionSelection";
 import DisplaySetting from "./DisplaySetting";
