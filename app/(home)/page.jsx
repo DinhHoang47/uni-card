@@ -248,7 +248,7 @@ const SocialSection = () => {
     <div className="w-full flex flex-col items-center space-y-4 py-10">
       <h4 className="text-4xl font-semibold">Follow us</h4>
       <div className="flex space-x-8">
-        <Link href={"#"}>
+        <Link href={"https://www.facebook.com/uni.card.flashcard"}>
           <div className="relative w-8 h-8">
             <Image
               sizes="32px"
