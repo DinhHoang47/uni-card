@@ -73,35 +73,37 @@ export default function FlipCardMode({
     }
   }, [learningStatus]);
   if (cardList?.length === 0) return <div className="">No cards to study</div>;
-  return (
-    <>
-      <SectionSelection
-        currentSection={currentSection}
-        setCurrentSection={setCurrentSection}
-        collectionId={collectionId}
-        openSelect={openSelect}
-        setOpenSelect={setOpenSelect}
-        buttonArr={buttonArr}
-        testingStatus={testingStatus}
-        currentCardArr={currentCardArr}
-        cardArr={cardList}
-      />
-      <DisplaySetting
-        cardPerPage={cardPerPage}
-        setCardPerPage={setCardPerPage}
-        initOptions={initOptions}
-        setDisplayOptions={setDisplayOptions}
-        openSelect={openSelect}
-        setIsOpenLearningConfig={setIsOpenLearningConfig}
-      />
-      <PlayGround
-        collectionId={collectionId}
-        displayOptions={displayOptions}
-        currentCardArr={currentCardArr}
-        setOpenSelect={setOpenSelect}
-      />
-    </>
-  );
+  if (cardList?.length !== 0) {
+    return (
+      <>
+        <SectionSelection
+          currentSection={currentSection}
+          setCurrentSection={setCurrentSection}
+          collectionId={collectionId}
+          openSelect={openSelect}
+          setOpenSelect={setOpenSelect}
+          buttonArr={buttonArr}
+          testingStatus={testingStatus}
+          currentCardArr={currentCardArr}
+          cardArr={cardList}
+        />
+        <DisplaySetting
+          cardPerPage={cardPerPage}
+          setCardPerPage={setCardPerPage}
+          initOptions={initOptions}
+          setDisplayOptions={setDisplayOptions}
+          openSelect={openSelect}
+          setIsOpenLearningConfig={setIsOpenLearningConfig}
+        />
+        <PlayGround
+          collectionId={collectionId}
+          displayOptions={displayOptions}
+          currentCardArr={currentCardArr}
+          setOpenSelect={setOpenSelect}
+        />
+      </>
+    );
+  }
 }
 
 const getCurrentCardArr = (cardArr, currentSection) => {
