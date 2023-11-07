@@ -77,7 +77,6 @@ export default function FlipCardMode({
     return (
       <>
         <SectionSelection
-          key={buttonArr[0]?.startNumber}
           currentSection={currentSection}
           setCurrentSection={setCurrentSection}
           collectionId={collectionId}
@@ -97,7 +96,6 @@ export default function FlipCardMode({
           setIsOpenLearningConfig={setIsOpenLearningConfig}
         />
         <PlayGround
-          key={buttonArr[0].startNumber}
           collectionId={collectionId}
           displayOptions={displayOptions}
           currentCardArr={currentCardArr}
@@ -122,7 +120,7 @@ const getButtonArray = (totalCard = 0, pageSize = 10) => {
   const totalPage = Math.ceil(totalCard / pageSize);
   const buttonArray = [];
   let endNumber = 0;
-  let startNumber = 0;
+  let startNumber = 1;
   let end = 0;
   for (let index = 0; index < totalPage; index++) {
     startNumber = index * pageSize + 1;
