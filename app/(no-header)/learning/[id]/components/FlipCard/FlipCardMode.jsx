@@ -52,7 +52,7 @@ export default function FlipCardMode({
     setButtonArr(buttons);
     const button1 = buttons[0];
     const updatedSection = {
-      startNumber: button1?.startNumber,
+      startNumber: button1?.startNumber || 1,
       endNumber: button1?.endNumber,
     };
     setCurrentSection(updatedSection);
@@ -114,7 +114,7 @@ const getCurrentCardArr = (cardArr, currentSection) => {
   return [];
 };
 
-const getButtonArray = (totalCard, pageSize = 10) => {
+const getButtonArray = (totalCard = 0, pageSize = 10) => {
   const totalPage = Math.ceil(totalCard / pageSize);
   const buttonArray = [];
   let endNumber = 0;
