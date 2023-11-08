@@ -1,9 +1,8 @@
-import { BACKEND_URL } from "./config";
 import axios from "axios";
 
 export class PrivateService {
   constructor() {
-    this.backendUrl = BACKEND_URL;
+    this.backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   }
 
   get(url) {
