@@ -1,10 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import * as api from "../../app/api/index.js";
-import { mutate, useSWRConfig } from "swr";
+import { useSWRConfig } from "swr";
 import { useDispatch } from "react-redux";
 import { close as closeAuthModal } from "../../redux/authModalSlice.js";
-import { useRouter } from "next/navigation.js";
 
 async function handleCredentialResponse(
   response,

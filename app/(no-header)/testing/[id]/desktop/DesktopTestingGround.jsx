@@ -18,6 +18,7 @@ export default function TestingGround({
   const totalQuiz = quizArr.length;
   const { data: learningStatus, mutate: mutateLearningStatus } =
     useLearningStatus(collectionId);
+  console.log("learningStatus: ", learningStatus);
   // Local state
   const [answeredAllQuiz, setAnsweredAllQuiz] = useState(false);
   // Hanlder
@@ -415,7 +416,9 @@ const handleSubmitAns = async (
     .catch((err) => {
       console.log(err);
     });
+  console.log("updatedTestResult: ", updatedTestResult);
   mutateLearningStatus();
   setResultArr(resultArr);
+  console.log("resultArr: ", resultArr);
   setOpenResultModal(true);
 };

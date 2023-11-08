@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "https://api-unicard.onrender.com/" });
+const API = axios.create({
+  baseURL: `${process.env.NEXT_PUBLIC_BACKEND_URL}/`,
+});
 
 export const signUp = (userData) => {
   return API.post(`register`, userData, {

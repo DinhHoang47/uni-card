@@ -4,13 +4,7 @@ import PortalModalWrapper from "@components/PortalModalWrapper";
 import { useEffect, useRef, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { TextareaAutosize } from "@mui/base";
-import { Switch } from "@mui/material";
 import Image from "next/image";
-import {
-  MAX_COLLECTION_IMG_SIZE,
-  MAX_COLLECTION_IMG_SIZE_TEXT,
-} from "@utils/config";
-import { updateImage, uploadImage } from "@services/CldService";
 import { privateCollectionServ } from "@services/Private_CollectionService";
 import Spinner from "@public/assets/icons/MySpinner";
 import useUser from "@lib/useUser";
