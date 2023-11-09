@@ -20,6 +20,7 @@ import CardPreview from "./CardPreview";
 import { useTotalCollections } from "@lib/useTotalCollections";
 import useUser from "@lib/useUser";
 import { FREE_USER_CODE, FREE_USER_MAX_COLLECTION_NUM } from "@utils/config";
+import PremiumIcon from "@public/assets/icons/PremiumIcon";
 
 export default function AddNewCollectionModal({ hanger, router }) {
   // Fetched data
@@ -39,8 +40,10 @@ export default function AddNewCollectionModal({ hanger, router }) {
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   let reachedMaxCollection = false;
+  let allowInputImage = true;
   if (user.type === FREE_USER_CODE) {
     reachedMaxCollection = usersCollectionNum >= FREE_USER_MAX_COLLECTION_NUM;
+    allowInputImage = false;
   }
   // Handler add new collection   -------------------------------
   const dispatch = useDispatch();
@@ -183,36 +186,55 @@ export default function AddNewCollectionModal({ hanger, router }) {
           </div>
           {/* Switchs */}
           <div className="space-y-1 max-w-[380px]">
-            <label className="">Ex</label>
+            <label className="">Example</label>
             <Switch
               onChange={(e) => {
                 setDisplayExample((pre) => !pre);
               }}
               checked={displayExample}
             />
-            <label className="">Pron</label>
+            <label className="">Pronunciation</label>
             <Switch
               onChange={(e) => {
                 setDisplayDef2((pre) => !pre);
               }}
               checked={displayDef2}
             />
-
-            <label className="">Image</label>
-            <Switch
-              onChange={(e) => {
-                setDisplayImg((pre) => !pre);
-              }}
-              checked={displayImg}
-            />
+            <div className="relative max-w-max">
+              <label
+                className={`relative ${allowInputImage ? "" : "text-gray-400"}`}
+              >
+                Image
+              </label>
+              <div className="inline-block group">
+                <Switch
+                  disabled={!allowInputImage}
+                  onChange={(e) => {
+                    setDisplayImg((pre) => !pre);
+                  }}
+                  checked={displayImg}
+                />
+                {!allowInputImage && (
+                  <span className="absolute z-10 right-0 top-1/2 -translate-y-1/2">
+                    {/* <PremiumIcon className="w-5 h-5 fill-violet-500" /> */}
+                    <p className=" absolute text-sm top-1/2 -translate-y-1/2 left-0 px-2 py-1 rounded invisible group-hover:visible min-w-max bg-blue-200">
+                      Upload images coming soon.
+                    </p>
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
           {/* Error Message */}
           <div className="w-full">
             <p className="text-red-500 text-sm">{errMsg}</p>
             {reachedMaxCollection && (
-              <p className="text-orange-500 text-sm">
+              <p className="text-violet-600 text-sm">
+                <span className="inline-block mr-1 translate-y-1/3">
+                  <PremiumIcon className="w-5 h-5 fill-violet-500" />
+                </span>
                 You have reached the maximum of {FREE_USER_MAX_COLLECTION_NUM}{" "}
-                collection numbers for free users.
+                collections numbers for free users.
               </p>
             )}
           </div>

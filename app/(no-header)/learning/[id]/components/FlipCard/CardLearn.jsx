@@ -60,7 +60,7 @@ const FrontSide = ({ data, setIsFlipped, currentStatus, isDisplayStatus }) => {
       }}
       className={`w-full bg-white relative rounded-lg h-full  flex items-center justify-center p-2 border-2 border-slate-400 overflow-hidden `}
     >
-      <p className="w-full text-xl break-words text-center font-medium text-slate-950">
+      <p className="w-full text-xl break-words text-center font-medium">
         {term}
       </p>
       {/* Testing status tag */}
@@ -125,7 +125,7 @@ const BackSide = ({ data, setIsFlipped, displayOptions }) => {
 
         <div className="w-full text-center space-y-2">
           <p
-            className={`max-w-full break-words line-clamp-4 text-lg font-semibold  bg-transparent-white-07`}
+            className={`max-w-full break-words line-clamp-4 text-lg bg-transparent-white-07`}
           >
             {definition1}
           </p>

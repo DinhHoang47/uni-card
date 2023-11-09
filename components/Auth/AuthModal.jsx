@@ -27,44 +27,11 @@ export default function AuthModal({ hanger }) {
           <div className="flex items-center justify-center">
             <p className="logo_text font-vina text-xl text-center">UniCard</p>
           </div>
-          <div className="flex justify-center items-center space-x-4 font-semibold h-10 text-gray-400">
-            <button
-              onClick={() => {
-                setAuthMode(mode.signIn);
-              }}
-              className={`${
-                authMode === mode.signIn
-                  ? `before:contents-[""] before:w-full text-gray-700`
-                  : ""
-              } h-full relative  before:h-0.5 before:bg-blue before:absolute before:top-full before:-translate-y-full before:bg-blue-300 hover:text-gray-700 transition-all`}
-            >
-              Sign In
-            </button>
-            <button
-              onClick={() => {
-                setAuthMode(mode.signUp);
-              }}
-              className={`${
-                authMode === mode.signUp
-                  ? `before:contents-[""] before:w-full text-gray-700`
-                  : ""
-              } h-full relative before:h-0.5 before:bg-blue before:absolute before:top-full before:-translate-y-full before:bg-blue-300 hover:text-gray-700 transition-all duration-200`}
-            >
-              Sign Up
-            </button>
+          <div className="flex justify-center items-center space-x-4 font-semibold h-10">
+            Sign In
           </div>
           {/* Google Auth */}
           <GoogleSignInButton />
-          <div className="flex items-center justify-center">
-            <p className="text-gray-400 font-semibold">- or email -</p>
-          </div>
-          {authMode === mode.signIn ? (
-            // Sign In Form
-            <SignInForm mode={mode} setAuthMode={setAuthMode} />
-          ) : (
-            // Sign Up Form
-            <SignUpForm mode={mode} setAuthMode={setAuthMode} />
-          )}
         </div>
         {/* Close btn */}
         <button
@@ -79,3 +46,51 @@ export default function AuthModal({ hanger }) {
     </PortalModalWrapper>
   );
 }
+
+const SwithBetweenSignInSignUp = () => {
+  return (
+    <div className="">
+      <button
+        onClick={() => {
+          setAuthMode(mode.signIn);
+        }}
+        className={`${
+          authMode === mode.signIn
+            ? `before:contents-[""] before:w-full text-gray-700`
+            : ""
+        } h-full relative  before:h-0.5 before:bg-blue before:absolute before:top-full before:-translate-y-full before:bg-blue-300 hover:text-gray-700 transition-all`}
+      >
+        Sign In
+      </button>
+      <button
+        onClick={() => {
+          setAuthMode(mode.signUp);
+        }}
+        className={`${
+          authMode === mode.signUp
+            ? `before:contents-[""] before:w-full text-gray-700`
+            : ""
+        } h-full relative before:h-0.5 before:bg-blue before:absolute before:top-full before:-translate-y-full before:bg-blue-300 hover:text-gray-700 transition-all duration-200`}
+      >
+        Sign Up
+      </button>
+    </div>
+  );
+};
+
+const SignInWithEmailSection = () => {
+  return (
+    <div className="">
+      <div className="flex items-center justify-center">
+        <p className="text-gray-400 font-semibold">- or email -</p>
+      </div>
+      {authMode === mode.signIn ? (
+        // Sign In Form
+        <SignInForm mode={mode} setAuthMode={setAuthMode} />
+      ) : (
+        // Sign Up Form
+        <SignUpForm mode={mode} setAuthMode={setAuthMode} />
+      )}
+    </div>
+  );
+};
