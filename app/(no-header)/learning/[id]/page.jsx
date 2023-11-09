@@ -16,7 +16,6 @@ export default function CollectionLearn({ params }) {
   // Fetched data
   const { id: collectionId } = params;
   const { user, userIsLoading } = useUser("/auth");
-  const { data } = useCard(collectionId);
   const { data: learningStatus, mutate: mutateLearningStatus } =
     useLearningStatus(collectionId);
   // Local State

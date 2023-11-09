@@ -22,6 +22,7 @@ export default function FlipCardMode({
   const [openSelect, setOpenSelect] = useState(true);
   const [currentCardArr, setCurrentCardArr] = useState([]);
   const [buttonArr, setButtonArr] = useState([]);
+  console.log("buttonArr: ", buttonArr);
   const [cardPerPage, setCardPerPage] = useState(10);
   const [displayOptions, setDisplayOptions] = useState({
     displayDef2: null,
@@ -49,12 +50,14 @@ export default function FlipCardMode({
   // Set current card list for first render
   useEffect(() => {
     const buttons = getButtonArray(cardList?.length, cardPerPage * 1);
+    console.log("buttons: ", buttons);
     setButtonArr(buttons);
     const button1 = buttons[0];
     const updatedSection = {
       startNumber: button1?.startNumber || 1,
       endNumber: button1?.endNumber,
     };
+    console.log("updatedSection: ", updatedSection);
     setCurrentSection(updatedSection);
     setCurrentCardArr(getCurrentCardArr(cardList, updatedSection));
   }, [JSON.stringify(cardList), cardPerPage]);
