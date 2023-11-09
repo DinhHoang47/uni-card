@@ -18,7 +18,6 @@ export default function TestingGround({
   const totalQuiz = quizArr.length;
   const { data: learningStatus, mutate: mutateLearningStatus } =
     useLearningStatus(collectionId);
-  console.log("learningStatus: ", learningStatus);
   // Local state
   const [answeredAllQuiz, setAnsweredAllQuiz] = useState(false);
   // Hanlder
@@ -400,7 +399,7 @@ const handleSubmitAns = async (
     );
     // If found old result update it
     if (foundAnsIndex !== -1) {
-      updatedTestResult[foundAnsIndex].p = currentAns.p;
+      updatedTestResult[foundAnsIndex].r = currentAns.r;
     } else {
       // If not found old result then push new item to the result
       updatedTestResult.push({
@@ -416,9 +415,7 @@ const handleSubmitAns = async (
     .catch((err) => {
       console.log(err);
     });
-  console.log("updatedTestResult: ", updatedTestResult);
   mutateLearningStatus();
   setResultArr(resultArr);
-  console.log("resultArr: ", resultArr);
   setOpenResultModal(true);
 };
