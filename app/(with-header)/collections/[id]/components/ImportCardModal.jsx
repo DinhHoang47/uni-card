@@ -281,7 +281,7 @@ const textToArray = (
   text,
   seperateBy,
   newLineBy,
-  properties = ["term", "definition"],
+  properties = ["term", "definition_1"],
   setErrMsg
 ) => {
   const cards = text.split(newLineBy);
@@ -298,25 +298,36 @@ const textToArray = (
   });
   // Validate input
   const emptyTermIndex = [];
+  const emptyDefinitionIndex = [];
   const invalidLengthIndex = [];
   reformCardItems.forEach((data, index) => {
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
         const value = data[key];
+        // Check if term is empty
         if (key === "term" && value.trim() === "") {
           emptyTermIndex.push(index);
         }
+        // Check if definition is empty
+        if (key === "definition_1" && (!value || value.trim() === "")) {
+          emptyDefinitionIndex.push(index);
+        }
         if (typeof value === "string" && value.length > 225) {
-          console.log("value.length: ", value.length);
           invalidLengthIndex.push(index);
         }
       }
     }
   });
   let message = "Invalid input at:\n";
+  // Concat message respectively to each error index
   if (emptyTermIndex.length !== 0) {
     emptyTermIndex.forEach(
       (item) => (message += `Row ${item + 1} term is required\n`)
+    );
+  }
+  if (emptyDefinitionIndex.length !== 0) {
+    emptyDefinitionIndex.forEach(
+      (item) => (message += `Row ${item + 1} definition is required\n`)
     );
   }
   if (invalidLengthIndex.length !== 0) {
@@ -326,7 +337,11 @@ const textToArray = (
       } invalid value. Input string max length 225.\n`;
     });
   }
-  if (emptyTermIndex.length !== 0 || invalidLengthIndex.length !== 0) {
+  if (
+    emptyTermIndex.length !== 0 ||
+    emptyDefinitionIndex.length !== 0 ||
+    invalidLengthIndex.length !== 0
+  ) {
     setErrMsg(message);
     return undefined;
   }
