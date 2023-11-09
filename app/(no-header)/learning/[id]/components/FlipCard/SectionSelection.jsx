@@ -6,7 +6,6 @@ import MobileSectionSelection from "./MobileSectionSelection";
 export default function SectionSelection({
   setOpenSelect,
   openSelect,
-  collectionId,
   setCurrentSection,
   currentSection,
   buttonArr,

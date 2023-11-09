@@ -33,6 +33,23 @@ export default function FlipCardMode({
     displayExample: null,
     displayImg: null,
   });
+  // Handler
+  const getButtonArray = (totalCard = 0, pageSize = 10) => {
+    const totalPage = Math.ceil(totalCard / pageSize);
+    const buttonArray = [];
+    for (let index = 0; index < totalPage; index++) {
+      let startNumber = index * pageSize + 1;
+      let endNumber;
+      let end = startNumber + pageSize - 1;
+      if (end <= totalCard) {
+        endNumber = end;
+      } else {
+        endNumber = totalCard;
+      }
+      buttonArray.push({ startNumber, endNumber });
+    }
+    return buttonArray;
+  };
   // Set init data for displayOptions
   useEffect(() => {
     setDisplayOptions({
@@ -114,23 +131,4 @@ const getCurrentCardArr = (cardArr, currentSection) => {
     return cardArr.slice(startIndex, endIndex);
   }
   return [];
-};
-
-const getButtonArray = (totalCard = 0, pageSize = 10) => {
-  const totalPage = Math.ceil(totalCard / pageSize);
-  const buttonArray = [];
-  let endNumber = 0;
-  let startNumber = 1;
-  let end = 0;
-  for (let index = 0; index < totalPage; index++) {
-    startNumber = index * pageSize + 1;
-    end = startNumber + pageSize - 1;
-    if (end <= totalCard) {
-      endNumber = end;
-    } else {
-      endNumber = totalCard;
-    }
-    buttonArray.push({ startNumber, endNumber });
-  }
-  return buttonArray;
 };
