@@ -15,6 +15,7 @@ import FacebookIcon from "@public/assets/icons/icon-facebook.svg";
 import TwitterIcon from "@public/assets/icons/icon-twitter.svg";
 
 import AmberButton from "@components/Buttons/AmberButton";
+import Footer from "@components/Footer";
 
 export default function Home() {
   return (
@@ -25,7 +26,9 @@ export default function Home() {
       <OtherFeatures />
       <CallToActions />
       <SocialSection />
-      <HomeFooter />
+      <div className="border-t border-gray-200 w-full">
+        <Footer />
+      </div>
     </div>
   );
 }
