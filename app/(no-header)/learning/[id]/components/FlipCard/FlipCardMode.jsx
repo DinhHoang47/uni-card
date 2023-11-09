@@ -22,7 +22,6 @@ export default function FlipCardMode({
   const [openSelect, setOpenSelect] = useState(true);
   const [currentCardArr, setCurrentCardArr] = useState([]);
   const [buttonArr, setButtonArr] = useState([]);
-  console.log("buttonArr: ", buttonArr);
   const [cardPerPage, setCardPerPage] = useState(10);
   const [displayOptions, setDisplayOptions] = useState({
     displayDef2: null,
@@ -34,6 +33,23 @@ export default function FlipCardMode({
     displayExample: null,
     displayImg: null,
   });
+  // Handler
+  const getButtonArray = (totalCard = 0, pageSize = 10) => {
+    const totalPage = Math.ceil(totalCard / pageSize);
+    const buttonArray = [];
+    for (let index = 0; index < totalPage; index++) {
+      let startNumber = index * pageSize + 1;
+      let endNumber;
+      let end = startNumber + pageSize - 1;
+      if (end <= totalCard) {
+        endNumber = end;
+      } else {
+        endNumber = totalCard;
+      }
+      buttonArray.push({ startNumber, endNumber });
+    }
+    return buttonArray;
+  };
   // Set init data for displayOptions
   useEffect(() => {
     setDisplayOptions({
@@ -50,14 +66,12 @@ export default function FlipCardMode({
   // Set current card list for first render
   useEffect(() => {
     const buttons = getButtonArray(cardList?.length, cardPerPage * 1);
-    console.log("buttons: ", buttons);
     setButtonArr(buttons);
     const button1 = buttons[0];
     const updatedSection = {
       startNumber: button1?.startNumber || 1,
       endNumber: button1?.endNumber,
     };
-    console.log("updatedSection: ", updatedSection);
     setCurrentSection(updatedSection);
     setCurrentCardArr(getCurrentCardArr(cardList, updatedSection));
   }, [JSON.stringify(cardList), cardPerPage]);
@@ -117,23 +131,4 @@ const getCurrentCardArr = (cardArr, currentSection) => {
     return cardArr.slice(startIndex, endIndex);
   }
   return [];
-};
-
-const getButtonArray = (totalCard = 0, pageSize = 10) => {
-  const totalPage = Math.ceil(totalCard / pageSize);
-  const buttonArray = [];
-  let endNumber = 0;
-  let startNumber = 1;
-  let end = 0;
-  for (let index = 0; index < totalPage; index++) {
-    startNumber = index * pageSize + 1;
-    end = startNumber + pageSize - 1;
-    if (end <= totalCard) {
-      endNumber = end;
-    } else {
-      endNumber = totalCard;
-    }
-    buttonArray.push({ startNumber, endNumber });
-  }
-  return buttonArray;
 };
