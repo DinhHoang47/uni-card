@@ -271,7 +271,7 @@ export default function AddTermModal({
           <div className="">
             <p className="text-red-500 text-sm">{errMsg}</p>
             {reachedMaxCard && (
-              <p className="text-orange-500 text-sm">
+              <p className="text-violet-600 text-sm">
                 You've reached the maximum {FREE_USER_MAX_CARD_NUM} cards per
                 collection for a free user.
               </p>

@@ -4,11 +4,12 @@ import Image from "next/image";
 import StarButton from "@components/StarButton/StarButton";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import UserLink from "@components/UserLink";
-import Link from "next/link";
 import SettingTooltip from "./SettingTooltip";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import useUser from "@lib/useUser";
+import { useDispatch } from "react-redux";
+import { open as openSignInModal } from "@redux/authModalSlice.js";
 
 export default function CollectionHeader({
   data,
@@ -23,8 +24,13 @@ export default function CollectionHeader({
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   // Handler
   const router = useRouter();
+  const dispatch = useDispatch();
   const navigateToLearn = () => {
-    router.push(`/learning/${collectionId}`);
+    if (currentUser?.isLoggedIn) {
+      router.push(`/learning/${collectionId}`);
+    } else {
+      dispatch(openSignInModal());
+    }
   };
 
   return (

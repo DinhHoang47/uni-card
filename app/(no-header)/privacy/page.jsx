@@ -12,7 +12,7 @@ export default function page() {
         <div className="space-y-4">
           <h2 className="text-3xl font-semibold">Privacy Policy for UniCard</h2>
           <div className="space-y-3 ml-2">
-            <p>Effective Date:9/11/2023</p>
+            <p>Effective Date: 9/11/2023</p>
             <p>
               This Privacy Policy outlines how "UniCard" collects, uses, and
               protects the personal information of its users. "UniCard" is
