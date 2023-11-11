@@ -1,4 +1,5 @@
 import "@styles/globals.css";
+import Script from "next/script";
 
 export const meta = {
   title: "Promptopia",
@@ -6,5 +7,13 @@ export const meta = {
 };
 
 export default async function RootLayout(props) {
-  return <main className="">{props.children}</main>;
+  return (
+    <main className="">
+      <Script
+        strategy="beforeInteractive"
+        src="https://accounts.google.com/gsi/client"
+      ></Script>
+      {props.children}
+    </main>
+  );
 }
