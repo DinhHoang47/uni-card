@@ -72,11 +72,15 @@ const PasswordInput = ({ token }) => {
       if (result.status === 200) {
         dispatch(
           addMessage({
-            text: "Set password successful. Please login.",
+            text: "Successful. Please login.",
             variation: "success",
           })
         );
-        router.push("/auth");
+
+        debugger;
+        setTimeout(() => {
+          router.push("/auth");
+        }, 1000);
       }
       setLoading(false);
     } catch (error) {
@@ -193,6 +197,16 @@ const PasswordInput = ({ token }) => {
         )}
         Set password
       </button>
+      <div className="mt-4 flex justify-end">
+        <button
+          className="text-sm text-right text-blue-500"
+          onClick={() => {
+            router.push("/auth");
+          }}
+        >
+          ← Back to log in
+        </button>
+      </div>
     </div>
   );
 };
