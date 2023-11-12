@@ -127,7 +127,9 @@ export default function AddNewCollectionModal({ hanger, router }) {
     <PortalModalWrapper mountTarget={hanger}>
       <div className="bg-white relative rounded-md p-6 max-w-min">
         {/* Title */}
-        <h3 className="font-semibold text-xl text-center">Create new</h3>
+        <h3 className="font-semibold text-xl text-center">
+          Create new collection
+        </h3>
 
         {/* Data Input Section */}
         <form className="space-y-2">
@@ -137,7 +139,7 @@ export default function AddNewCollectionModal({ hanger, router }) {
             <input
               maxLength={225}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="漢字"
+              placeholder="English Verbs"
               className="w-full border-b-2 px-2  resize-none focus:border-blue-300 focus:outline-none bg-transparent border-gray-300"
             ></input>
           </div>
@@ -145,7 +147,7 @@ export default function AddNewCollectionModal({ hanger, router }) {
           <div className="space-y-1 ">
             <label className="font-semibold">Description</label>
             <TextareaAutosize
-              placeholder="Example"
+              placeholder="The 100 most common verbs in English."
               onChange={(e) => {
                 setDescription(e.target.value);
               }}
