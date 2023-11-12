@@ -65,15 +65,16 @@ export default function Auth() {
             {showModal === "login" && (
               <>
                 <div className="space-y-2">
-                  <p className="text-center text-xl">Welcome</p>
+                  <p className="text-center text-xl">Log in</p>
                   {/* <p className="text-center text-sm">Please login to start</p> */}
                 </div>
-                {displayButton && <GoogleSignInButton />}
+                {/* Temporarily remove google auth */}
+                {/* {displayButton && <GoogleSignInButton />}
                 <div className="flex items-center justify-center">
                   <p className="text-gray-400 font-semibold text-sm">
                     - or email -
                   </p>
-                </div>
+                </div> */}
                 <LoginWithEmail
                   setShowModal={setShowModal}
                   mutateUser={mutateUser}
