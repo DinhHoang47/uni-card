@@ -22,7 +22,7 @@ export default function page() {
   const token = searchParams.get("token");
   return (
     <div className="w-full h-screen flex items-center justify-center bg-blue-50">
-      <div className="max-w-4xl mx-5 sm:mx-10 w-full flex h-[580px] h- bg-white border border-slate-200 rounded-lg shadow-lg p-4">
+      <div className="max-w-4xl mx-5 sm:mx-10 w-full flex h-[540px] h- bg-white border border-slate-200 rounded-lg shadow-lg p-4">
         <div className="w-full flex flex-col items-center justify-center">
           <div className="bg-white w-full py-3 space-y-4">
             <div className="flex flex-col items-center justify-center">
