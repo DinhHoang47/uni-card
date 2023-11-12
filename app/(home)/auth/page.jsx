@@ -41,7 +41,7 @@ export default function Auth() {
   }
   return (
     <div className="w-full h-screen flex items-center justify-center bg-blue-50">
-      <div className="max-w-4xl mx-5 sm:mx-10 w-full flex h-[620px] h- bg-white border border-slate-200 rounded-lg shadow-lg p-4">
+      <div className="max-w-4xl mx-5 sm:mx-10 w-full flex h-[580px] h- bg-white border border-slate-200 rounded-lg shadow-lg p-4">
         <div className="hidden sm:flex items-center justify-center flex-1 ">
           <Player autoplay loop style={{ width: "400px" }} src={animation} />
         </div>
