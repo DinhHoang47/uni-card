@@ -13,7 +13,7 @@ export default function TooltipMenu({ setIsOpen, children }) {
       onClick={(e) => {
         e.stopPropagation();
       }}
-      className="absolute top-full translate-y-2 right-0 p-1 bg-white border rounded"
+      className="absolute top-full translate-y-2 right-0 px-4 py-2 bg-white border rounded"
     >
       {children}
     </div>

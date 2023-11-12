@@ -11,8 +11,8 @@ export default function UserMenu({ closeTooltip, ...props }) {
   const { mutate } = useSWRConfig();
   const router = useRouter();
   return (
-    <div className="w-28" {...props}>
-      <ul className="px-2 font-semibold">
+    <div className="min-w-max" {...props}>
+      <ul className="px-2 font-semibold space-y-2">
         <li className="">
           <button
             onClick={() => {
