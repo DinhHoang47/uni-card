@@ -1,0 +1,13 @@
+.cardStyle {
+  background-color: white;
+  width: 320px;
+  height: 200px;
+  border-radius: 8px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 8px auto;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
