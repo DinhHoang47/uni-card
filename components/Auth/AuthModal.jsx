@@ -11,6 +11,7 @@ import { close } from "../../redux/authModalSlice";
 import SignUpForm from "./SignUpForm";
 import SignInForm from "./SignInForm";
 import GoogleSignInButton from "./GoogleSignInButton";
+import Link from "next/link";
 
 export default function AuthModal({ hanger }) {
   const dispatch = useDispatch();
@@ -30,8 +31,10 @@ export default function AuthModal({ hanger }) {
           <div className="flex justify-center items-center space-x-4 font-semibold h-10">
             Sign In
           </div>
+          {/* Temporarily remove google auth */}
           {/* Google Auth */}
-          <GoogleSignInButton />
+          {/* <GoogleSignInButton /> */}
+          <NavigateToAuthButton />
         </div>
         {/* Close btn */}
         <button
@@ -75,6 +78,17 @@ const SwithBetweenSignInSignUp = () => {
         Sign Up
       </button>
     </div>
+  );
+};
+
+const NavigateToAuthButton = () => {
+  return (
+    <Link
+      href={"/auth"}
+      className="border border-gray-200 h-10 flex items-center justify-center rounded"
+    >
+      Auth 🗝️
+    </Link>
   );
 };
 

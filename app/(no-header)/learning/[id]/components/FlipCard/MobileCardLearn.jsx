@@ -98,7 +98,7 @@ const BackSide = ({ data, setIsFlipped, displayOptions }) => {
             <p
               className={`${
                 example !== "" ? "" : "text-gray-300"
-              } max-w-full break-words line-clamp-3 bg-transparent-white-07 w-full`}
+              } max-w-full break-words line-clamp-3 bg-transparent-white-07 w-full mt-3`}
             >
               {example}
             </p>

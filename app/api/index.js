@@ -18,6 +18,13 @@ export const SignIn = (credential) => {
   });
 };
 
+export const ResetPassword = (credential) => {
+  return API.post(`auth/resetPassword`, credential, {
+    headers: { "Content-Type": "application/json" },
+    withCredentials: true,
+  });
+};
+
 export const LogOut = () => {
   return API.post(
     "logout",
@@ -30,6 +37,13 @@ export const LogOut = () => {
 
 export const googleSignIn = (credential) => {
   return API.post("auth/googleSignIn", credential, {
+    headers: { "Content-Type": "application/json" },
+    withCredentials: true,
+  });
+};
+
+export const SetPassword = (credential) => {
+  return API.post("auth/setPassword", credential, {
     headers: { "Content-Type": "application/json" },
     withCredentials: true,
   });

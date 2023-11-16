@@ -25,8 +25,6 @@ export default function SignInForm({ mode, setAuthMode }) {
   const [emailFocus, setEmailFocus] = useState(false);
 
   const [pwd, setPwd] = useState("");
-  const [validPwd, setValidPwd] = useState(false);
-  const [pwdFocus, setPwdFocus] = useState(false);
   // Use User
 
   const { mutateUser } = useUser();

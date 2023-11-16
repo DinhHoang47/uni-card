@@ -53,7 +53,7 @@ const FeaturesContent = [
   {
     number: 1,
     title: "Flashcards Simplified",
-    description: `Create your own or explore available collections 
+    description: `Create your own or explore available decks 
 with Unicard's user-friendly interface.`,
     image: Feature1Image,
   },
@@ -110,7 +110,7 @@ const TopBanner = () => {
           Effortlessly Memorize, Progress Tracking
         </h3>
         <p className="text-center font-serif text-lg">
-          Unicard allows you to create collections of terms, quizzes to aid in
+          Unicard allows you to create decks of terms, quizzes to aid in
           memorization. It is particularly effective for language learning, test
           preparation, and more.
         </p>
@@ -156,8 +156,14 @@ const Feature = ({ number, title, description, image }) => {
       </div>
       <h4 className="font-semibold text-3xl text-center">{title}</h4>
       <p className="text-center max-w-md text-lg">{description}</p>
-      <div className="w-96">
-        <Image sizes="384px" quality={100} src={image} alt="Feature Image" />
+      <div className="relative w-[400px] h-[340px]">
+        <Image
+          fill
+          style={{ objectFit: "contain" }}
+          quality={100}
+          src={image}
+          alt="Feature Image"
+        />
       </div>
     </div>
   );
@@ -237,7 +243,7 @@ const CallToActions = () => {
 const CTAButton = () => {
   return (
     <Link
-      className="h-12 bg-blue-500 hover:bg-blue-600 transition-all shadow font-semibold text-white rounded px-4 flex items-center"
+      className="h-12 bg-blue-600 hover:bg-blue-700 transition-all shadow-lg font-semibold text-white rounded px-4 flex items-center"
       href={"/auth"}
     >
       {" "}
@@ -262,7 +268,7 @@ const SocialSection = () => {
             />
           </div>
         </Link>
-        <Link href={"#"}>
+        <Link href={"https://www.instagram.com/_unicard_"}>
           <div className="relative w-8 h-8">
             <Image
               sizes="32px"
@@ -273,7 +279,7 @@ const SocialSection = () => {
             />
           </div>
         </Link>
-        <Link href={"#"}>
+        <Link href={"https://twitter.com/unicard_app"}>
           <div className="relative w-8 h-8">
             <Image
               sizes="32px"

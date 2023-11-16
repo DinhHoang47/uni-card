@@ -107,7 +107,8 @@ export default function Nav() {
         strategy="beforeInteractive"
         src="https://accounts.google.com/gsi/client"
       ></Script>
-      <GoogleOneTap />
+      {/* Temporarily remove google auth */}
+      {/* <GoogleOneTap /> */}
       <nav className="flex-between h-16 w-full md:px-4 lg:px-8">
         {/* Destop Menu */}
         <div className="hidden lg:flex h-full ">
