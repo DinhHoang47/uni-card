@@ -8,26 +8,35 @@ import ReactCardFlip from "react-card-flip";
 const slidesData = [
   {
     id: "1",
-    title: "Create Your Decks",
-    content:
-      "Start by creating personalized collections based on your learning goals.",
+    term: "Apple",
+    def1: "林檎",
+    def2: "/'æpl/",
+    exam: "A round green or red fruit",
+    img: "https://res.cloudinary.com/unicard/image/upload/v1700103735/cards/apple-0103735449.png",
   },
   {
     id: "2",
-    title: "Create Rich Content",
-    content:
-      "Unicard allow you to flashcards with rich content such as images, examples, and pronunciation fields.",
+    term: "Broccoli",
+    def1: "ブロッコリー",
+    def2: "/ˈbrɒk·ə·li/",
+    exam: "A green vegetable with a thick stem",
+    img: "https://res.cloudinary.com/unicard/image/upload/v1700103813/cards/broccoli-0103813061.png",
   },
   {
     id: "3",
-    title: "Customize Your Study Session",
-    content:
-      "You can divide your term deck into a specific number of terms per section for learning and tracking it according to your own schedule.",
+    term: "Burger",
+    def1: "バーガー",
+    def2: "/ˈbɜː·ɡər/",
+    exam: "Meat that is cooked in a round",
+    img: "https://res.cloudinary.com/unicard/image/upload/v1700103944/cards/burger-0103944259.png",
   },
   {
     id: "4",
-    title: "Track Your Progress",
-    content: "Stay motivated by tracking your progress over time.",
+    term: "Carrot",
+    def1: "ニンジン",
+    def2: "/ˈkær·ət/",
+    exam: "A long, thin, orange vegetable that grows in the ground",
+    img: "https://res.cloudinary.com/unicard/image/upload/v1700104155/cards/carrot-0104155307.png",
   },
 ];
 
@@ -37,7 +46,7 @@ export default function FlashcardSlider() {
   const [sliderRef, instanceRef] = useKeenSlider(
     {
       slideChanged() {},
-      loop: true,
+      loop: false,
     },
     [
       (slider) => {
@@ -89,7 +98,7 @@ const SlideItem = ({ data }) => {
   }, []);
   return (
     <div className="keen-slider__slide rounded-lg">
-      <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
+      <ReactCardFlip isFlipped={isFlipped} flipDirection="vertical">
         <FrontSide data={data} />
         <BackSide data={data} />
       </ReactCardFlip>
@@ -99,9 +108,11 @@ const SlideItem = ({ data }) => {
 
 const FrontSide = ({ data }) => {
   return (
-    <div className={`${styles.cardStyle}`}>
-      <div className="m-auto">
-        <p className="text-lg font-semibold">Banana</p>
+    <div className="flex items-center justify-center py-2">
+      <div className={`${styles.cardStyle}`}>
+        <div className="m-auto">
+          <p className="text-lg font-semibold">{data?.term}</p>
+        </div>
       </div>
     </div>
   );
@@ -109,19 +120,22 @@ const FrontSide = ({ data }) => {
 
 const BackSide = ({ data }) => {
   return (
-    <div className={`${styles.cardStyle}`}>
-      <p className="mb-4">bə'nænə</p>
-      <Image
-        alt="Image"
-        className="mb-4"
-        height={60}
-        width={60}
-        src={
-          "https://res.cloudinary.com/unicard/image/upload/v1699953665/cards/blob_tt5d0z.jpg"
-        }
-      />
-      <p className="text-lg mb-2 font-semibold">バナナ</p>
-      <p className="text-sm">A bench of bananas</p>
+    <div className="flex items-center justify-center py-2">
+      <div className={`${styles.cardStyle} text-center`}>
+        <p className="mb-4">{data?.def2}</p>
+        <Image
+          alt="Image"
+          className="mb-4"
+          height={60}
+          width={60}
+          src={
+            data?.img ||
+            "https://res.cloudinary.com/unicard/image/upload/v1700104155/cards/carrot-0104155307.png"
+          }
+        />
+        <p className="text-lg mb-2 font-semibold">{data?.def1}</p>
+        <p className="text-sm">{data?.exam}</p>
+      </div>
     </div>
   );
 };

@@ -16,10 +16,10 @@ export default function layout({ children }) {
 const Nav = () => {
   return (
     <header className="max-w-3xl flex justify-between w-full h-14 items-center px-4 mx-auto">
-      <div className="flex items-center space-x-2 select-none">
+      <Link href={"/"} className="flex items-center space-x-2 select-none">
         <Image sizes="40px" alt="Unicard logo" className="w-10" src={Logo} />
         <h1 className="logo_text font-vina text-xl">UniCard</h1>
-      </div>
+      </Link>
       <nav className="">
         <Link href={"/auth"}>
           <AmberButton>Sign In</AmberButton>

@@ -102,7 +102,7 @@ const Section2 = () => {
     <section className={`${styles.sectionStyle} bg-white py-10`}>
       <div className="px-4  max-w-4xl  mx-auto grid grid-cols-1 sm:grid-cols-2 space-x-4">
         <div className="flex justify-center py-4">
-          <Image alt="Brain image" width={300} src={img_section2_brain} />
+          <Image alt="Brain image" width={180} src={img_section2_brain} />
         </div>
         <article className="space-y-2 pl-4 py-4">
           <h2 className="font-semibold text-xl">
@@ -164,7 +164,7 @@ const Section3 = () => {
         <div className="flex justify-center items-center py-4">
           <Link
             href={"/mypage"}
-            className="px-4 bg-blue-600 text-white h-10 rounded-md flex items-center"
+            className="px-4 bg-blue-600 text-white h-12 rounded-md flex items-center"
           >
             <span>Start using now (for Free)</span>
           </Link>
