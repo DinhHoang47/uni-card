@@ -45,7 +45,7 @@ export default function GoogleSignInButton() {
     <div className="space-y-2">
       {errorMsg !== "" && (
         <div className="">
-          <p className="text-sm pl-1 text-orange-500">{errorMsg}</p>
+          <p className="text-sm pl-1 text-orange-500 text-center">{errorMsg}</p>
         </div>
       )}
 

@@ -31,9 +31,8 @@ export default function AuthModal({ hanger }) {
           <div className="flex justify-center items-center space-x-4 font-semibold h-10">
             Sign In
           </div>
-          {/* Temporarily remove google auth */}
           {/* Google Auth */}
-          {/* <GoogleSignInButton /> */}
+          <GoogleSignInButton />
           <NavigateToAuthButton />
         </div>
         {/* Close btn */}
@@ -85,9 +84,9 @@ const NavigateToAuthButton = () => {
   return (
     <Link
       href={"/auth"}
-      className="border border-gray-200 h-10 flex items-center justify-center rounded"
+      className="border border-gray-200 h-10 flex items-center justify-center rounded text-sm"
     >
-      Auth 🗝️
+      Sign in with email 🗝️
     </Link>
   );
 };

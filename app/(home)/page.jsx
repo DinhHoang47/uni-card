@@ -158,6 +158,7 @@ const Feature = ({ number, title, description, image }) => {
       <p className="text-center max-w-md text-lg">{description}</p>
       <div className="relative w-[400px] h-[340px]">
         <Image
+          sizes="400"
           fill
           style={{ objectFit: "contain" }}
           quality={100}

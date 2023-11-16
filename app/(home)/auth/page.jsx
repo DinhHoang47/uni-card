@@ -46,14 +46,14 @@ export default function Auth() {
           <Player autoplay loop style={{ width: "400px" }} src={animation} />
         </div>
         <div className="w-full flex justify-center  sm:w-80">
-          <div className="bg-white w-full py-3 space-y-4">
+          <div className="bg-white w-full space-y-4">
             <div className="flex flex-col items-center justify-center">
               <Link
                 className="flex items-center justify-center flex-col"
                 href={"/"}
               >
                 <Image
-                  style={{ width: "60px" }}
+                  style={{ width: "40px" }}
                   alt="Unicard logo"
                   src={unicardLogo}
                 />
@@ -68,13 +68,12 @@ export default function Auth() {
                   <p className="text-center text-xl">Log in</p>
                   {/* <p className="text-center text-sm">Please login to start</p> */}
                 </div>
-                {/* Temporarily remove google auth */}
-                {/* {displayButton && <GoogleSignInButton />}
+                {displayButton && <GoogleSignInButton />}
                 <div className="flex items-center justify-center">
                   <p className="text-gray-400 font-semibold text-sm">
                     - or email -
                   </p>
-                </div> */}
+                </div>
                 <LoginWithEmail
                   setShowModal={setShowModal}
                   mutateUser={mutateUser}
@@ -287,7 +286,7 @@ const SignInForm = ({ setMode, mutateUser, setShowModal }) => {
           className="border border-gray-300 h-10 rounded bg-gray-50 outline-none px-2 text-sm"
         />
       </div>
-      <div className="pt-2 flex flex-col items-center space-y-4 text-sm">
+      <div className="flex flex-col items-center space-y-4 text-sm">
         <p className={`text-red-500 text-xs line-clamp-3`}>{errMsg}</p>
         <button
           onClick={() => {
