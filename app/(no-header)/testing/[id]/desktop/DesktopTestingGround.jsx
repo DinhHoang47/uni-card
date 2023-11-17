@@ -14,6 +14,7 @@ export default function TestingGround({
   setOpenResultModal,
   collectionId,
 }) {
+  console.log("quizArr: ", quizArr);
   // Fetched data
   const totalQuiz = quizArr.length;
   const { data: learningStatus, mutate: mutateLearningStatus } =
@@ -62,6 +63,7 @@ export default function TestingGround({
               totalQuiz={totalQuiz}
             />
             <NextButton
+              quizArr={quizArr}
               answerArr={answerArr}
               totalQuiz={totalQuiz}
               setCurrentQuiz={setCurrentQuiz}
@@ -271,7 +273,6 @@ const ButtonSection = ({
   currentQuiz,
   setCurrentQuiz,
 }) => {
-  console.log("currentQuiz: ", currentQuiz);
   const Rows = [];
   const buttonPerRow = 10;
   const rowsNumber = Math.ceil(totalQuiz / buttonPerRow);
@@ -310,7 +311,26 @@ const ButtonSection = ({
   return Rows;
 };
 
-const NextButton = ({ setCurrentQuiz, currentQuiz, totalQuiz, answerArr }) => {
+const NextButton = ({
+  setCurrentQuiz,
+  currentQuiz,
+  totalQuiz,
+  answerArr,
+  quizArr,
+}) => {
+  console.log("answerArr: ", answerArr);
+  // Check if all quiz answer or not
+  const notAllAnswered = answerArr?.some((ans) => ans["answerIndex"] === null);
+  console.log("notAllAnswered: ", notAllAnswered);
+  // Find index of current quiz
+  const currentQuizIndex = quizArr.findIndex((item) => item.id === currentQuiz);
+  let nextQuizId;
+  // If not reached the end quiz then set the next quiz id equel to next index item id
+  if (currentQuizIndex < quizArr.length - 1) {
+    nextQuizId = quizArr[currentQuizIndex + 1]?.id;
+  } else {
+    nextQuizId = quizArr[0]?.id;
+  }
   let answerSelected = false;
   const currentAns = answerArr?.find((ans) => ans.id === currentQuiz);
   if (currentAns?.answerIndex !== null) {
@@ -319,16 +339,13 @@ const NextButton = ({ setCurrentQuiz, currentQuiz, totalQuiz, answerArr }) => {
 
   return (
     <button
-      disabled={!answerSelected}
+      disabled={!notAllAnswered || !answerSelected}
       onClick={() => {
-        if (currentQuiz < totalQuiz) {
-          setCurrentQuiz(currentQuiz + 1);
-        } else {
-          setCurrentQuiz(1);
-        }
+        setCurrentQuiz(nextQuizId);
+        // setCurrentQuiz(quizArr[0].id);
       }}
       className={`h-10 ${
-        answerSelected ? "bg-blue-500" : "bg-blue-200"
+        notAllAnswered && answerSelected ? "bg-blue-500" : "bg-blue-200"
       }  w-full font-semibold text-white rounded-md`}
     >
       Next

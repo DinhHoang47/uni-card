@@ -57,7 +57,7 @@ export default function CollectionTest({ params }) {
       answerIndex: null,
     }));
     setAnswerArr(emptyAnswerArr);
-    setCurrentQuiz(1);
+    setCurrentQuiz(quizArr[0].id);
     setResultArr([]);
     setIsOpen(false);
   };
