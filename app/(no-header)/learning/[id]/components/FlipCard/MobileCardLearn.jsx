@@ -91,14 +91,14 @@ const BackSide = ({ data, setIsFlipped, displayOptions }) => {
         )}
 
         <div className="w-full text-center">
-          <p className={`break-words bg-transparent-white-07 text-2xl`}>
+          <p className={`break-words bg-transparent-white-07 text-lg`}>
             {definition1}
           </p>
           {example && displayExample ? (
             <p
               className={`${
                 example !== "" ? "" : "text-gray-300"
-              } max-w-full break-words line-clamp-3 bg-transparent-white-07 w-full mt-3`}
+              } max-w-full break-words line-clamp-3 bg-transparent-white-07 w-full mt-3 italic`}
             >
               {example}
             </p>

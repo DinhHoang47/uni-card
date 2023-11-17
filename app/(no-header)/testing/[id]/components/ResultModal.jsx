@@ -24,7 +24,7 @@ export default function ResultModal({
   return (
     <PortalModalWrapper mountTarget={hanger}>
       {/* Main container */}
-      <div className="p-4 rounded relative cursor-pointer bg-white space-y-6">
+      <div className="p-2 sm:p-4 rounded relative cursor-pointer bg-white space-y-6">
         <Granding resultArr={resultArr} />
         <ResultList resultArr={resultArr} />
         <div className="space-y-2">
@@ -77,7 +77,7 @@ function ResultList({ resultArr }) {
           return (
             <li
               key={`card-select-btn-${index + buttonPerRow * i}`}
-              className={`h-7 w-7 border-2 flex items-center justify-center rounded border-slate-400 cursor-pointer ${
+              className={`h-6 w-6 sm:h-7 sm:w-7 border-2 flex items-center justify-center rounded border-slate-400 cursor-pointer ${
                 item.r === 1 ? styles.correct : styles.fail
               }`}
             >

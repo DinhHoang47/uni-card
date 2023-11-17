@@ -83,8 +83,9 @@ export default function CollectionTest({ params }) {
       // Set quiz array
       const currentArr = getCurrentCardArr(cardData, currentSection);
       const quizArr = generateQuiz(currentArr, testingMode);
+      setCurrentQuiz(quizArr[0].id);
       setQuizArr(quizArr);
-      // Init answer arra
+      // Init answer array
       const emptyAnswerArr = quizArr.map((item) => ({
         id: item.id,
         answer: null,
@@ -214,7 +215,9 @@ const generateQuiz = (cardArr, testingMode) => {
       cardId: item.id,
     };
   });
-  return quizArr;
+  // Shuffle quiz array
+  const shuffledQuiz = shuffleArray(quizArr);
+  return shuffledQuiz;
 };
 
 const getRandomAnswerArr = (arr, numItems) => {

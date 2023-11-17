@@ -271,6 +271,7 @@ const ButtonSection = ({
   currentQuiz,
   setCurrentQuiz,
 }) => {
+  console.log("currentQuiz: ", currentQuiz);
   const Rows = [];
   const buttonPerRow = 10;
   const rowsNumber = Math.ceil(totalQuiz / buttonPerRow);
