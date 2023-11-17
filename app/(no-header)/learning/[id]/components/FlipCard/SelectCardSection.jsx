@@ -32,7 +32,9 @@ export default function SelectCardSection({
               currentSlide === index ? `${styles.active}` : "border-slate-400"
             } relative overflow-hidden`}
           >
-            <p className="truncate text-xs w-full text-center">{item.term}</p>
+            <p className="truncate text-xs w-full text-center select-none">
+              {item.term}
+            </p>
             {isDisplayStatus && <StatusIndicator status={item.status} />}
           </li>
         );
