@@ -116,6 +116,7 @@ export default function TestConfigModal({
               />
               <div className="w-32 justify-center items-center flex flex-col">
                 <Image
+                  priority
                   alt="text-box-image"
                   width={36}
                   height={36}
@@ -144,6 +145,7 @@ export default function TestConfigModal({
               />
               <div className="w-32 justify-center items-center flex flex-col">
                 <Image
+                  priority
                   alt="typing-image"
                   width={36}
                   height={36}
@@ -205,6 +207,7 @@ const SpeedSetting = () => {
           />
           <div className="w-16  justify-center items-center flex flex-col">
             <Image
+              priority
               alt="text-box-image"
               width={36}
               height={36}
@@ -234,6 +237,7 @@ const SpeedSetting = () => {
           />
           <div className="w-16  justify-center items-center flex flex-col">
             <Image
+              priority
               alt="typing-image"
               width={36}
               height={36}
@@ -263,6 +267,7 @@ const SpeedSetting = () => {
           />
           <div className="w-16  justify-center items-center flex flex-col">
             <Image
+              priority
               alt="typing-image"
               width={36}
               height={36}

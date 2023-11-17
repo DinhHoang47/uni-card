@@ -27,6 +27,7 @@ export default function page() {
           <div className="bg-white w-full py-3 space-y-4">
             <div className="flex flex-col items-center justify-center">
               <Image
+                priority
                 style={{ width: "60px" }}
                 alt="Unicard logo"
                 src={unicardLogo}

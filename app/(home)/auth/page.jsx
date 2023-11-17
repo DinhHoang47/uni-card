@@ -53,6 +53,7 @@ export default function Auth() {
                 href={"/"}
               >
                 <Image
+                  priority
                   style={{ width: "40px" }}
                   alt="Unicard logo"
                   src={unicardLogo}

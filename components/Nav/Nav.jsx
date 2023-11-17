@@ -113,6 +113,7 @@ export default function Nav() {
         <div className="hidden lg:flex h-full ">
           <Link href="/" className="flex gap-2 items-center">
             <Image
+              priority
               style={{ width: "40px" }}
               alt="Unicard logo"
               src={unicardLogo}
@@ -290,6 +291,7 @@ const MobileMenu = ({ unicardLogo, dispatch, openSidebar }) => {
       <Link href="/" className="relative ml-2 sm:ml-0 flex gap-2 items-center">
         <div className="relative w-10 h-10">
           <Image
+            priority
             fill
             sizes="40px"
             alt="Unicard logo"

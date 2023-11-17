@@ -37,7 +37,13 @@ const Nav = () => {
   return (
     <div className="max-w-3xl flex justify-between w-full h-14 items-center px-4">
       <div className="flex items-center space-x-2 select-none">
-        <Image sizes="40px" alt="Unicard logo" className="w-10" src={Logo} />
+        <Image
+          priority
+          sizes="40px"
+          alt="Unicard logo"
+          className="w-10"
+          src={Logo}
+        />
         <h1 className="logo_text font-vina text-xl">UniCard</h1>
       </div>
       <div className="">
@@ -116,6 +122,7 @@ const TopBanner = () => {
         </p>
         <CTAButton />
         <Image
+          priority
           className="translate-y-10"
           src={TopBannerImage}
           alt="Top banner"
@@ -223,6 +230,7 @@ const CallToActions = () => {
         <div className="px-4 bg-white py-5 rounded-lg w-full flex flex-col items-center justify-center space-y-4 shadow-md">
           <div className="relative w-14 h-14">
             <Image
+              priority
               fill
               sizes="56px"
               style={{ objectFit: "contain" }}
