@@ -20,7 +20,7 @@ export default function GoogleOneTap() {
   const { user, mutateUser } = useUser();
   const dispatch = useDispatch();
   useEffect(() => {
-    google.accounts.id.initialize({
+    google?.accounts.id.initialize({
       client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
       callback: (res) => {
         handleCredentialResponse(res, mutateUser, dispatch);

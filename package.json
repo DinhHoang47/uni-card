@@ -27,6 +27,7 @@
     "axios": "^1.5.0",
     "bcrypt": "^5.1.0",
     "browser-image-compression": "^2.0.2",
+    "html2canvas": "^1.4.1",
     "install": "^0.13.0",
     "keen-slider": "^6.8.6",
     "mui-chips-input": "^2.0.2",
