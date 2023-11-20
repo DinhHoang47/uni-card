@@ -235,7 +235,7 @@ const ContentContainer = ({
           <div className="">
             <QRCodeCanvas
               size={64}
-              value={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/${collectionId}`}
+              value={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/collections/${collectionId}`}
             />
           </div>
           <div className=""></div>
