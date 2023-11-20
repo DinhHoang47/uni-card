@@ -5,10 +5,17 @@ import React, { useRef, useState } from "react";
 import styles from "./styles.module.css";
 import Logo from "@public/assets/images/unicard-logo.png";
 import html2canvas from "html2canvas";
+import { QRCodeCanvas } from "qrcode.react";
+import { Slider } from "@mui/material";
+import Link from "next/link";
+import { ColorPicker } from "antd";
+
+const DEFAULT_EXPORT_SIZE = 768;
 
 export default function page({ params }) {
   // Fetched data
   const { data: cardList } = useCard(params.id);
+  const collectionId = params.id;
   const totalTerms = cardList?.length || 0;
   // Local state
   const [pageSize, setPageSize] = useState(5);
@@ -20,7 +27,8 @@ export default function page({ params }) {
   );
   console.log("currentPageData: ", currentPageData);
   return (
-    <div className="mt-5 w-full px-8">
+    <div className="mt-5 mb-10 w-full px-8">
+      <BackToThisCollection collectionId={collectionId} />
       <DataSelection
         setPageSize={setPageSize}
         totalTerms={totalTerms}
@@ -28,10 +36,18 @@ export default function page({ params }) {
         page={page}
         setPage={setPage}
       />
-      <ExportContent exportData={currentPageData} />
+      <ExportContent collectionId={collectionId} exportData={currentPageData} />
     </div>
   );
 }
+
+const BackToThisCollection = ({ collectionId }) => {
+  return (
+    <div className="max-w-3xl mx-auto">
+      <Link href={`/collections/${collectionId}`}>⬅ Back</Link>
+    </div>
+  );
+};
 
 const DataSelection = ({
   setPageSize,
@@ -42,12 +58,14 @@ const DataSelection = ({
 }) => {
   const pageNums = Array.from({ length: totalPage }, (_, index) => index + 1);
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center max-w-3xl mx-auto space-x-4 py-2">
       {/* Page size input */}
-      <div className="">
-        <label htmlFor="page-size-input">Set page size :</label>
+      <div className="space-x-2">
+        <label htmlFor="page-size-input" className="font-semibold">
+          Set page size :
+        </label>
         <select
-          className="px-2 py-1 bg-transparent"
+          className="px-2 py-1 bg-blue-100 rounded"
           onChange={(e) => {
             setPageSize(e.target.value * 1);
           }}
@@ -62,8 +80,10 @@ const DataSelection = ({
         </select>
       </div>
       {/* Page input */}
-      <div className="">
-        <label htmlFor="set-page">Page:</label>
+      <div className="space-x-2">
+        <label htmlFor="set-page" className="font-semibold">
+          Page:
+        </label>
         <select
           defaultValue={page}
           onChange={(e) => {
@@ -71,7 +91,7 @@ const DataSelection = ({
           }}
           name=""
           id="set-page"
-          className="px-2 bg-transparent"
+          className="px-2 py-1 bg-blue-100 rounded"
         >
           {pageNums.map((item, index) => (
             <option key={`page-${index * 2 + 1}-opt`} value={index + 1}>
@@ -84,34 +104,100 @@ const DataSelection = ({
   );
 };
 
-const ExportContent = ({ exportData }) => {
-  const [bgColor, setBgColor] = useState("");
+const ExportContent = ({ exportData, collectionId }) => {
+  const [bgColor, setBgColor] = useState("#eff6f");
+  const [containerWidth, setContainerWidth] = useState(DEFAULT_EXPORT_SIZE);
   const contentRef = useRef(null);
   return (
     <div className="">
-      <div className="flex justify-end max-w-3xl mx-auto mb-5">
-        <button
-          className="bg-blue-600 text-white h-10 px-4 rounded"
-          onClick={() => {
-            // console.log(contentRef);
-            exportAsImage(contentRef.current, "filename");
-          }}
-        >
-          Export
-        </button>
-      </div>
-
-      <ContentContainer contentRef={contentRef} exportData={exportData} />
+      <ExportButton contentRef={contentRef} />
+      <StyleSetting
+        setContainerWidth={setContainerWidth}
+        setBgColor={setBgColor}
+      />
+      <ContentContainer
+        containerWidth={containerWidth}
+        bgColor={bgColor}
+        collectionId={collectionId}
+        contentRef={contentRef}
+        exportData={exportData}
+      />
     </div>
   );
 };
 
-const ContentContainer = ({ exportData, contentRef }) => {
+const ExportButton = ({ contentRef }) => {
+  return (
+    <div className="flex justify-end max-w-3xl mx-auto py-4">
+      <button
+        className="bg-blue-600 text-white h-10 px-4 rounded"
+        onClick={() => {
+          // console.log(contentRef);
+          exportAsImage(contentRef.current, "filename");
+        }}
+      >
+        Export
+      </button>
+    </div>
+  );
+};
+
+const StyleSetting = ({ setContainerWidth, setBgColor }) => {
+  const [value, setValue] = useState(DEFAULT_EXPORT_SIZE);
+  const handleChange = (event, newValue) => {
+    if (typeof newValue === "number") {
+      setValue(newValue);
+      setContainerWidth(newValue);
+    }
+  };
+  return (
+    <div className="max-w-3xl mx-auto flex items-center space-x-5">
+      <div className="w-60">
+        <Slider
+          onChange={handleChange}
+          value={value}
+          min={400}
+          step={1}
+          max={1080}
+          className=""
+          valueLabelDisplay="on"
+        />
+      </div>
+      <div className="">
+        <ColorPicker
+          defaultValue="eff6ff"
+          presets={[
+            {
+              label: "Recommended",
+              colors: ["#eff6ff", "#f0fdf4"],
+            },
+            {
+              label: "Recent",
+              colors: [],
+            },
+          ]}
+          onChange={(value, hex) => {
+            setBgColor(hex);
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+const ContentContainer = ({
+  exportData,
+  contentRef,
+  collectionId,
+  containerWidth,
+  bgColor,
+}) => {
   return (
     <div className="">
       <ul
+        style={{ width: `${containerWidth}px`, backgroundColor: `${bgColor}` }}
         ref={contentRef}
-        className="p-6 border border-gray-400 space-y-4 mx-auto rounded-lg max-w-3xl bg-blue-50"
+        className="p-6 border border-gray-400 space-y-4 mx-auto rounded-3xl bg-blue-50 overflow-hidden"
       >
         {/* Title */}
         <li className="text-center">
@@ -124,13 +210,27 @@ const ContentContainer = ({ exportData, contentRef }) => {
           return <ExportRow key={item.id} data={item} />;
         })}
         {/* Footer */}
-        <li className="flex justify-between">
-          <div className="">
+        <li className={`${styles.exportRow}`}>
+          <div className="flex items-center justify-end">
+            <p>Create with</p>
+          </div>
+          <div className="flex items-center justify-center space-x-1">
             <Image alt="Logo image" width={60} height={60} src={Logo} />
+            <p className="text-blue-600 font-semibold">UniCard</p>
+          </div>
+
+          <div className="flex justify-between rounded p-1">
+            <p className="text-sm text-center flex items-center justify-center font-semibold w-full">
+              <span className="">Scan to learn</span>
+            </p>
           </div>
           <div className="">
-            <Image alt="QR Code image" width={60} height={60} src={Logo} />
+            <QRCodeCanvas
+              size={64}
+              value={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/${collectionId}`}
+            />
           </div>
+          <div className=""></div>
         </li>
       </ul>
     </div>
@@ -139,7 +239,7 @@ const ContentContainer = ({ exportData, contentRef }) => {
 
 const ExportRow = ({ data }) => {
   return (
-    <ul className={`${styles.exportRow} flex pb-2 border-b border-slate-400`}>
+    <ul className={`${styles.exportRow}  pb-2 border-b border-slate-400`}>
       <li className="relative w-14 h-14 shrink-0">
         {data.image_url && (
           <Image
@@ -159,7 +259,7 @@ const ExportRow = ({ data }) => {
 };
 
 const exportAsImage = async (element, imageFileName) => {
-  const canvas = await html2canvas(element);
+  const canvas = await html2canvas(element, { backgroundColor: null });
   const image = canvas.toDataURL("image/png", 1.0);
   downloadImage(image, imageFileName);
 };

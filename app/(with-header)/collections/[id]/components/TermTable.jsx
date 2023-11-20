@@ -10,6 +10,8 @@ import { useDispatch } from "react-redux";
 import { addMessage } from "@redux/commonMessageSlice";
 import { getImageUrl } from "@utils/getImageUrl";
 import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
+import { DocumentArrowDownIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 
 export default function TermTable({
   displayExample,
@@ -23,6 +25,7 @@ export default function TermTable({
   // Fetched data
   const { error, data, loading, mutate } = useCard(collectionId);
   // Handler
+  const router = useRouter();
   const showErrorMsg = () => {
     dispatch(addMessage({ text: "Fail to delete.", variation: "warning" }));
   };
@@ -42,17 +45,28 @@ export default function TermTable({
       <>
         <div className="flex items-center justify-between">
           <h4 className="font-semibold">Cards</h4>
-
           {isOwner && (
-            <button
-              onClick={() => {
-                setIsImportModalOpen(true);
-              }}
-              className="flex items-center space-x-1 hover:text-blue-600 font-semibold"
-            >
-              <DocumentArrowUpIcon className="h-5 w-5 " />
-              <span>Import</span>
-            </button>
+            <div className="flex space-x-4">
+              <button
+                onClick={() => {
+                  router.push(`/collections/${collectionId}/export`);
+                }}
+                className="flex items-center space-x-1 hover:text-blue-600 font-semibold"
+              >
+                <DocumentArrowUpIcon className="h-5 w-5" />
+
+                <span>Export</span>
+              </button>
+              <button
+                onClick={() => {
+                  setIsImportModalOpen(true);
+                }}
+                className="flex items-center space-x-1 hover:text-blue-600 font-semibold"
+              >
+                <DocumentArrowDownIcon className="h-5 w-5" />
+                <span>Import</span>
+              </button>
+            </div>
           )}
         </div>
         {isOwner && <AddTermButton setTermModalOpen={setTermModalOpen} />}
