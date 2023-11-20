@@ -9,12 +9,14 @@ import { QRCodeCanvas } from "qrcode.react";
 import { Slider } from "@mui/material";
 import Link from "next/link";
 import { ColorPicker } from "antd";
+import { useCollection } from "@lib/useCollection";
 
 const DEFAULT_EXPORT_SIZE = 768;
 
 export default function page({ params }) {
   // Fetched data
   const { data: cardList } = useCard(params.id);
+  const { data: collectionData } = useCollection(params.id);
   const collectionId = params.id;
   const totalTerms = cardList?.length || 0;
   // Local state
@@ -36,7 +38,11 @@ export default function page({ params }) {
         page={page}
         setPage={setPage}
       />
-      <ExportContent collectionId={collectionId} exportData={currentPageData} />
+      <ExportContent
+        collectionData={collectionData}
+        collectionId={collectionId}
+        exportData={currentPageData}
+      />
     </div>
   );
 }
@@ -104,7 +110,7 @@ const DataSelection = ({
   );
 };
 
-const ExportContent = ({ exportData, collectionId }) => {
+const ExportContent = ({ exportData, collectionId, collectionData }) => {
   const [bgColor, setBgColor] = useState("#eff6f");
   const [containerWidth, setContainerWidth] = useState(DEFAULT_EXPORT_SIZE);
   const contentRef = useRef(null);
@@ -116,6 +122,7 @@ const ExportContent = ({ exportData, collectionId }) => {
         setBgColor={setBgColor}
       />
       <ContentContainer
+        collectionData={collectionData}
         containerWidth={containerWidth}
         bgColor={bgColor}
         collectionId={collectionId}
@@ -191,6 +198,7 @@ const ContentContainer = ({
   collectionId,
   containerWidth,
   bgColor,
+  collectionData,
 }) => {
   return (
     <div className="">
@@ -202,7 +210,7 @@ const ContentContainer = ({
         {/* Title */}
         <li className="text-center">
           <h1 className="font-semibold text-2xl text-center">
-            Vocabulary list
+            {collectionData.title}
           </h1>
         </li>
         {/* Term rows */}
