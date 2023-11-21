@@ -27,7 +27,6 @@ export default function page({ params }) {
     (page - 1) * pageSize,
     (page - 1) * pageSize + pageSize
   );
-  console.log("currentPageData: ", currentPageData);
   return (
     <div className="mt-5 mb-10 w-full px-8">
       <BackToThisCollection collectionId={collectionId} />
