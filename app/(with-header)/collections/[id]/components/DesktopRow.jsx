@@ -7,10 +7,14 @@ import { TrashIcon } from "@heroicons/react/24/solid";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import { CloudArrowUpIcon } from "@heroicons/react/20/solid";
 import { DocumentArrowUpIcon } from "@heroicons/react/20/solid";
-
+import { FolderPlusIcon } from "@heroicons/react/24/solid";
 import { TextareaAutosize } from "@mui/base";
 import { handleSelectedImage } from "@lib/handleSelectedImage";
 import Spinner from "@public/assets/icons/MySpinner";
+import MagicWand from "@public/assets/icons/MagicWand";
+import NoImageAi from "@public/assets/images/no-image-ai.png";
+import { useDispatch, useSelector } from "react-redux";
+import { openAPIKeyInput } from "@redux/modalSlice";
 
 export default function DesktopRow({
   cardData,
@@ -24,6 +28,7 @@ export default function DesktopRow({
 }) {
   // States
   // Fetched data
+  const openAiKey = useSelector((state) => state.openAiKey.key);
   // Local data
   const totalCol =
     3 +
@@ -38,6 +43,7 @@ export default function DesktopRow({
   const [editted, setEditted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
+  const [openMagicInput, setOpenMagicInput] = useState(false);
   const order = rowIndex + 1;
   // Input value
   const [term, setTerm] = useState(cardData.term);
@@ -45,6 +51,7 @@ export default function DesktopRow({
   const [definition2, setDefition2] = useState(cardData.definition_2);
   const [example, setExample] = useState(cardData.example);
   // Handler
+  const dispatch = useDispatch();
   const handleEdit = () => {
     setEditting(true);
   };
@@ -67,6 +74,13 @@ export default function DesktopRow({
     setEditting(false);
   };
   const handleDelete = () => {};
+  const handleAiImageBtn = () => {
+    if (openAiKey) {
+      setOpenMagicInput(true);
+    } else {
+      dispatch(openAPIKeyInput());
+    }
+  };
   //Set editting if info changed
   useEffect(() => {
     if (
@@ -194,7 +208,10 @@ export default function DesktopRow({
         )}
         {/* Card Image */}
         {displayImg && (
-          <li datafield="image" className={`${styles.rowItem} relative`}>
+          <li
+            datafield="image"
+            className={`${styles.rowItem} relative !overflow-visible`}
+          >
             {!editting && cardData.image_url && (
               <div className="relative w-12 h-12">
                 <Image
@@ -256,33 +273,45 @@ export default function DesktopRow({
             )}
             {editting && (
               <>
-                <input
-                  multiple={false}
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  id={cardData.id}
-                  onChange={(e) => {
-                    handleSelectedImage({
-                      selectedFile: e.target.files[0],
-                      inputTarget: e.target.value,
-                      setErrMsg,
-                      setSelectedFile,
-                      setSelectedFileUrl,
-                      setLoadingImage,
-                    });
-                  }}
-                />
-                <label
-                  className="cursor-pointer absolute top-1/2 -translate-y-1/2  left-1/2 translate-x-1/2 p-2"
-                  htmlFor={cardData.id}
-                >
-                  <DocumentArrowUpIcon className="h-6 w-6 text-blue-500" />
-                </label>
+                <div className="flex flex-col absolute top-1/2 -translate-y-1/2  left-1/2 translate-x-full ml-3 space-y-1">
+                  <input
+                    multiple={false}
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    id={cardData.id}
+                    onChange={(e) => {
+                      handleSelectedImage({
+                        selectedFile: e.target.files[0],
+                        inputTarget: e.target.value,
+                        setErrMsg,
+                        setSelectedFile,
+                        setSelectedFileUrl,
+                        setLoadingImage,
+                      });
+                    }}
+                  />
+                  <label className="cursor-pointer" htmlFor={cardData.id}>
+                    <FolderPlusIcon className="h-5 w-5 text-blue-500" />
+                  </label>
+                  {/* AI generate image button */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAiImageBtn();
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <MagicWand className="w-5 h-5 fill-indigo-500" />
+                  </button>
+                </div>
                 {loadingImage && (
-                  <label className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                  <label className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 ">
                     <Spinner className="animate-spin h-6 w-6 text-blue-700" />
                   </label>
+                )}
+                {openMagicInput && (
+                  <MagicPrompInput setOpenMagicInput={setOpenMagicInput} />
                 )}
               </>
             )}
@@ -366,3 +395,81 @@ export default function DesktopRow({
     </li>
   );
 }
+
+// Components
+const MagicPrompInput = ({ setOpenMagicInput }) => {
+  // Local state
+  const [prompt, setPrompt] = useState("");
+  useEffect(() => {
+    const closeThis = () => {
+      setOpenMagicInput(false);
+    };
+    window.addEventListener("click", closeThis, false);
+    return () => {
+      window.removeEventListener("click", closeThis);
+    };
+  }, []);
+  return (
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+      className="absolute right-0 top-full bg-indigo-100 z-20 border border-indigo-400  rounded-md shadow-md p-2 translate-x-1/3 space-y-2"
+    >
+      {/* Image */}
+      <div className="relative flex items-center justify-center">
+        <div className="relative w-14 h-14">
+          <Image
+            alt="No image placeholder"
+            src={NoImageAi}
+            fill
+            style={{ objectFit: "contain" }}
+          />
+        </div>
+      </div>
+      {/* Input */}
+      <TextareaAutosize
+        minRows={5}
+        maxRows={5}
+        placeholder="Enter your prompt"
+        className="outline-none border-indigo-400 border rounded text-xs px-1 w-48 "
+        type="text"
+        name=""
+        id=""
+        value={prompt}
+        onChange={(e) => {
+          setPrompt(e.target.value);
+        }}
+      />
+      {/* Actions */}
+      <div className="flex justify-between">
+        <button className="px-2 py-1 text-xs bg-blue-300 rounded text-white">
+          Save
+        </button>
+        <button className="px-2 py-1 text-xs bg-lime-600 rounded text-white">
+          Prompt
+        </button>
+        <button
+          onClick={() => {
+            generateAiImage(prompt.trim());
+          }}
+          className="bg-indigo-500 px-2 py-1 text-white rounded text-xs"
+        >
+          Generate
+        </button>
+      </div>
+      {/* Close button */}
+      {/* <button className="absolute top-0 right-0 h-6 w-6 bg-gray-200 translate-x-1/2 -translate-y-1/2 rounded-full border border-gray-200 !mt-0">
+        X
+      </button> */}
+    </div>
+  );
+};
+
+const generateAiImage = (prompt) => {
+  console.log(prompt);
+};
+
+const handleMagicImage = () => {
+  console.log("handle");
+};

@@ -30,16 +30,18 @@ export default function GoogleSignInButton() {
   const { mutate } = useSWRConfig();
   const dispatch = useDispatch();
   useEffect(() => {
-    google?.accounts.id.initialize({
-      client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-      callback: (res) => {
-        handleCredentialResponse(res, mutate, dispatch, setErrorMsg);
-      },
-    });
-    google?.accounts.id.renderButton(
-      document.getElementById("googleSignInBtn"),
-      { theme: "outline", size: "large" } // customization attributes
-    );
+    if (typeof google !== "undefined") {
+      google.accounts.id.initialize({
+        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+        callback: (res) => {
+          handleCredentialResponse(res, mutate, dispatch, setErrorMsg);
+        },
+      });
+      google.accounts.id.renderButton(
+        document.getElementById("googleSignInBtn"),
+        { theme: "outline", size: "large" } // customization attributes
+      );
+    }
   }, []);
   return (
     <div className="space-y-2">

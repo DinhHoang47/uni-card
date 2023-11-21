@@ -24,6 +24,8 @@ import Script from "next/script";
 import GoogleOneTap from "./GoogleOneTap";
 import CommonMessage from "@components/CommonMessage/CommonMessage";
 import unicardLogo from "@public/assets/images/unicard-logo.png";
+import UserSettingModal from "@components/UserSetting/UserSettingModal";
+import APIKeyInput from "@components/UserSetting/APIKeyInput";
 export default function Nav() {
   // States
   const [currentPath, setCurrentPath] = useState("");
@@ -31,6 +33,12 @@ export default function Nav() {
   const isOpen = useSelector((state) => state.authModal.isOpen);
   const isAddNewCollectionModalOpen = useSelector(
     (state) => state.modal.isAddNewCollectionModalOpen
+  );
+  const isUserSettingOpen = useSelector(
+    (state) => state.modal.isUserSettingOpen
+  );
+  const isAPIKeyInputOpen = useSelector(
+    (state) => state.modal.isAPIKeyInputOpen
   );
   const searchContainerRef = useRef();
   const navhangerRef = useRef(null);
@@ -262,7 +270,7 @@ export default function Nav() {
         timeout={200}
         unmountOnExit
       >
-        <AuthModal hanger={"navHanger"} isOpen={isOpen} />
+        <AuthModal hanger={"navHanger"} />
       </CSSTransition>
       {/* New collection */}
       <CSSTransition
@@ -277,6 +285,24 @@ export default function Nav() {
           setIsOpen={setIsAddNewOpen}
           router={router}
         />
+      </CSSTransition>
+      <CSSTransition
+        nodeRef={navhangerRef}
+        classNames={"modal"}
+        in={isUserSettingOpen}
+        timeout={200}
+        unmountOnExit
+      >
+        <UserSettingModal user={user} hanger={"navHanger"} />
+      </CSSTransition>
+      <CSSTransition
+        nodeRef={navhangerRef}
+        classNames={"modal"}
+        in={isAPIKeyInputOpen}
+        timeout={200}
+        unmountOnExit
+      >
+        <APIKeyInput hanger={"navHanger"} user={user} />
       </CSSTransition>
       <CommonMessage />
     </div>

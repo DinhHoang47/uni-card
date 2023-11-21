@@ -20,12 +20,14 @@ export default function GoogleOneTap() {
   const { user, mutateUser } = useUser();
   const dispatch = useDispatch();
   useEffect(() => {
-    google?.accounts.id.initialize({
-      client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-      callback: (res) => {
-        handleCredentialResponse(res, mutateUser, dispatch);
-      },
-    });
+    if (typeof google !== "undefined") {
+      google.accounts.id.initialize({
+        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+        callback: (res) => {
+          handleCredentialResponse(res, mutateUser, dispatch);
+        },
+      });
+    }
     if (user && !user.isLoggedIn) {
       google.accounts.id.prompt();
     }

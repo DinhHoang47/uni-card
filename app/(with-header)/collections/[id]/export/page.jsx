@@ -210,7 +210,7 @@ const ContentContainer = ({
         {/* Title */}
         <li className="text-center">
           <h1 className="font-semibold text-2xl text-center">
-            {collectionData.title}
+            {collectionData?.title}
           </h1>
         </li>
         {/* Term rows */}

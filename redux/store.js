@@ -7,6 +7,7 @@ import rightSideBarReducer from "./rightSideBarSlice";
 import commonMessageReducer from "./commonMessageSlice";
 import modalReducer from "./modalSlice";
 import learningStatusReducer from "./learningStatusSlice";
+import openAiKeyReducer from "./openAiKeySlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     commonMessage: commonMessageReducer,
     modal: modalReducer,
     learningStatus: learningStatusReducer,
+    openAiKey: openAiKeyReducer,
   },
   middleware: [thunk],
   devTools: true,
