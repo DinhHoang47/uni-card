@@ -18,6 +18,10 @@ const nextConfig = {
         protocol: "http",
         hostname: "res.cloudinary.com",
       },
+      {
+        protocol: "https",
+        hostname: "oaidalleapiprodscus.blob.core.windows.net",
+      },
     ],
   },
   reactStrictMode: false,

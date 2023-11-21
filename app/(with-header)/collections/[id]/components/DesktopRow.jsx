@@ -15,6 +15,7 @@ import MagicWand from "@public/assets/icons/MagicWand";
 import NoImageAi from "@public/assets/images/no-image-ai.png";
 import { useDispatch, useSelector } from "react-redux";
 import { openAPIKeyInput } from "@redux/modalSlice";
+import { GetImageFromAi } from "@services/OpenAIService";
 
 export default function DesktopRow({
   cardData,
@@ -40,11 +41,13 @@ export default function DesktopRow({
   const [errMsg, setErrMsg] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileUrl, setSelectedFileUrl] = useState(null);
+  const [aiImageUrl, setAiImageUrl] = useState(null);
   const [editted, setEditted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
   const [openMagicInput, setOpenMagicInput] = useState(false);
   const order = rowIndex + 1;
+  const [loadingOpenAi, setLoadingOpenAi] = useState(false);
   // Input value
   const [term, setTerm] = useState(cardData.term);
   const [definition1, setDefition1] = useState(cardData.definition_1);
@@ -66,6 +69,7 @@ export default function DesktopRow({
         selectedFileUrl,
         imageUrl: cardData.image_url,
         selectedFile: selectedFile,
+        aiImageUrl: aiImageUrl,
       });
     }
     setSelectedFile(null);
@@ -289,6 +293,7 @@ export default function DesktopRow({
                         setSelectedFileUrl,
                         setLoadingImage,
                       });
+                      setAiImageUrl(null);
                     }}
                   />
                   <label className="cursor-pointer" htmlFor={cardData.id}>
@@ -311,7 +316,16 @@ export default function DesktopRow({
                   </label>
                 )}
                 {openMagicInput && (
-                  <MagicPrompInput setOpenMagicInput={setOpenMagicInput} />
+                  <MagicPrompInput
+                    setLoadingOpenAi={setLoadingOpenAi}
+                    loadingOpenAi={loadingOpenAi}
+                    openAiKey={openAiKey}
+                    setOpenMagicInput={setOpenMagicInput}
+                    term={term}
+                    setSelectedFileUrl={setSelectedFileUrl}
+                    setSelectedFile={setSelectedFile}
+                    setAiImageUrl={setAiImageUrl}
+                  />
                 )}
               </>
             )}
@@ -397,9 +411,24 @@ export default function DesktopRow({
 }
 
 // Components
-const MagicPrompInput = ({ setOpenMagicInput }) => {
+const MagicPrompInput = ({
+  setOpenMagicInput,
+  openAiKey,
+  loadingOpenAi,
+  setLoadingOpenAi,
+  term,
+  setSelectedFileUrl,
+  setSelectedFile,
+  setAiImageUrl,
+}) => {
   // Local state
+  const [imageUrl, setImageUrl] = useState("");
   const [prompt, setPrompt] = useState("");
+  const [errMsg, setErrMsg] = useState("");
+  // Effect
+  useEffect(() => {
+    setErrMsg("");
+  }, [prompt]);
   useEffect(() => {
     const closeThis = () => {
       setOpenMagicInput(false);
@@ -418,17 +447,44 @@ const MagicPrompInput = ({ setOpenMagicInput }) => {
     >
       {/* Image */}
       <div className="relative flex items-center justify-center">
-        <div className="relative w-14 h-14">
-          <Image
-            alt="No image placeholder"
-            src={NoImageAi}
-            fill
-            style={{ objectFit: "contain" }}
-          />
+        <div className="relative w-20 h-20">
+          {imageUrl && (
+            <Image
+              sizes="80px"
+              alt="Illustration Image"
+              src={imageUrl}
+              fill
+              style={{ objectFit: "contain" }}
+            />
+          )}
+          {!imageUrl && (
+            <Image
+              sizes="80px"
+              alt="No image placeholder"
+              src={NoImageAi}
+              fill
+              style={{ objectFit: "contain" }}
+            />
+          )}
         </div>
+        <button
+          disabled={!imageUrl}
+          onClick={() => {
+            setSelectedFile(null);
+            setSelectedFileUrl(imageUrl);
+            setAiImageUrl(imageUrl);
+            setOpenMagicInput(false);
+          }}
+          className={`absolute bottom-0 right-0 px-2 py-1 text-xs ${
+            !imageUrl ? "bg-blue-300" : "bg-blue-600"
+          } rounded text-white`}
+        >
+          Save
+        </button>
       </div>
       {/* Input */}
       <TextareaAutosize
+        maxLength={1000}
         minRows={5}
         maxRows={5}
         placeholder="Enter your prompt"
@@ -441,23 +497,37 @@ const MagicPrompInput = ({ setOpenMagicInput }) => {
           setPrompt(e.target.value);
         }}
       />
+      {/* Error message */}
+      <div className="!mt-0">
+        <p className="text-red-500 font-light text-xs">{errMsg}</p>
+      </div>
       {/* Actions */}
-      <div className="flex justify-between">
-        <button className="px-2 py-1 text-xs bg-blue-300 rounded text-white">
-          Save
-        </button>
-        <button className="px-2 py-1 text-xs bg-lime-600 rounded text-white">
-          Prompt
-        </button>
+      <div className="flex justify-end space-x-2">
         <button
+          disabled={!prompt.trim() || loadingOpenAi}
           onClick={() => {
-            generateAiImage(prompt.trim());
+            generateAiImage(
+              prompt.trim(),
+              openAiKey,
+              setLoadingOpenAi,
+              setErrMsg,
+              setImageUrl
+            );
           }}
-          className="bg-indigo-500 px-2 py-1 text-white rounded text-xs"
+          className="bg-indigo-500 px-2 py-1 text-white rounded text-xs w-[74px] text-center"
         >
-          Generate
+          {loadingOpenAi && (
+            <Spinner
+              className={`${
+                loadingOpenAi ? "" : "hidden"
+              } animate-spin h-4 w-4 text-white mx-auto`}
+            />
+          )}
+          {!loadingOpenAi && <span>Generate</span>}
         </button>
       </div>
+      {/* Styles setting */}
+      <StyleInput term={term} setPrompt={setPrompt} />
       {/* Close button */}
       {/* <button className="absolute top-0 right-0 h-6 w-6 bg-gray-200 translate-x-1/2 -translate-y-1/2 rounded-full border border-gray-200 !mt-0">
         X
@@ -466,10 +536,118 @@ const MagicPrompInput = ({ setOpenMagicInput }) => {
   );
 };
 
-const generateAiImage = (prompt) => {
-  console.log(prompt);
+const generateAiImage = async (
+  prompt,
+  key,
+  setLoadingOpenAi,
+  setErrMsg,
+  setImageUrl
+) => {
+  setErrMsg("");
+  setLoadingOpenAi(true);
+  try {
+    const {
+      data: { data },
+    } = await GetImageFromAi(prompt, key);
+    if (data) {
+      const tempImgUrl = data[0]?.url;
+      if (tempImgUrl) {
+        setImageUrl(tempImgUrl);
+      }
+    }
+    setLoadingOpenAi(false);
+  } catch (error) {
+    setLoadingOpenAi(false);
+    if (error.response.status === 401) {
+      return setErrMsg("Your API Key is not valid.");
+    }
+    setErrMsg(error.message || "Something went wrong.");
+  }
 };
 
-const handleMagicImage = () => {
-  console.log("handle");
+const StyleInput = ({ setPrompt, term }) => {
+  const [style, setStyle] = useState("anime");
+  const [type, setType] = useState("An illustration");
+  const [bg, setBg] = useState("white");
+  return (
+    <div className="text-xs flex flex-col space-y-2">
+      <div className="space-y-1">
+        <div className="flex justify-between">
+          <label htmlFor="image-type-input" className="">
+            Type:
+          </label>
+          <select
+            onChange={(e) => {
+              setType(e.target.value);
+            }}
+            name=""
+            id="image-type-input"
+          >
+            <option value="An illustration">Illustration</option>
+            <option value="A photograph">Photograph</option>
+            <option value="A 3D render">3D Render</option>
+          </select>
+        </div>
+        <div className="flex justify-between">
+          <label htmlFor="image-type-input" className="">
+            Style:
+          </label>
+          <select
+            onChange={(e) => {
+              setStyle(e.target.value);
+            }}
+            name=""
+            id="image-style-input"
+          >
+            <option value="anime">Anime</option>
+            <option value="abstract">Abstract</option>
+            <option value="minimalist">Minimalist</option>
+            <option value="surreal">Surreal</option>
+          </select>
+        </div>
+        <div className="flex justify-between">
+          <label htmlFor="image-type-input" className="">
+            Background
+          </label>
+          <select
+            onChange={(e) => {
+              setBg(e.target.value);
+            }}
+            name=""
+            id="image-bg-input"
+          >
+            <option value="white">White</option>
+            <option value="blue">Blue</option>
+          </select>
+        </div>
+      </div>
+      <div className="flex justify-end">
+        <button
+          onClick={() => {
+            const _prompt = generatePromt(term, type, style, bg);
+            setPrompt(_prompt);
+          }}
+          className="px-2 py-1 text-xs bg-lime-600 rounded text-white"
+        >
+          Generate prompt
+        </button>
+      </div>
+    </div>
+  );
 };
+
+const generatePromt = (term, type, style, bg) => {
+  const text = `${type} of ${term} in the style of ${style}, background color ${bg}`;
+  return text;
+};
+
+const generateRandomPrompt = (term) => {
+  const typeArr = ["illustration", "photograph", "3D render"];
+  const styleArr = ["abstract", "minimalist", "surreal"];
+  const randomType = Math.floor(Math.random() * typeArr.length);
+  const randomStyle = Math.floor(Math.random() * styleArr.length);
+  const text = `${typeArr[randomType]} of ${term} in the style of ${styleArr[randomStyle]}`;
+  return text;
+};
+
+const handleSaveAiImg = (imageUrl) => {};

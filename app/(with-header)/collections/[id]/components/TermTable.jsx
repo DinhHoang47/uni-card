@@ -8,7 +8,7 @@ import { useCard } from "@lib/useCard";
 import { privateCardServ } from "@services/Private_CardService";
 import { useDispatch } from "react-redux";
 import { addMessage } from "@redux/commonMessageSlice";
-import { getImageUrl } from "@utils/getImageUrl";
+import { getImageUrl, getImageUrlWithAiImg } from "@utils/getImageUrl";
 import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
 import { DocumentArrowDownIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
@@ -231,11 +231,20 @@ const handleUpdate = async (
 
 const updateFn = async (inputData, currentCardList, showErrorMsg) => {
   const preset = "card_image";
-  const updatedImageUrl = await getImageUrl(
-    inputData.imageUrl,
-    inputData.selectedFile,
-    preset
-  );
+  let updatedImageUrl;
+  if (!inputData.aiImageUrl) {
+    updatedImageUrl = await getImageUrl(
+      inputData.imageUrl,
+      inputData.selectedFile,
+      preset
+    );
+  } else {
+    updatedImageUrl = await getImageUrlWithAiImg(
+      inputData.imageUrl,
+      inputData.aiImageUrl,
+      preset
+    );
+  }
   const dataToSend = {
     term: inputData.term,
     definition_1: inputData.definition1,

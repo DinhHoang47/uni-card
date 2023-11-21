@@ -48,3 +48,5 @@ export const updateImage = async (
     data: formData,
   });
 };
+
+export const uploadImageViaUrl = async (imageUrl) => {};
