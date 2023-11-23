@@ -285,7 +285,11 @@ export default function DesktopRow({
             )}
             {editting && (
               <>
-                <div className="flex flex-col absolute top-1/2 -translate-y-1/2  left-1/2 translate-x-full ml-3 space-y-1">
+                <div
+                  className={`flex flex-col absolute top-1/2 -translate-y-1/2  left-1/2 translate-x-full ml-3 ${
+                    isAdmin ? "" : "space-y-1"
+                  }`}
+                >
                   <input
                     multiple={false}
                     type="file"
@@ -324,7 +328,7 @@ export default function DesktopRow({
                         e.stopPropagation();
                         setOpenFlaticonInput(true);
                       }}
-                      className="cursor-pointer absolute translate-x-7 -translate-y-1"
+                      className="cursor-pointer"
                     >
                       <PhotoIcon className="h-5 w-5 fill-lime-500 outline-gray-500 z-10" />
                     </button>
@@ -697,7 +701,6 @@ const FlaticonImageInput = ({
   const [page, setPage] = useState(1);
   const [buttonArr, setButtonArr] = useState([]);
   const [selectedImg, setSelectedImg] = useState(null);
-  console.log("selectedImg: ", selectedImg);
   // Effect
   useEffect(() => {
     const key = localStorage.getItem("UC_flaticon_api_key");
@@ -801,6 +804,7 @@ const FlaticonImageInput = ({
             setSelectedFile(null);
             setSelectedFileUrl(selectedImg);
             setAiImageUrl(selectedImg);
+            setOpenFlaticonInput(false);
           }}
           className={`px-2 py-1 text-xs ${
             selectedImg ? "bg-blue-500" : "bg-blue-300"
