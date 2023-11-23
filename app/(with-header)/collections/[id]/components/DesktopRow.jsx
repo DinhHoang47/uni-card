@@ -6,7 +6,7 @@ import { PencilIcon } from "@heroicons/react/24/solid";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import { CloudArrowUpIcon } from "@heroicons/react/20/solid";
-import { DocumentArrowUpIcon } from "@heroicons/react/20/solid";
+import { PhotoIcon } from "@heroicons/react/24/solid";
 import { FolderPlusIcon } from "@heroicons/react/24/solid";
 import { TextareaAutosize } from "@mui/base";
 import { handleSelectedImage } from "@lib/handleSelectedImage";
@@ -16,6 +16,11 @@ import NoImageAi from "@public/assets/images/no-image-ai.png";
 import { useDispatch, useSelector } from "react-redux";
 import { openAPIKeyInput } from "@redux/modalSlice";
 import { GetImageFromAi } from "@services/OpenAIService";
+import useUser from "@lib/useUser";
+import {
+  getFlaticonToken,
+  searchFlaticonImage,
+} from "@services/FlaticonService";
 
 export default function DesktopRow({
   cardData,
@@ -30,6 +35,8 @@ export default function DesktopRow({
   // States
   // Fetched data
   const openAiKey = useSelector((state) => state.openAiKey.key);
+  const { user } = useUser();
+  const isAdmin = user?.type === process.env.NEXT_PUBLIC_ADMIN_CODE * 1;
   // Local data
   const totalCol =
     3 +
@@ -46,6 +53,7 @@ export default function DesktopRow({
   const [loading, setLoading] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
   const [openMagicInput, setOpenMagicInput] = useState(false);
+  const [openFlaticonInput, setOpenFlaticonInput] = useState(false);
   const order = rowIndex + 1;
   const [loadingOpenAi, setLoadingOpenAi] = useState(false);
   // Input value
@@ -309,6 +317,18 @@ export default function DesktopRow({
                   >
                     <MagicWand className="w-5 h-5 fill-indigo-500" />
                   </button>
+                  {/* Flaticon image for Admin only */}
+                  {isAdmin && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setOpenFlaticonInput(true);
+                      }}
+                      className="cursor-pointer absolute translate-x-7 -translate-y-1"
+                    >
+                      <PhotoIcon className="h-5 w-5 fill-lime-500 outline-gray-500 z-10" />
+                    </button>
+                  )}
                 </div>
                 {loadingImage && (
                   <label className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 ">
@@ -322,6 +342,14 @@ export default function DesktopRow({
                     openAiKey={openAiKey}
                     setOpenMagicInput={setOpenMagicInput}
                     term={term}
+                    setSelectedFileUrl={setSelectedFileUrl}
+                    setSelectedFile={setSelectedFile}
+                    setAiImageUrl={setAiImageUrl}
+                  />
+                )}
+                {openFlaticonInput && (
+                  <FlaticonImageInput
+                    setOpenFlaticonInput={setOpenFlaticonInput}
                     setSelectedFileUrl={setSelectedFileUrl}
                     setSelectedFile={setSelectedFile}
                     setAiImageUrl={setAiImageUrl}
@@ -411,6 +439,7 @@ export default function DesktopRow({
 }
 
 // Components
+// Open Ai Prompt Input Modal
 const MagicPrompInput = ({
   setOpenMagicInput,
   openAiKey,
@@ -566,9 +595,9 @@ const generateAiImage = async (
 };
 
 const StyleInput = ({ setPrompt, term }) => {
-  const [style, setStyle] = useState("anime");
+  const [style, setStyle] = useState("");
   const [type, setType] = useState("An illustration");
-  const [bg, setBg] = useState("white");
+  const [bg, setBg] = useState("");
   return (
     <div className="text-xs flex flex-col space-y-2">
       <div className="space-y-1">
@@ -599,8 +628,10 @@ const StyleInput = ({ setPrompt, term }) => {
             name=""
             id="image-style-input"
           >
-            <option value="anime">Anime</option>
+            <option value="">none</option>
+            <option value="cartoon">Cartoon</option>
             <option value="abstract">Abstract</option>
+            <option value="anime">Anime</option>
             <option value="minimalist">Minimalist</option>
             <option value="surreal">Surreal</option>
           </select>
@@ -616,6 +647,7 @@ const StyleInput = ({ setPrompt, term }) => {
             name=""
             id="image-bg-input"
           >
+            <option value="">none</option>
             <option value="white">White</option>
             <option value="blue">Blue</option>
           </select>
@@ -637,17 +669,357 @@ const StyleInput = ({ setPrompt, term }) => {
 };
 
 const generatePromt = (term, type, style, bg) => {
-  const text = `${type} of ${term} in the style of ${style}, background color ${bg}`;
+  const text = `${type} of ${term}${style && ` in the style of ${style}`}${
+    bg && `, background color ${bg}`
+  }`;
   return text;
 };
 
-const generateRandomPrompt = (term) => {
-  const typeArr = ["illustration", "photograph", "3D render"];
-  const styleArr = ["abstract", "minimalist", "surreal"];
-  const randomType = Math.floor(Math.random() * typeArr.length);
-  const randomStyle = Math.floor(Math.random() * styleArr.length);
-  const text = `${typeArr[randomType]} of ${term} in the style of ${styleArr[randomStyle]}`;
-  return text;
+// Flat icon input
+const FlaticonImageInput = ({
+  setOpenFlaticonInput,
+  setSelectedFileUrl,
+  setSelectedFile,
+  setAiImageUrl,
+}) => {
+  // Local state
+  const PageSize = 10;
+  const [renderImgArr, setRenderImgArr] = useState([]);
+  const [imageArr, setImageArr] = useState([]);
+  const [flaticonKey, setFlaticonKey] = useState("");
+  const [foundKey, setFoundKey] = useState("");
+  const [token, setToken] = useState("");
+  const [tokenExpired, setTokenExpired] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [errMsg, setErrMsg] = useState("");
+  const [showTokenSetting, setShowTokenSetting] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [buttonArr, setButtonArr] = useState([]);
+  const [selectedImg, setSelectedImg] = useState(null);
+  console.log("selectedImg: ", selectedImg);
+  // Effect
+  useEffect(() => {
+    const key = localStorage.getItem("UC_flaticon_api_key");
+    if (key) {
+      setFoundKey(key);
+    }
+  }, []);
+  useEffect(() => {
+    const token = localStorage.getItem("UC_flaticon_token");
+    const expireTime = localStorage.getItem("UC_flaticon_token_expire");
+    if (token) {
+      setToken(token);
+    }
+    if (expireTime) {
+      const currentTime = Math.floor(new Date().getTime() / 1000);
+      if (currentTime > expireTime * 1) {
+        localStorage.removeItem("UC_flaticon_token");
+        localStorage.removeItem("UC_flaticon_token_expire");
+        setToken("");
+      }
+    }
+  }, []);
+  useEffect(() => {
+    setErrMsg("");
+  }, [searchKeyword]);
+  useEffect(() => {
+    const closeThis = () => {
+      setOpenFlaticonInput(false);
+    };
+    window.addEventListener("click", closeThis, false);
+    return () => {
+      window.removeEventListener("click", closeThis);
+    };
+  }, []);
+  // Set current page when ever page change
+  useEffect(() => {
+    const startIndex = (page - 1) * PageSize;
+    const endIndex = startIndex + PageSize;
+    const newArr = imageArr.slice(startIndex, endIndex);
+    setRenderImgArr(newArr);
+  }, [page, imageArr]);
+  // Set button arr
+  useEffect(() => {
+    const newBtnArr = Array.from(
+      { length: Math.ceil(imageArr.length / PageSize) },
+      (_, index) => index + 1
+    );
+
+    setButtonArr(newBtnArr);
+  }, [imageArr]);
+  return (
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+      className="absolute right-0 top-full bg-blue-100 z-20 border border-blue-400  rounded-md shadow-md p-2 translate-x-1/3 space-y-2"
+    >
+      {/* Image */}
+      <div className="relative flex items-center justify-center">
+        <RenderImageResult
+          renderImgArr={renderImgArr}
+          setRenderImgArr={setRenderImgArr}
+          setSelectedImg={setSelectedImg}
+        />
+      </div>
+      {/* Save button */}
+      <div className="flex justify-between">
+        {/* Setting key and get token button */}
+        <div className="flex items-center">
+          <button
+            onClick={() => {
+              setShowTokenSetting((pre) => !pre);
+            }}
+            className="font-bold px-1 h-full rounded bg-blue-300 text-white"
+          >
+            ⚙
+          </button>
+        </div>
+        {/* Pagination */}
+        <div className="grid grid-cols-5 gap-2 rounded">
+          {buttonArr.map((item, index) => {
+            return (
+              <button
+                onClick={() => {
+                  setPage(item);
+                }}
+                key={index}
+                className={`${
+                  item === page ? "bg-blue-500 " : "bg-blue-300"
+                } w-5 text-xs rounded text-center text-white`}
+              >
+                {index + 1}
+              </button>
+            );
+          })}
+        </div>
+        {/* Select button */}
+        <button
+          disabled={!selectedImg}
+          onClick={() => {
+            setSelectedFile(null);
+            setSelectedFileUrl(selectedImg);
+            setAiImageUrl(selectedImg);
+          }}
+          className={`px-2 py-1 text-xs ${
+            selectedImg ? "bg-blue-500" : "bg-blue-300"
+          } rounded text-white h-8`}
+        >
+          Select
+        </button>
+      </div>
+
+      {/* Input */}
+      <div className="flex space-x-2 justify-between">
+        <input
+          maxLength={1000}
+          placeholder="Search"
+          className="outline-none border-blue-400 border rounded text-xs px-1 w-48 h-8 "
+          type="text"
+          name=""
+          id=""
+          value={searchKeyword}
+          onChange={(e) => {
+            setSearchKeyword(e.target.value);
+          }}
+        />
+        <button
+          disabled={!searchKeyword.trim()}
+          onClick={() => {
+            if (!token) {
+              setErrMsg("Retrieve token first");
+            } else {
+              getFlaticonImage(
+                token,
+                searchKeyword,
+                setLoading,
+                setImageArr,
+                setErrMsg
+              );
+            }
+          }}
+          className="bg-blue-500 px-2 py-1 text-white rounded text-xs text-center w-9"
+        >
+          {loading && (
+            <Spinner
+              className={`${
+                loading ? "" : "hidden"
+              } animate-spin h-3 w-3 text-white mx-auto`}
+            />
+          )}
+          {!loading && <span>🔍</span>}
+        </button>
+      </div>
+      {/* Input flaticon key */}
+      {showTokenSetting && (
+        <div className="flex h-8 space-x-2">
+          {!foundKey && (
+            <>
+              <input
+                maxLength={1000}
+                placeholder="Key"
+                className={`outline-none border-blue-400 border rounded text-xs px-1`}
+                type="text"
+                name=""
+                id=""
+                value={flaticonKey}
+                onChange={(e) => {
+                  setFlaticonKey(e.target.value);
+                }}
+              />
+              <button
+                onClick={() => {
+                  localStorage.setItem("UC_flaticon_api_key", flaticonKey);
+                  setFoundKey(flaticonKey);
+                }}
+                className="bg-lime-500 text-white px-2 text-xs rounded"
+              >
+                🔑
+              </button>
+            </>
+          )}
+          {foundKey && (
+            <>
+              <p className="select-none text-sm bg-gray-100 px-2 rounded flex-1">{`${foundKey.slice(
+                -3
+              )}`}</p>
+              <button
+                onClick={() => {
+                  localStorage.removeItem("UC_flaticon_api_key");
+                  localStorage.removeItem("UC_flaticon_token");
+                  localStorage.removeItem("UC_flaticon_token_expire");
+                  setFlaticonKey("");
+                  setFoundKey("");
+                  setToken("");
+                }}
+                className="bg-orange-500 font-bold px-2 text-xs rounded"
+              >
+                🔨
+              </button>
+              <button
+                onClick={() => {
+                  handleFlaticonToken(
+                    foundKey,
+                    setToken,
+                    setTokenExpired,
+                    setErrMsg
+                  );
+                }}
+                className={`${
+                  token && !tokenExpired ? "bg-lime-500 " : "bg-red-500"
+                } h-full w-8 rounded `}
+              >
+                🚀
+              </button>
+            </>
+          )}
+        </div>
+      )}
+      {/* Error message */}
+      <div className="!mt-0">
+        <p className="text-red-500 font-light text-xs">{errMsg}</p>
+      </div>
+    </div>
+  );
 };
 
-const handleSaveAiImg = (imageUrl) => {};
+const handleFlaticonToken = async (
+  apiKey,
+  setToken,
+  setTokenExpired,
+  setErrMsg
+) => {
+  try {
+    const {
+      data: { data },
+    } = await getFlaticonToken(apiKey);
+    const { token, expires } = data;
+    setToken(token);
+    setTokenExpired(false);
+    localStorage.setItem("UC_flaticon_token", token);
+    localStorage.setItem("UC_flaticon_token_expire", expires);
+  } catch (error) {
+    setErrMsg(error.message || "Error when retrieve token.");
+    setToken("");
+    setTokenExpired(true);
+  }
+  // localStorage.setItem("UC_flaticon_token", );
+};
+
+const getFlaticonImage = async (
+  token,
+  searchKeyword,
+  setLoading,
+  setImageArr,
+  setErrMsg
+) => {
+  // Available sizes 16,32,64,128,256,512
+  const ImageSize = 256;
+  setLoading(true);
+  try {
+    const {
+      data: { data },
+    } = await searchFlaticonImage(token, searchKeyword);
+    if (data) {
+      const receivedImageUrlArr = data?.map((item) => {
+        return { id: item.id, imageUrl: item.images[`${ImageSize}`] };
+      });
+      setImageArr(receivedImageUrlArr);
+    } else {
+      setErrMsg("Not found");
+    }
+    setLoading(false);
+  } catch (error) {
+    setErrMsg(error.message || "Error when search image.");
+    setLoading(false);
+  }
+};
+
+// Render images
+const RenderImageResult = ({
+  renderImgArr,
+  setRenderImgArr,
+  setSelectedImg,
+}) => {
+  const handleClickOnImage = (selectedImageId) => {
+    setRenderImgArr((pre) => {
+      // Add selected properties to selected id
+      const newArr = pre.map((item) => {
+        if (item.id !== selectedImageId) {
+          return { ...item, selected: false };
+        } else {
+          return { ...item, selected: true };
+        }
+      });
+      return newArr;
+    });
+  };
+  if (renderImgArr.length === 0) {
+    return (
+      <div className="w-60 h-24 border-blue-300 rounded border p-1 flex items-center justify-center ">
+        <p className="text-sm text-gray-400 select-none">Search image</p>
+      </div>
+    );
+  }
+  return (
+    <div className="w-60 h-24 border-blue-300 bg-white rounded border grid grid-cols-5 gap-1 p-1 ">
+      {renderImgArr.map((item, index) => {
+        return (
+          <div
+            onClick={() => {
+              handleClickOnImage(item.id);
+              setSelectedImg(item.imageUrl);
+            }}
+            key={item.id}
+            className={`flex items-center justify-center rounded  ${
+              item.selected ? "bg-blue-300" : ""
+            }`}
+          >
+            <img className=" h-8 w-8" src={`${item.imageUrl}`} alt="" />
+          </div>
+        );
+      })}
+    </div>
+  );
+};
