@@ -11,7 +11,11 @@ import Link from "next/link";
 import { ColorPicker } from "antd";
 import { useCollection } from "@lib/useCollection";
 
-const DEFAULT_EXPORT_SIZE = 768;
+const DEFAULT_EXPORT_SIZE = 600; //px
+const DEFAULT_IMG_SIZE = 56; //px
+const DEFAULT_ROW_SPACE = 5; // tailwind unit
+const DEFAULT_BG_COLOR = "#f0fdf4"; // px
+const DEFAULT_BORDER_RADIUS = 0.5; // tailwind unit
 
 export default function page({ params }) {
   // Fetched data
@@ -48,7 +52,7 @@ export default function page({ params }) {
 
 const BackToThisCollection = ({ collectionId }) => {
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-4xl mx-auto">
       <Link href={`/collections/${collectionId}`}>⬅ Back</Link>
     </div>
   );
@@ -63,7 +67,7 @@ const DataSelection = ({
 }) => {
   const pageNums = Array.from({ length: totalPage }, (_, index) => index + 1);
   return (
-    <div className="flex items-center max-w-3xl mx-auto space-x-4 py-2">
+    <div className="flex items-center max-w-4xl mx-auto space-x-4 py-2">
       {/* Page size input */}
       <div className="space-x-2">
         <label htmlFor="page-size-input" className="font-semibold">
@@ -110,72 +114,205 @@ const DataSelection = ({
 };
 
 const ExportContent = ({ exportData, collectionId, collectionData }) => {
-  const [bgColor, setBgColor] = useState("#eff6f");
+  const [bgColor, setBgColor] = useState(DEFAULT_BG_COLOR);
   const [containerWidth, setContainerWidth] = useState(DEFAULT_EXPORT_SIZE);
+  const [imageSize, setImageSize] = useState(DEFAULT_IMG_SIZE);
+  const [borderRadius, setBorderRadius] = useState(DEFAULT_BORDER_RADIUS);
+  const [rowSpace, setRowSpace] = useState(DEFAULT_ROW_SPACE);
+  const [properties, setProperties] = useState({
+    boderRadius: DEFAULT_BORDER_RADIUS,
+  });
   const contentRef = useRef(null);
   return (
-    <div className="">
-      <ExportButton contentRef={contentRef} />
-      <StyleSetting
-        setContainerWidth={setContainerWidth}
-        setBgColor={setBgColor}
-      />
-      <ContentContainer
-        collectionData={collectionData}
-        containerWidth={containerWidth}
-        bgColor={bgColor}
-        collectionId={collectionId}
-        contentRef={contentRef}
-        exportData={exportData}
-      />
+    <div className="mt-4">
+      <div className="max-w-4xl mx-auto flex justify-between">
+        <ContentContainer
+          borderRadius={borderRadius}
+          imageSize={imageSize}
+          collectionData={collectionData}
+          containerWidth={containerWidth}
+          bgColor={bgColor}
+          collectionId={collectionId}
+          contentRef={contentRef}
+          exportData={exportData}
+          rowSpace={rowSpace}
+        />
+        <StyleSetting
+          contentRef={contentRef}
+          setImageSize={setImageSize}
+          setContainerWidth={setContainerWidth}
+          setBgColor={setBgColor}
+          setRowSpace={setRowSpace}
+          setBorderRadius={setBorderRadius}
+        />
+      </div>
     </div>
   );
 };
 
 const ExportButton = ({ contentRef }) => {
   return (
-    <div className="flex justify-end max-w-3xl mx-auto py-4">
-      <button
-        className="bg-blue-600 text-white h-10 px-4 rounded"
-        onClick={() => {
-          // console.log(contentRef);
-          exportAsImage(contentRef.current, "filename");
-        }}
-      >
-        Export
-      </button>
-    </div>
+    <button
+      className="bg-blue-600 text-white h-10 px-4 rounded"
+      onClick={() => {
+        // console.log(contentRef);
+        exportAsImage(contentRef.current, "filename");
+      }}
+    >
+      Export
+    </button>
   );
 };
 
-const StyleSetting = ({ setContainerWidth, setBgColor }) => {
+const StyleSetting = ({
+  setBorderRadius,
+  setContainerWidth,
+  setBgColor,
+  setImageSize,
+  setRowSpace,
+  contentRef,
+  properties,
+}) => {
   const [value, setValue] = useState(DEFAULT_EXPORT_SIZE);
+  const [size, setSize] = useState(DEFAULT_IMG_SIZE);
+  const [border_radius, setBorder_Radius] = useState(DEFAULT_BORDER_RADIUS);
+  const [row_space, set_Row_Space] = useState(DEFAULT_ROW_SPACE);
+
   const handleChange = (event, newValue) => {
     if (typeof newValue === "number") {
       setValue(newValue);
       setContainerWidth(newValue);
     }
   };
+  const handleChangeImgSize = (event, newValue) => {
+    if (typeof newValue === "number") {
+      setSize(newValue);
+      setImageSize(newValue);
+    }
+  };
+  const handleChangeBorderRadius = (event, newValue) => {
+    if (typeof newValue === "number") {
+      setBorder_Radius(newValue);
+      setBorderRadius(newValue);
+    }
+  };
+  const handleChangeRowSpace = (event, newValue) => {
+    if (typeof newValue === "number") {
+      set_Row_Space(newValue);
+      setRowSpace(newValue);
+    }
+  };
   return (
-    <div className="max-w-3xl mx-auto flex items-center space-x-5">
-      <div className="w-60">
+    <div className="">
+      <LayoutSetting
+        value={value}
+        size={size}
+        border_radius={border_radius}
+        row_space={row_space}
+        handleChange={handleChange}
+        handleChangeImgSize={handleChangeImgSize}
+        handleChangeBorderRadius={handleChangeBorderRadius}
+        handleChangeRowSpace={handleChangeRowSpace}
+        setBgColor={setBgColor}
+      />
+      <ExportButton contentRef={contentRef} />
+    </div>
+  );
+};
+
+const LayoutSetting = ({
+  value,
+  size,
+  border_radius,
+  row_space,
+  handleChange,
+  handleChangeImgSize,
+  handleChangeBorderRadius,
+  handleChangeRowSpace,
+}) => {
+  const ImgMarks = [
+    {
+      value: 56,
+      label: "",
+    },
+    {
+      value: 64,
+      label: "",
+    },
+  ];
+  return (
+    <div className="grid grid-rows-5 gap-x-10 gap-y-2 pb-5 min-w-min h-fit">
+      <div className="">
+        <label className="text-xs" htmlFor="">
+          Width: <span className="font-semibold">{value}</span>
+        </label>
         <Slider
+          size="small"
           onChange={handleChange}
           value={value}
           min={400}
           step={1}
-          max={1080}
+          max={800}
           className=""
-          valueLabelDisplay="on"
         />
       </div>
       <div className="">
+        <label className="text-xs" htmlFor="">
+          Image size: <span className="font-semibold">{size}</span>{" "}
+        </label>
+        <Slider
+          size="small"
+          marks={ImgMarks}
+          onChange={handleChangeImgSize}
+          value={size}
+          min={40}
+          step={1}
+          max={100}
+          className=""
+        />
+      </div>
+      <div className="">
+        <label className="text-xs" htmlFor="">
+          Row space: <span className="font-semibold">{row_space}</span>
+        </label>
+        <Slider
+          size="small"
+          onChange={handleChangeRowSpace}
+          value={row_space}
+          min={0}
+          step={1}
+          max={10}
+          className=""
+        />
+      </div>
+      <div className="">
+        <span
+          className="shink-0 flex-1 w-20 line-clamspan-1 text-xs"
+          htmlFor=""
+        >
+          Border:{" "}
+          <span className="font-semibold break-keep">{border_radius}</span>
+        </span>
+        <Slider
+          size="small"
+          onChange={handleChangeBorderRadius}
+          value={border_radius}
+          min={0}
+          step={0.125}
+          max={1.5}
+          className=""
+        />
+      </div>
+      <div className="flex items-center justify-between">
+        <label className="text-xs" htmlFor="">
+          Bg color
+        </label>
         <ColorPicker
-          defaultValue="eff6ff"
+          defaultValue="#f0fdf4"
           presets={[
             {
               label: "Recommended",
-              colors: ["#eff6ff", "#f0fdf4"],
+              colors: ["#dbeafe", "#eff6ff", "#f0fdf4"],
             },
             {
               label: "Recent",
@@ -198,13 +335,20 @@ const ContentContainer = ({
   containerWidth,
   bgColor,
   collectionData,
+  imageSize,
+  borderRadius,
+  rowSpace,
 }) => {
   return (
-    <div className="">
+    <div className="flex-1 mx-auto">
       <ul
-        style={{ width: `${containerWidth}px`, backgroundColor: `${bgColor}` }}
+        style={{
+          width: `${containerWidth}px`,
+          backgroundColor: `${bgColor}`,
+          borderRadius: `${borderRadius}rem`,
+        }}
         ref={contentRef}
-        className="p-6 border border-gray-400 space-y-4 mx-auto rounded-3xl bg-blue-50 overflow-hidden"
+        className={`p-6 border border-gray-400 space-y-${rowSpace} mx-auto rounded-3xl bg-blue-50 overflow-hidden`}
       >
         {/* Title */}
         <li className="text-center">
@@ -214,21 +358,21 @@ const ContentContainer = ({
         </li>
         {/* Term rows */}
         {exportData?.map((item, index) => {
-          return <ExportRow key={item.id} data={item} />;
+          return <ExportRow imageSize={imageSize} key={item.id} data={item} />;
         })}
         {/* Footer */}
         <li className={`${styles.exportRow}`}>
           <div className="flex items-center justify-end">
-            <p>Create with</p>
+            <p className="text-xs">Created with</p>
           </div>
           <div className="flex items-center justify-center space-x-1">
-            <Image alt="Logo image" width={60} height={60} src={Logo} />
+            <Image alt="Logo image" width={40} height={40} src={Logo} />
             <p className="text-blue-600 font-semibold">UniCard</p>
           </div>
 
           <div className="flex justify-between rounded p-1">
             <p className="text-sm text-center flex items-center justify-center font-semibold w-full">
-              <span className="">Scan to learn</span>
+              <span className="text-xs">Scan to learn</span>
             </p>
           </div>
           <div className="">
@@ -244,22 +388,24 @@ const ContentContainer = ({
   );
 };
 
-const ExportRow = ({ data }) => {
+const ExportRow = ({ data, imageSize }) => {
   return (
-    <ul className={`${styles.exportRow}  pb-2 border-b border-slate-400`}>
-      <li className="relative w-14 h-14 shrink-0">
-        {data.image_url && (
-          <Image
-            alt={data.term + "image"}
-            sizes="56px"
-            fill
-            style={{ objectFit: "contain" }}
-            src={data.image_url}
-          />
-        )}
+    <ul className={`${styles.exportRow} pb-2 border-b border-slate-400`}>
+      <li className="relative flex items-center justify-center">
+        <div style={{ width: imageSize, height: imageSize }} className="">
+          {data.image_url && (
+            <Image
+              alt={data.term + "image"}
+              sizes={`${imageSize}px`}
+              fill
+              style={{ objectFit: "contain" }}
+              src={data.image_url}
+            />
+          )}
+        </div>
       </li>
-      <li className="text-blue w-40 ml-8 font-semibold">{data.term}</li>
-      <li className="text-blue w-40">{data.definition_2}</li>
+      <li className="text-blue font-semibold">{data.term}</li>
+      <li className="text-blue">{data.definition_2}</li>
       <li className="text-blue flex-1">{data.definition_1}</li>
     </ul>
   );
