@@ -392,7 +392,10 @@ const ExportRow = ({ data, imageSize }) => {
   return (
     <ul className={`${styles.exportRow} pb-2 border-b border-slate-400`}>
       <li className="relative flex items-center justify-center">
-        <div style={{ width: imageSize, height: imageSize }} className="">
+        <div
+          style={{ width: imageSize, height: imageSize }}
+          className="relative"
+        >
           {data.image_url && (
             <Image
               alt={data.term + "image"}
