@@ -10,12 +10,48 @@ import { Slider } from "@mui/material";
 import Link from "next/link";
 import { ColorPicker } from "antd";
 import { useCollection } from "@lib/useCollection";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
+
+const tailwindColors = [
+  "#fef3c7",
+  "#fde68a",
+  "#d9f99d",
+  "#bef264",
+  "#d1fae5",
+  "#6ee7b7",
+  "#f0f9ff",
+  "#e0f2fe",
+  "#bae6fd",
+  "#eff6ff",
+  "#dbeafe",
+  "#bfdbfe",
+  "#eef2ff",
+  "#e0e7ff",
+  "#c7d2fe",
+  "#ede9fe",
+  "#ddd6fe",
+  "#c4b5fd",
+  "#f3e8ff",
+  "#e9d5ff",
+  "#d8b4fe",
+  "#fae8ff",
+  "#d8b4fe",
+  "#fce7f3",
+  "#fbcfe8",
+  "#f9a8d4",
+  "#ffe4e6",
+  "#fecdd3",
+  "#fda4af",
+];
 
 const DEFAULT_EXPORT_SIZE = 600; //px
 const DEFAULT_IMG_SIZE = 56; //px
-const DEFAULT_ROW_SPACE = 5; // tailwind unit
+const DEFAULT_FONT_SIZE = 1.125; // tailwind unit
 const DEFAULT_BG_COLOR = "#f0fdf4"; // px
 const DEFAULT_BORDER_RADIUS = 0.5; // tailwind unit
+
+const DEFAULT_CANVAS_BG = "#dbeafe"; // blue-100
+const DEFAULT_CANVAS_PADDING = 20; // px
 
 export default function page({ params }) {
   // Fetched data
@@ -52,7 +88,7 @@ export default function page({ params }) {
 
 const BackToThisCollection = ({ collectionId }) => {
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-5xl mx-auto">
       <Link href={`/collections/${collectionId}`}>⬅ Back</Link>
     </div>
   );
@@ -67,7 +103,7 @@ const DataSelection = ({
 }) => {
   const pageNums = Array.from({ length: totalPage }, (_, index) => index + 1);
   return (
-    <div className="flex items-center max-w-4xl mx-auto space-x-4 py-2">
+    <div className="flex items-center max-w-5xl mx-auto space-x-4 py-2">
       {/* Page size input */}
       <div className="space-x-2">
         <label htmlFor="page-size-input" className="font-semibold">
@@ -118,15 +154,17 @@ const ExportContent = ({ exportData, collectionId, collectionData }) => {
   const [containerWidth, setContainerWidth] = useState(DEFAULT_EXPORT_SIZE);
   const [imageSize, setImageSize] = useState(DEFAULT_IMG_SIZE);
   const [borderRadius, setBorderRadius] = useState(DEFAULT_BORDER_RADIUS);
-  const [rowSpace, setRowSpace] = useState(DEFAULT_ROW_SPACE);
-  const [properties, setProperties] = useState({
-    boderRadius: DEFAULT_BORDER_RADIUS,
+  const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
+  const [canvasProperties, setCanvasProperties] = useState({
+    padding: DEFAULT_CANVAS_PADDING,
+    bgColor: DEFAULT_CANVAS_BG,
   });
   const contentRef = useRef(null);
   return (
     <div className="mt-4">
-      <div className="max-w-4xl mx-auto flex justify-between">
+      <div className="max-w-5xl mx-auto flex justify-between">
         <ContentContainer
+          canvasProperties={canvasProperties}
           borderRadius={borderRadius}
           imageSize={imageSize}
           collectionData={collectionData}
@@ -135,14 +173,18 @@ const ExportContent = ({ exportData, collectionId, collectionData }) => {
           collectionId={collectionId}
           contentRef={contentRef}
           exportData={exportData}
-          rowSpace={rowSpace}
+          fontSize={fontSize}
         />
         <StyleSetting
+          setBgColor={setBgColor}
+          canvasProperties={canvasProperties}
+          setCanvasProperties={setCanvasProperties}
           contentRef={contentRef}
           setImageSize={setImageSize}
           setContainerWidth={setContainerWidth}
           setBgColor={setBgColor}
-          setRowSpace={setRowSpace}
+          setFontSize={setFontSize}
+          fontSize={fontSize}
           setBorderRadius={setBorderRadius}
         />
       </div>
@@ -169,14 +211,15 @@ const StyleSetting = ({
   setContainerWidth,
   setBgColor,
   setImageSize,
-  setRowSpace,
+  setFontSize,
+  fontSize,
   contentRef,
-  properties,
+  canvasProperties,
+  setCanvasProperties,
 }) => {
   const [value, setValue] = useState(DEFAULT_EXPORT_SIZE);
   const [size, setSize] = useState(DEFAULT_IMG_SIZE);
   const [border_radius, setBorder_Radius] = useState(DEFAULT_BORDER_RADIUS);
-  const [row_space, set_Row_Space] = useState(DEFAULT_ROW_SPACE);
 
   const handleChange = (event, newValue) => {
     if (typeof newValue === "number") {
@@ -196,50 +239,70 @@ const StyleSetting = ({
       setBorderRadius(newValue);
     }
   };
-  const handleChangeRowSpace = (event, newValue) => {
+  const handleChangeFontSize = (event, newValue) => {
     if (typeof newValue === "number") {
-      set_Row_Space(newValue);
-      setRowSpace(newValue);
+      setFontSize(newValue);
     }
   };
   return (
-    <div className="">
+    <div className="w-36">
       <LayoutSetting
         value={value}
         size={size}
         border_radius={border_radius}
-        row_space={row_space}
+        fontSize={fontSize}
         handleChange={handleChange}
         handleChangeImgSize={handleChangeImgSize}
         handleChangeBorderRadius={handleChangeBorderRadius}
-        handleChangeRowSpace={handleChangeRowSpace}
+        handleChangeFontSize={handleChangeFontSize}
         setBgColor={setBgColor}
+      />
+      <CanvasSetting
+        canvasProperties={canvasProperties}
+        setCanvasProperties={setCanvasProperties}
       />
       <ExportButton contentRef={contentRef} />
     </div>
   );
 };
 
+const ImgMarks = [
+  {
+    value: 56,
+    label: "",
+  },
+  {
+    value: 64,
+    label: "",
+  },
+];
+
+const SizeMarks = [
+  {
+    value: 500,
+    label: "",
+  },
+  {
+    value: 800,
+    label: "",
+  },
+  {
+    value: 1000,
+    label: "",
+  },
+];
+
 const LayoutSetting = ({
   value,
   size,
   border_radius,
-  row_space,
+  fontSize,
+  handleChangeFontSize,
   handleChange,
   handleChangeImgSize,
   handleChangeBorderRadius,
-  handleChangeRowSpace,
+  setBgColor,
 }) => {
-  const ImgMarks = [
-    {
-      value: 56,
-      label: "",
-    },
-    {
-      value: 64,
-      label: "",
-    },
-  ];
   return (
     <div className="grid grid-rows-5 gap-x-10 gap-y-2 pb-5 min-w-min h-fit">
       <div className="">
@@ -247,12 +310,13 @@ const LayoutSetting = ({
           Width: <span className="font-semibold">{value}</span>
         </label>
         <Slider
+          marks={SizeMarks}
           size="small"
           onChange={handleChange}
           value={value}
           min={400}
-          step={1}
-          max={800}
+          step={50}
+          max={1000}
           className=""
         />
       </div>
@@ -273,15 +337,15 @@ const LayoutSetting = ({
       </div>
       <div className="">
         <label className="text-xs" htmlFor="">
-          Row space: <span className="font-semibold">{row_space}</span>
+          Font size: <span className="font-semibold">{fontSize}</span>
         </label>
         <Slider
           size="small"
-          onChange={handleChangeRowSpace}
-          value={row_space}
-          min={0}
-          step={1}
-          max={10}
+          onChange={handleChangeFontSize}
+          value={fontSize}
+          min={0.75}
+          step={0.125}
+          max={3}
           className=""
         />
       </div>
@@ -290,7 +354,7 @@ const LayoutSetting = ({
           className="shink-0 flex-1 w-20 line-clamspan-1 text-xs"
           htmlFor=""
         >
-          Border:{" "}
+          Border:
           <span className="font-semibold break-keep">{border_radius}</span>
         </span>
         <Slider
@@ -312,7 +376,7 @@ const LayoutSetting = ({
           presets={[
             {
               label: "Recommended",
-              colors: ["#dbeafe", "#eff6ff", "#f0fdf4"],
+              colors: tailwindColors,
             },
             {
               label: "Recent",
@@ -337,60 +401,76 @@ const ContentContainer = ({
   collectionData,
   imageSize,
   borderRadius,
-  rowSpace,
+  fontSize,
+  canvasProperties,
 }) => {
   return (
     <div className="flex-1 mx-auto">
-      <ul
+      <div
         style={{
-          width: `${containerWidth}px`,
-          backgroundColor: `${bgColor}`,
-          borderRadius: `${borderRadius}rem`,
+          backgroundColor: `${canvasProperties.bgColor}`,
+          padding: `${canvasProperties.padding}px`,
         }}
         ref={contentRef}
-        className={`p-6 border border-gray-400 space-y-${rowSpace} mx-auto rounded-3xl bg-blue-50 overflow-hidden`}
+        className="w-fit mx-auto"
       >
-        {/* Title */}
-        <li className="text-center">
-          <h1 className="font-semibold text-2xl text-center">
-            {collectionData?.title}
-          </h1>
-        </li>
-        {/* Term rows */}
-        {exportData?.map((item, index) => {
-          return <ExportRow imageSize={imageSize} key={item.id} data={item} />;
-        })}
-        {/* Footer */}
-        <li className={`${styles.exportRow}`}>
-          <div className="flex items-center justify-end">
-            <p className="text-xs">Created with</p>
-          </div>
-          <div className="flex items-center justify-center space-x-1">
-            <Image alt="Logo image" width={40} height={40} src={Logo} />
-            <p className="text-blue-600 font-semibold">UniCard</p>
-          </div>
+        <ul
+          style={{
+            fontSize: `${fontSize}rem`,
+            height: `${containerWidth}px`,
+            width: `${containerWidth}px`,
+            backgroundColor: `${bgColor}`,
+            borderRadius: `${borderRadius}rem`,
+          }}
+          className={`p-6 border border-gray-400 flex flex-col justify-between mx-auto rounded-3xl bg-blue-50 overflow-hidden`}
+        >
+          {/* Title */}
+          <li className="text-center">
+            <h1
+              style={{ fontSize: `${fontSize + 0.125}rem` }}
+              className="font-semibold text-center"
+            >
+              {collectionData?.title}
+            </h1>
+          </li>
+          {/* Term rows */}
+          {exportData?.map((item, index) => {
+            return (
+              <ExportRow imageSize={imageSize} key={item.id} data={item} />
+            );
+          })}
+          {/* Footer */}
+          <li className={`flex justify-around`}>
+            <div className="flex items-center justify-center space-x-5">
+              <p className="text-sm text-center flex items-center justify-center w-full">
+                <span className="text-xs text-gray-500">Created with</span>
+              </p>
 
-          <div className="flex justify-between rounded p-1">
-            <p className="text-sm text-center flex items-center justify-center font-semibold w-full">
-              <span className="text-xs">Scan to learn</span>
-            </p>
-          </div>
-          <div className="">
-            <QRCodeCanvas
-              size={64}
-              value={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/collections/${collectionId}`}
-            />
-          </div>
-          <div className=""></div>
-        </li>
-      </ul>
+              <img
+                alt="Logo image"
+                style={{ height: "56px", width: "112px" }}
+                src={`/assets/images/logo-text.png`}
+              />
+            </div>
+            <div className="flex justify-between space-x-5">
+              <p className="text-sm text-center flex items-center justify-center w-full">
+                <span className="text-xs text-gray-500">Scan to learn</span>
+              </p>
+              <QRCodeCanvas
+                size={64}
+                value={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/collections/${collectionId}`}
+              />
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 };
 
 const ExportRow = ({ data, imageSize }) => {
   return (
-    <ul className={`${styles.exportRow} pb-2 border-b border-slate-400`}>
+    <ul className={`${styles.exportRow} pb-2 border-b border-slate-300`}>
       <li className="relative flex items-center justify-center">
         <div
           style={{ width: imageSize, height: imageSize }}
@@ -431,4 +511,74 @@ const downloadImage = (blob, fileName) => {
   document.body.removeChild(fakeLink);
 
   fakeLink.remove();
+};
+
+const CanvasSetting = ({ canvasProperties, setCanvasProperties }) => {
+  const [open, setOpen] = useState(true);
+  return (
+    <div className="pb-5">
+      <button
+        onClick={() => {
+          setOpen((pre) => !pre);
+        }}
+        className="text-sm flex  items-center   mb-4"
+      >
+        Canvas{" "}
+        <ChevronDownIcon className={`h-4 w-4  ${open ? "" : "-rotate-90"}`} />
+      </button>
+      {open && (
+        <div className="text-xs space-y-4">
+          {/* Bg color setting */}
+          <div className="flex items-center justify-between">
+            <div className="h-8 flex items-center ">
+              <label className="" htmlFor="">
+                Canvas color
+              </label>
+            </div>
+
+            <ColorPicker
+              defaultValue={`${DEFAULT_CANVAS_BG}`}
+              presets={[
+                {
+                  label: "Recommended",
+                  colors: tailwindColors,
+                },
+                {
+                  label: "Recent",
+                  colors: [],
+                },
+              ]}
+              onChange={(value, hex) => {
+                setCanvasProperties((pre) => {
+                  return { ...pre, bgColor: hex };
+                });
+              }}
+            />
+          </div>
+          {/* Size setting */}
+          <div className="">
+            <span className="" htmlFor="">
+              Padding:
+              <span className="ml-2 font-semibold break-keep">
+                {canvasProperties.padding}
+              </span>
+            </span>
+            <Slider
+              value={canvasProperties.padding}
+              onChange={(e, newValue) => {
+                setCanvasProperties((pre) => {
+                  return { ...pre, padding: newValue };
+                });
+              }}
+              size="small"
+              min={0}
+              step={1}
+              max={100}
+              className=""
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
