@@ -182,7 +182,6 @@ const ExportContent = ({ exportData, collectionId, collectionData }) => {
           contentRef={contentRef}
           setImageSize={setImageSize}
           setContainerWidth={setContainerWidth}
-          setBgColor={setBgColor}
           setFontSize={setFontSize}
           fontSize={fontSize}
           setBorderRadius={setBorderRadius}
