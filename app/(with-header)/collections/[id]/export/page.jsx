@@ -11,47 +11,17 @@ import Link from "next/link";
 import { ColorPicker } from "antd";
 import { useCollection } from "@lib/useCollection";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { ImgMarks, SizeMarks, tailwindColors } from "./config/config";
+import { NumberInput } from "@mui/base/Unstable_NumberInput/NumberInput";
 
-const tailwindColors = [
-  "#fef3c7",
-  "#fde68a",
-  "#d9f99d",
-  "#bef264",
-  "#d1fae5",
-  "#6ee7b7",
-  "#f0f9ff",
-  "#e0f2fe",
-  "#bae6fd",
-  "#eff6ff",
-  "#dbeafe",
-  "#bfdbfe",
-  "#eef2ff",
-  "#e0e7ff",
-  "#c7d2fe",
-  "#ede9fe",
-  "#ddd6fe",
-  "#c4b5fd",
-  "#f3e8ff",
-  "#e9d5ff",
-  "#d8b4fe",
-  "#fae8ff",
-  "#d8b4fe",
-  "#fce7f3",
-  "#fbcfe8",
-  "#f9a8d4",
-  "#ffe4e6",
-  "#fecdd3",
-  "#fda4af",
-];
-
-const DEFAULT_EXPORT_SIZE = 600; //px
-const DEFAULT_IMG_SIZE = 56; //px
-const DEFAULT_FONT_SIZE = 1.125; // tailwind unit
+const DEFAULT_EXPORT_SIZE = 1000; //px
+const DEFAULT_IMG_SIZE = 128; //px
+const DEFAULT_FONT_SIZE = 2; // tailwind unit
 const DEFAULT_BG_COLOR = "#f0fdf4"; // px
-const DEFAULT_BORDER_RADIUS = 0.5; // tailwind unit
+const DEFAULT_BORDER_RADIUS = 1.5; // tailwind unit
 
 const DEFAULT_CANVAS_BG = "#dbeafe"; // blue-100
-const DEFAULT_CANVAS_PADDING = 20; // px
+const DEFAULT_CANVAS_PADDING = 40; // px
 
 export default function page({ params }) {
   // Fetched data
@@ -88,7 +58,7 @@ export default function page({ params }) {
 
 const BackToThisCollection = ({ collectionId }) => {
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-7xl mx-auto">
       <Link href={`/collections/${collectionId}`}>⬅ Back</Link>
     </div>
   );
@@ -103,7 +73,7 @@ const DataSelection = ({
 }) => {
   const pageNums = Array.from({ length: totalPage }, (_, index) => index + 1);
   return (
-    <div className="flex items-center max-w-5xl mx-auto space-x-4 py-2">
+    <div className="flex items-center max-w-7xl mx-auto space-x-4 py-2">
       {/* Page size input */}
       <div className="space-x-2">
         <label htmlFor="page-size-input" className="font-semibold">
@@ -150,11 +120,13 @@ const DataSelection = ({
 };
 
 const ExportContent = ({ exportData, collectionId, collectionData }) => {
-  const [bgColor, setBgColor] = useState(DEFAULT_BG_COLOR);
-  const [containerWidth, setContainerWidth] = useState(DEFAULT_EXPORT_SIZE);
-  const [imageSize, setImageSize] = useState(DEFAULT_IMG_SIZE);
-  const [borderRadius, setBorderRadius] = useState(DEFAULT_BORDER_RADIUS);
-  const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
+  const [layoutProperties, setLayoutProperties] = useState({
+    bgColor: DEFAULT_BG_COLOR,
+    exportSize: DEFAULT_EXPORT_SIZE,
+    imageSize: DEFAULT_IMG_SIZE,
+    borderRadius: DEFAULT_BORDER_RADIUS,
+    fontSize: DEFAULT_FONT_SIZE,
+  });
   const [canvasProperties, setCanvasProperties] = useState({
     padding: DEFAULT_CANVAS_PADDING,
     bgColor: DEFAULT_CANVAS_BG,
@@ -162,29 +134,28 @@ const ExportContent = ({ exportData, collectionId, collectionData }) => {
   const contentRef = useRef(null);
   return (
     <div className="mt-4">
-      <div className="max-w-5xl mx-auto flex justify-between">
-        <ContentContainer
+      <div className="max-w-7xl mx-auto flex justify-between ">
+        <ImageToExport
           canvasProperties={canvasProperties}
-          borderRadius={borderRadius}
-          imageSize={imageSize}
+          layoutProperties={layoutProperties}
           collectionData={collectionData}
-          containerWidth={containerWidth}
-          bgColor={bgColor}
           collectionId={collectionId}
           contentRef={contentRef}
           exportData={exportData}
-          fontSize={fontSize}
+        />
+        <ContentContainer
+          canvasProperties={canvasProperties}
+          layoutProperties={layoutProperties}
+          collectionData={collectionData}
+          collectionId={collectionId}
+          exportData={exportData}
         />
         <StyleSetting
-          setBgColor={setBgColor}
+          layoutProperties={layoutProperties}
+          setLayoutProperties={setLayoutProperties}
           canvasProperties={canvasProperties}
           setCanvasProperties={setCanvasProperties}
           contentRef={contentRef}
-          setImageSize={setImageSize}
-          setContainerWidth={setContainerWidth}
-          setFontSize={setFontSize}
-          fontSize={fontSize}
-          setBorderRadius={setBorderRadius}
         />
       </div>
     </div>
@@ -206,55 +177,17 @@ const ExportButton = ({ contentRef }) => {
 };
 
 const StyleSetting = ({
-  setBorderRadius,
-  setContainerWidth,
-  setBgColor,
-  setImageSize,
-  setFontSize,
-  fontSize,
   contentRef,
   canvasProperties,
   setCanvasProperties,
+  layoutProperties,
+  setLayoutProperties,
 }) => {
-  const [value, setValue] = useState(DEFAULT_EXPORT_SIZE);
-  const [size, setSize] = useState(DEFAULT_IMG_SIZE);
-  const [border_radius, setBorder_Radius] = useState(DEFAULT_BORDER_RADIUS);
-
-  const handleChange = (event, newValue) => {
-    if (typeof newValue === "number") {
-      setValue(newValue);
-      setContainerWidth(newValue);
-    }
-  };
-  const handleChangeImgSize = (event, newValue) => {
-    if (typeof newValue === "number") {
-      setSize(newValue);
-      setImageSize(newValue);
-    }
-  };
-  const handleChangeBorderRadius = (event, newValue) => {
-    if (typeof newValue === "number") {
-      setBorder_Radius(newValue);
-      setBorderRadius(newValue);
-    }
-  };
-  const handleChangeFontSize = (event, newValue) => {
-    if (typeof newValue === "number") {
-      setFontSize(newValue);
-    }
-  };
   return (
-    <div className="w-36">
+    <div className="w-44 shrink-0 bg-blue-200 p-5 rounded-md ml-4">
       <LayoutSetting
-        value={value}
-        size={size}
-        border_radius={border_radius}
-        fontSize={fontSize}
-        handleChange={handleChange}
-        handleChangeImgSize={handleChangeImgSize}
-        handleChangeBorderRadius={handleChangeBorderRadius}
-        handleChangeFontSize={handleChangeFontSize}
-        setBgColor={setBgColor}
+        setLayoutProperties={setLayoutProperties}
+        layoutProperties={layoutProperties}
       />
       <CanvasSetting
         canvasProperties={canvasProperties}
@@ -265,83 +198,62 @@ const StyleSetting = ({
   );
 };
 
-const ImgMarks = [
-  {
-    value: 56,
-    label: "",
-  },
-  {
-    value: 64,
-    label: "",
-  },
-];
-
-const SizeMarks = [
-  {
-    value: 500,
-    label: "",
-  },
-  {
-    value: 800,
-    label: "",
-  },
-  {
-    value: 1000,
-    label: "",
-  },
-];
-
-const LayoutSetting = ({
-  value,
-  size,
-  border_radius,
-  fontSize,
-  handleChangeFontSize,
-  handleChange,
-  handleChangeImgSize,
-  handleChangeBorderRadius,
-  setBgColor,
-}) => {
+const LayoutSetting = ({ layoutProperties, setLayoutProperties }) => {
   return (
     <div className="grid grid-rows-5 gap-x-10 gap-y-2 pb-5 min-w-min h-fit">
       <div className="">
         <label className="text-xs" htmlFor="">
-          Width: <span className="font-semibold">{value}</span>
+          Width:{" "}
+          <span className="font-semibold">{layoutProperties.exportSize}</span>
         </label>
         <Slider
           marks={SizeMarks}
           size="small"
-          onChange={handleChange}
-          value={value}
-          min={400}
+          onChange={(e, newValue) => {
+            setLayoutProperties((pre) => {
+              return { ...pre, exportSize: newValue };
+            });
+          }}
+          value={layoutProperties.exportSize}
+          min={800}
           step={50}
-          max={1000}
+          max={1200}
           className=""
         />
       </div>
       <div className="">
         <label className="text-xs" htmlFor="">
-          Image size: <span className="font-semibold">{size}</span>{" "}
+          Image size:{" "}
+          <span className="font-semibold">{layoutProperties.imageSize}</span>{" "}
         </label>
         <Slider
           size="small"
           marks={ImgMarks}
-          onChange={handleChangeImgSize}
-          value={size}
-          min={40}
-          step={1}
-          max={100}
+          onChange={(e, newValue) => {
+            setLayoutProperties((pre) => {
+              return { ...pre, imageSize: newValue };
+            });
+          }}
+          value={layoutProperties.imageSize}
+          min={56}
+          step={4}
+          max={256}
           className=""
         />
       </div>
       <div className="">
         <label className="text-xs" htmlFor="">
-          Font size: <span className="font-semibold">{fontSize}</span>
+          Font size:{" "}
+          <span className="font-semibold">{layoutProperties.fontSize}</span>
         </label>
         <Slider
           size="small"
-          onChange={handleChangeFontSize}
-          value={fontSize}
+          onChange={(e, newValue) => {
+            setLayoutProperties((pre) => {
+              return { ...pre, fontSize: newValue };
+            });
+          }}
+          value={layoutProperties.fontSize}
           min={0.75}
           step={0.125}
           max={3}
@@ -354,12 +266,18 @@ const LayoutSetting = ({
           htmlFor=""
         >
           Border:
-          <span className="font-semibold break-keep">{border_radius}</span>
+          <span className="font-semibold break-keep">
+            {layoutProperties.borderRadius}
+          </span>
         </span>
         <Slider
           size="small"
-          onChange={handleChangeBorderRadius}
-          value={border_radius}
+          onChange={(e, newValue) => {
+            setLayoutProperties((pre) => {
+              return { ...pre, borderRadius: newValue };
+            });
+          }}
+          value={layoutProperties.borderRadius}
           min={0}
           step={0.125}
           max={1.5}
@@ -383,7 +301,9 @@ const LayoutSetting = ({
             },
           ]}
           onChange={(value, hex) => {
-            setBgColor(hex);
+            setLayoutProperties((pre) => {
+              return { ...pre, bgColor: hex };
+            });
           }}
         />
       </div>
@@ -391,42 +311,39 @@ const LayoutSetting = ({
   );
 };
 
+// Data to display scale 0.5
+
 const ContentContainer = ({
   exportData,
-  contentRef,
   collectionId,
-  containerWidth,
-  bgColor,
   collectionData,
-  imageSize,
-  borderRadius,
-  fontSize,
   canvasProperties,
+  layoutProperties,
 }) => {
   return (
-    <div className="flex-1 mx-auto">
+    <div className="relative flex-1 mx-auto border border-gray-200 shadow p-4 bg-white flex items-center justify-center overflow-scroll h-[620px]">
       <div
         style={{
           backgroundColor: `${canvasProperties.bgColor}`,
           padding: `${canvasProperties.padding}px`,
+          transform: "scale(0.5) translate(-100%,-100%)",
         }}
-        ref={contentRef}
-        className="w-fit mx-auto"
+        className="w-fit absolute top-1/2 left-1/2"
       >
         <ul
           style={{
-            fontSize: `${fontSize}rem`,
-            height: `${containerWidth}px`,
-            width: `${containerWidth}px`,
-            backgroundColor: `${bgColor}`,
-            borderRadius: `${borderRadius}rem`,
+            fontSize: `${layoutProperties.fontSize}rem`,
+            height: `${layoutProperties.exportSize}px`,
+            width: `${layoutProperties.exportSize}px`,
+            backgroundColor: `${layoutProperties.bgColor}`,
+            borderRadius: `${layoutProperties.borderRadius}rem`,
           }}
           className={`p-6 border border-gray-400 flex flex-col justify-between mx-auto rounded-3xl bg-blue-50 overflow-hidden`}
         >
           {/* Title */}
           <li className="text-center">
             <h1
-              style={{ fontSize: `${fontSize + 0.125}rem` }}
+              style={{ fontSize: `${layoutProperties.fontSize + 0.125}rem` }}
               className="font-semibold text-center"
             >
               {collectionData?.title}
@@ -435,7 +352,88 @@ const ContentContainer = ({
           {/* Term rows */}
           {exportData?.map((item, index) => {
             return (
-              <ExportRow imageSize={imageSize} key={item.id} data={item} />
+              <ExportRow
+                imageSize={layoutProperties.imageSize}
+                key={item.id}
+                data={item}
+              />
+            );
+          })}
+          {/* Footer */}
+          <li className={`flex justify-around`}>
+            <div className="flex items-center justify-center space-x-5">
+              <p className="text-sm text-center flex items-center justify-center w-full">
+                <span className="text-xs text-gray-500">Created with</span>
+              </p>
+
+              <img
+                alt="Logo image"
+                style={{ height: "56px", width: "112px" }}
+                src={`/assets/images/logo-text.png`}
+              />
+            </div>
+            <div className="flex justify-between space-x-5">
+              <p className="text-sm text-center flex items-center justify-center w-full">
+                <span className="text-xs text-gray-500">Scan to learn</span>
+              </p>
+              <QRCodeCanvas
+                size={64}
+                value={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/collections/${collectionId}`}
+              />
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+// Scale 1
+const ImageToExport = ({
+  exportData,
+  contentRef,
+  collectionId,
+  collectionData,
+  canvasProperties,
+  layoutProperties,
+}) => {
+  return (
+    <div className="overflow-hidden w-0 h-0">
+      <div
+        style={{
+          backgroundColor: `${canvasProperties.bgColor}`,
+          padding: `${canvasProperties.padding}px`,
+        }}
+        ref={contentRef}
+        className="w-fit"
+      >
+        <ul
+          style={{
+            fontSize: `${layoutProperties.fontSize}rem`,
+            height: `${layoutProperties.exportSize}px`,
+            width: `${layoutProperties.exportSize}px`,
+            backgroundColor: `${layoutProperties.bgColor}`,
+            borderRadius: `${layoutProperties.borderRadius}rem`,
+          }}
+          className={`p-6 border border-gray-400 flex flex-col justify-between mx-auto rounded-3xl bg-blue-50 overflow-hidden`}
+        >
+          {/* Title */}
+          <li className="text-center">
+            <h1
+              style={{ fontSize: `${layoutProperties.fontSize + 0.125}rem` }}
+              className="font-semibold text-center"
+            >
+              {collectionData?.title}
+            </h1>
+          </li>
+          {/* Term rows */}
+          {exportData?.map((item, index) => {
+            return (
+              <ExportRow
+                imageSize={layoutProperties.imageSize}
+                key={item.id}
+                data={item}
+              />
             );
           })}
           {/* Footer */}
@@ -571,8 +569,8 @@ const CanvasSetting = ({ canvasProperties, setCanvasProperties }) => {
               }}
               size="small"
               min={0}
-              step={1}
-              max={100}
+              step={4}
+              max={96}
               className=""
             />
           </div>
