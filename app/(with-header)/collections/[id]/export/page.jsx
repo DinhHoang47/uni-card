@@ -1,27 +1,22 @@
 "use client";
 import { useCard } from "@lib/useCard";
 import Image from "next/image";
-import React, { useRef, useState } from "react";
+import React, { forwardRef, useRef, useState } from "react";
 import styles from "./styles.module.css";
-import Logo from "@public/assets/images/unicard-logo.png";
 import html2canvas from "html2canvas";
 import { QRCodeCanvas } from "qrcode.react";
-import { Slider } from "@mui/material";
 import Link from "next/link";
 import { ColorPicker } from "antd";
 import { useCollection } from "@lib/useCollection";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { ImgMarks, SizeMarks, tailwindColors } from "./config/config";
-import { NumberInput } from "@mui/base/Unstable_NumberInput/NumberInput";
-
-const DEFAULT_EXPORT_SIZE = 1000; //px
-const DEFAULT_IMG_SIZE = 128; //px
-const DEFAULT_FONT_SIZE = 2; // tailwind unit
-const DEFAULT_BG_COLOR = "#f0fdf4"; // px
-const DEFAULT_BORDER_RADIUS = 1.5; // tailwind unit
-
-const DEFAULT_CANVAS_BG = "#dbeafe"; // blue-100
-const DEFAULT_CANVAS_PADDING = 40; // px
+import {
+  colorSettingList,
+  defaultLayoutProperties,
+  rowPropertyList,
+  settingPropertyList,
+  tailwindColors,
+} from "./config/config";
+import ContentSetting from "./components/ContentSetting";
 
 export default function page({ params }) {
   // Fetched data
@@ -80,7 +75,7 @@ const DataSelection = ({
           Set page size :
         </label>
         <select
-          className="px-2 py-1 bg-blue-100 rounded"
+          className="px-2 py-1 bg-zinc-100 rounded"
           onChange={(e) => {
             setPageSize(e.target.value * 1);
           }}
@@ -88,6 +83,10 @@ const DataSelection = ({
           id="page-size-input"
         >
           <option value="5">5</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
           <option value="10">10</option>
           <option value="15">15</option>
           <option value="20">20</option>
@@ -106,7 +105,7 @@ const DataSelection = ({
           }}
           name=""
           id="set-page"
-          className="px-2 py-1 bg-blue-100 rounded"
+          className="px-2 py-1 bg-zinc-100 rounded"
         >
           {pageNums.map((item, index) => (
             <option key={`page-${index * 2 + 1}-opt`} value={index + 1}>
@@ -120,41 +119,29 @@ const DataSelection = ({
 };
 
 const ExportContent = ({ exportData, collectionId, collectionData }) => {
-  const [layoutProperties, setLayoutProperties] = useState({
-    bgColor: DEFAULT_BG_COLOR,
-    exportSize: DEFAULT_EXPORT_SIZE,
-    imageSize: DEFAULT_IMG_SIZE,
-    borderRadius: DEFAULT_BORDER_RADIUS,
-    fontSize: DEFAULT_FONT_SIZE,
-  });
-  const [canvasProperties, setCanvasProperties] = useState({
-    padding: DEFAULT_CANVAS_PADDING,
-    bgColor: DEFAULT_CANVAS_BG,
-  });
+  const [rowProperty, setRowProperty] = useState(rowPropertyList);
+  const [layoutProperties, setLayoutProperties] = useState(
+    defaultLayoutProperties
+  );
   const contentRef = useRef(null);
   return (
     <div className="mt-4">
       <div className="max-w-7xl mx-auto flex justify-between ">
-        <ImageToExport
-          canvasProperties={canvasProperties}
-          layoutProperties={layoutProperties}
-          collectionData={collectionData}
-          collectionId={collectionId}
-          contentRef={contentRef}
-          exportData={exportData}
+        <ContentSetting
+          rowProperty={rowProperty}
+          setRowProperty={setRowProperty}
         />
         <ContentContainer
-          canvasProperties={canvasProperties}
           layoutProperties={layoutProperties}
           collectionData={collectionData}
           collectionId={collectionId}
           exportData={exportData}
+          contentRef={contentRef}
+          rowProperty={rowProperty}
         />
         <StyleSetting
           layoutProperties={layoutProperties}
           setLayoutProperties={setLayoutProperties}
-          canvasProperties={canvasProperties}
-          setCanvasProperties={setCanvasProperties}
           contentRef={contentRef}
         />
       </div>
@@ -167,7 +154,6 @@ const ExportButton = ({ contentRef }) => {
     <button
       className="bg-blue-600 text-white h-10 px-4 rounded"
       onClick={() => {
-        // console.log(contentRef);
         exportAsImage(contentRef.current, "filename");
       }}
     >
@@ -178,20 +164,14 @@ const ExportButton = ({ contentRef }) => {
 
 const StyleSetting = ({
   contentRef,
-  canvasProperties,
-  setCanvasProperties,
   layoutProperties,
   setLayoutProperties,
 }) => {
   return (
-    <div className="w-44 shrink-0 bg-blue-200 p-5 rounded-md ml-4">
+    <div className="w-60 shrink-0 bg-zinc-100 px-4 py-5 rounded-md ml-4">
       <LayoutSetting
         setLayoutProperties={setLayoutProperties}
         layoutProperties={layoutProperties}
-      />
-      <CanvasSetting
-        canvasProperties={canvasProperties}
-        setCanvasProperties={setCanvasProperties}
       />
       <ExportButton contentRef={contentRef} />
     </div>
@@ -199,114 +179,91 @@ const StyleSetting = ({
 };
 
 const LayoutSetting = ({ layoutProperties, setLayoutProperties }) => {
+  const [open, setOpen] = useState(true);
   return (
-    <div className="grid grid-rows-5 gap-x-10 gap-y-2 pb-5 min-w-min h-fit">
-      <div className="">
-        <label className="text-xs" htmlFor="">
-          Width:{" "}
-          <span className="font-semibold">{layoutProperties.exportSize}</span>
-        </label>
-        <Slider
-          marks={SizeMarks}
-          size="small"
-          onChange={(e, newValue) => {
-            setLayoutProperties((pre) => {
-              return { ...pre, exportSize: newValue };
-            });
-          }}
-          value={layoutProperties.exportSize}
-          min={800}
-          step={50}
-          max={1200}
-          className=""
-        />
-      </div>
-      <div className="">
-        <label className="text-xs" htmlFor="">
-          Image size:{" "}
-          <span className="font-semibold">{layoutProperties.imageSize}</span>{" "}
-        </label>
-        <Slider
-          size="small"
-          marks={ImgMarks}
-          onChange={(e, newValue) => {
-            setLayoutProperties((pre) => {
-              return { ...pre, imageSize: newValue };
-            });
-          }}
-          value={layoutProperties.imageSize}
-          min={56}
-          step={4}
-          max={256}
-          className=""
-        />
-      </div>
-      <div className="">
-        <label className="text-xs" htmlFor="">
-          Font size:{" "}
-          <span className="font-semibold">{layoutProperties.fontSize}</span>
-        </label>
-        <Slider
-          size="small"
-          onChange={(e, newValue) => {
-            setLayoutProperties((pre) => {
-              return { ...pre, fontSize: newValue };
-            });
-          }}
-          value={layoutProperties.fontSize}
-          min={0.75}
-          step={0.125}
-          max={3}
-          className=""
-        />
-      </div>
-      <div className="">
-        <span
-          className="shink-0 flex-1 w-20 line-clamspan-1 text-xs"
-          htmlFor=""
-        >
-          Border:
-          <span className="font-semibold break-keep">
-            {layoutProperties.borderRadius}
-          </span>
+    <div className=" pb-5 min-w-min">
+      <button
+        onClick={() => {
+          setOpen((pre) => !pre);
+        }}
+        className="font-semibold text-sm flex items-center -ml-3"
+      >
+        <span className="pr-1">
+          <ChevronDownIcon className={`h-4 w-4 ${open ? "" : "-rotate-90"}`} />
         </span>
-        <Slider
-          size="small"
-          onChange={(e, newValue) => {
-            setLayoutProperties((pre) => {
-              return { ...pre, borderRadius: newValue };
-            });
-          }}
-          value={layoutProperties.borderRadius}
-          min={0}
-          step={0.125}
-          max={1.5}
-          className=""
-        />
+        Size & Properties
+      </button>
+      <div className={`pl-2 ${open ? "h-auto" : "h-0 overflow-hidden"} mt-2`}>
+        {settingPropertyList.map((data, index) => {
+          return (
+            <LayoutSettingItem
+              key={data.propertyAlias}
+              data={data}
+              layoutProperties={layoutProperties}
+              setLayoutProperties={setLayoutProperties}
+            />
+          );
+        })}
+        {colorSettingList.map((data) => {
+          return (
+            <ColorSettingItem
+              key={data.propertyAlias}
+              data={data}
+              layoutProperties={layoutProperties}
+              setLayoutProperties={setLayoutProperties}
+            />
+          );
+        })}
       </div>
-      <div className="flex items-center justify-between">
-        <label className="text-xs" htmlFor="">
-          Bg color
-        </label>
-        <ColorPicker
-          defaultValue="#f0fdf4"
-          presets={[
-            {
-              label: "Recommended",
-              colors: tailwindColors,
-            },
-            {
-              label: "Recent",
-              colors: [],
-            },
-          ]}
-          onChange={(value, hex) => {
-            setLayoutProperties((pre) => {
-              return { ...pre, bgColor: hex };
-            });
-          }}
-        />
-      </div>
+    </div>
+  );
+};
+
+const ColorSettingItem = ({ data, setLayoutProperties, layoutProperties }) => {
+  const { labelName, defaultColor, propertyAlias } = data;
+  return (
+    <div className="flex flex-1 items-center justify-between h-[34px]">
+      <label className="text-xs flex" htmlFor="">
+        {labelName}{" "}
+      </label>
+      <ColorPicker
+        presets={[
+          {
+            label: "Recommended",
+            colors: tailwindColors,
+          },
+        ]}
+        value={layoutProperties[propertyAlias]}
+        defaultValue={defaultColor}
+        onChange={(_, hex) => {
+          setLayoutProperties((pre) => {
+            return { ...pre, [propertyAlias]: hex };
+          });
+        }}
+      />
+    </div>
+  );
+};
+
+const LayoutSettingItem = ({ data, layoutProperties, setLayoutProperties }) => {
+  const { labelName, propertyAlias, min, max, step, Controller } = data;
+  return (
+    <div className="flex flex-1 items-center justify-between h-[34px]">
+      <label className="text-xs flex" htmlFor="">
+        {labelName}{" "}
+      </label>
+      <Controller
+        className="w-20"
+        value={layoutProperties[propertyAlias]}
+        min={min}
+        max={max}
+        step={step}
+        onChange={(newValue) => {
+          setLayoutProperties((pre) => {
+            return { ...pre, [propertyAlias]: newValue };
+          });
+        }}
+      />
     </div>
   );
 };
@@ -315,97 +272,22 @@ const LayoutSetting = ({ layoutProperties, setLayoutProperties }) => {
 
 const ContentContainer = ({
   exportData,
-  collectionId,
   collectionData,
-  canvasProperties,
   layoutProperties,
-}) => {
-  return (
-    <div className="relative flex-1 mx-auto border border-gray-200 shadow p-4 bg-white flex items-center justify-center overflow-scroll h-[620px]">
-      <div
-        style={{
-          backgroundColor: `${canvasProperties.bgColor}`,
-          padding: `${canvasProperties.padding}px`,
-          transform: "scale(0.5) translate(-100%,-100%)",
-        }}
-        className="w-fit absolute top-1/2 left-1/2"
-      >
-        <ul
-          style={{
-            fontSize: `${layoutProperties.fontSize}rem`,
-            height: `${layoutProperties.exportSize}px`,
-            width: `${layoutProperties.exportSize}px`,
-            backgroundColor: `${layoutProperties.bgColor}`,
-            borderRadius: `${layoutProperties.borderRadius}rem`,
-          }}
-          className={`p-6 border border-gray-400 flex flex-col justify-between mx-auto rounded-3xl bg-blue-50 overflow-hidden`}
-        >
-          {/* Title */}
-          <li className="text-center">
-            <h1
-              style={{ fontSize: `${layoutProperties.fontSize + 0.125}rem` }}
-              className="font-semibold text-center"
-            >
-              {collectionData?.title}
-            </h1>
-          </li>
-          {/* Term rows */}
-          {exportData?.map((item, index) => {
-            return (
-              <ExportRow
-                imageSize={layoutProperties.imageSize}
-                key={item.id}
-                data={item}
-              />
-            );
-          })}
-          {/* Footer */}
-          <li className={`flex justify-around`}>
-            <div className="flex items-center justify-center space-x-5">
-              <p className="text-sm text-center flex items-center justify-center w-full">
-                <span className="text-xs text-gray-500">Created with</span>
-              </p>
-
-              <img
-                alt="Logo image"
-                style={{ height: "56px", width: "112px" }}
-                src={`/assets/images/logo-text.png`}
-              />
-            </div>
-            <div className="flex justify-between space-x-5">
-              <p className="text-sm text-center flex items-center justify-center w-full">
-                <span className="text-xs text-gray-500">Scan to learn</span>
-              </p>
-              <QRCodeCanvas
-                size={64}
-                value={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/collections/${collectionId}`}
-              />
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-  );
-};
-
-// Scale 1
-const ImageToExport = ({
-  exportData,
   contentRef,
-  collectionId,
-  collectionData,
-  canvasProperties,
-  layoutProperties,
+  rowProperty,
 }) => {
   return (
-    <div className="overflow-hidden w-0 h-0">
+    <div className="relative flex-1 mx-auto border border-gray-200 rounded-lg shadow p-4 bg-white flex items-center justify-center overflow-scroll h-[620px]">
+      <div id={"exportElementStorage"} className="w-0 h-0"></div>
       <div
-        style={{
-          backgroundColor: `${canvasProperties.bgColor}`,
-          padding: `${canvasProperties.padding}px`,
-        }}
         ref={contentRef}
-        className="w-fit"
+        style={{
+          backgroundColor: `${layoutProperties.canvasColor}`,
+          padding: `${layoutProperties.canvasPadding}px`,
+          transform: "scale(0.375)",
+        }}
+        className="w-fit absolute"
       >
         <ul
           style={{
@@ -413,7 +295,7 @@ const ImageToExport = ({
             height: `${layoutProperties.exportSize}px`,
             width: `${layoutProperties.exportSize}px`,
             backgroundColor: `${layoutProperties.bgColor}`,
-            borderRadius: `${layoutProperties.borderRadius}rem`,
+            borderRadius: `${layoutProperties.borderRadius}%`,
           }}
           className={`p-6 border border-gray-400 flex flex-col justify-between mx-auto rounded-3xl bg-blue-50 overflow-hidden`}
         >
@@ -430,7 +312,8 @@ const ImageToExport = ({
           {exportData?.map((item, index) => {
             return (
               <ExportRow
-                imageSize={layoutProperties.imageSize}
+                rowProperty={rowProperty}
+                layoutProperties={layoutProperties}
                 key={item.id}
                 data={item}
               />
@@ -451,12 +334,15 @@ const ImageToExport = ({
             </div>
             <div className="flex justify-between space-x-5">
               <p className="text-sm text-center flex items-center justify-center w-full">
-                <span className="text-xs text-gray-500">Scan to learn</span>
+                <span className="text-xs text-gray-500">
+                  Fb: unicard.japanese
+                </span>
               </p>
               <QRCodeCanvas
                 size={64}
-                value={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/collections/${collectionId}`}
+                value={`https://www.facebook.com/unicard.japanese`}
               />
+              {/* ${process.env.NEXT_PUBLIC_FRONTEND_URL}/collections/${collectionId} */}
             </div>
           </li>
         </ul>
@@ -465,18 +351,22 @@ const ImageToExport = ({
   );
 };
 
-const ExportRow = ({ data, imageSize }) => {
-  return (
-    <ul className={`${styles.exportRow} pb-2 border-b border-slate-300`}>
+const ExportRow = ({ data, layoutProperties, rowProperty }) => {
+  const ImageBlock = ({ property }) => {
+    const style = property[0];
+    return (
       <li className="relative flex items-center justify-center">
         <div
-          style={{ width: imageSize, height: imageSize }}
+          style={{
+            width: style.size,
+            height: style.size,
+          }}
           className="relative"
         >
           {data.image_url && (
             <Image
               alt={data.term + "image"}
-              sizes={`${imageSize}px`}
+              sizes={`${style.size}px`}
               fill
               style={{ objectFit: "contain" }}
               src={data.image_url}
@@ -484,17 +374,71 @@ const ExportRow = ({ data, imageSize }) => {
           )}
         </div>
       </li>
-      <li className="text-blue font-semibold">{data.term}</li>
-      <li className="text-blue">{data.definition_2}</li>
-      <li className="text-blue flex-1">{data.definition_1}</li>
+    );
+  };
+  const TermBlock = ({ property }) => {
+    const style = property[0];
+    return (
+      <li
+        style={{ fontSize: `${style.fontSize}rem` }}
+        className="text-blue font-semibold"
+      >
+        {data.term}
+      </li>
+    );
+  };
+  const PronunciationBlock = ({ property }) => {
+    const style = property[0];
+    return (
+      <li style={{ fontSize: `${style.fontSize}rem` }} className="text-blue">
+        {data.definition_2}
+      </li>
+    );
+  };
+  const DefinitionBlock = ({ property }) => {
+    const style = property[0];
+    return (
+      <li
+        style={{ fontSize: `${style.fontSize}rem` }}
+        className="text-blue flex-1"
+      >
+        {data.definition_1}
+      </li>
+    );
+  };
+  const RowMarkups = [
+    { label: "image", Element: ImageBlock },
+    { label: "term", Element: TermBlock },
+    { label: "definition", Element: DefinitionBlock },
+    { label: "pronunciation", Element: PronunciationBlock },
+  ];
+  const renderElement = [];
+  // Find label of element by loop through property array
+  rowProperty.forEach((item, index) => {
+    let element = rowProperty.find((item) => item.order === index + 1);
+    let fieldName = element.field;
+    let elementToPush = RowMarkups.find((item) => item.label === fieldName);
+    if (element.display) {
+      renderElement.push({ ...elementToPush, ...element });
+    }
+  });
+  return (
+    <ul className={`${styles.exportRow} pb-2 border-b border-slate-300`}>
+      {renderElement.map((item) => {
+        const Component = item.Element;
+        return <Component property={item.property} key={item.label} />;
+      })}
     </ul>
   );
 };
 
 const exportAsImage = async (element, imageFileName) => {
+  // Create a clone element to remove scale property before export
+  element.style.removeProperty("transform");
   const canvas = await html2canvas(element, { backgroundColor: null });
   const image = canvas.toDataURL("image/png", 1.0);
   downloadImage(image, imageFileName);
+  element.style.setProperty("transform", "scale(0.375)");
 };
 const downloadImage = (blob, fileName) => {
   const fakeLink = window.document.createElement("a");
@@ -508,74 +452,4 @@ const downloadImage = (blob, fileName) => {
   document.body.removeChild(fakeLink);
 
   fakeLink.remove();
-};
-
-const CanvasSetting = ({ canvasProperties, setCanvasProperties }) => {
-  const [open, setOpen] = useState(true);
-  return (
-    <div className="pb-5">
-      <button
-        onClick={() => {
-          setOpen((pre) => !pre);
-        }}
-        className="text-sm flex  items-center   mb-4"
-      >
-        Canvas{" "}
-        <ChevronDownIcon className={`h-4 w-4  ${open ? "" : "-rotate-90"}`} />
-      </button>
-      {open && (
-        <div className="text-xs space-y-4">
-          {/* Bg color setting */}
-          <div className="flex items-center justify-between">
-            <div className="h-8 flex items-center ">
-              <label className="" htmlFor="">
-                Canvas color
-              </label>
-            </div>
-
-            <ColorPicker
-              defaultValue={`${DEFAULT_CANVAS_BG}`}
-              presets={[
-                {
-                  label: "Recommended",
-                  colors: tailwindColors,
-                },
-                {
-                  label: "Recent",
-                  colors: [],
-                },
-              ]}
-              onChange={(value, hex) => {
-                setCanvasProperties((pre) => {
-                  return { ...pre, bgColor: hex };
-                });
-              }}
-            />
-          </div>
-          {/* Size setting */}
-          <div className="">
-            <span className="" htmlFor="">
-              Padding:
-              <span className="ml-2 font-semibold break-keep">
-                {canvasProperties.padding}
-              </span>
-            </span>
-            <Slider
-              value={canvasProperties.padding}
-              onChange={(e, newValue) => {
-                setCanvasProperties((pre) => {
-                  return { ...pre, padding: newValue };
-                });
-              }}
-              size="small"
-              min={0}
-              step={4}
-              max={96}
-              className=""
-            />
-          </div>
-        </div>
-      )}
-    </div>
-  );
 };

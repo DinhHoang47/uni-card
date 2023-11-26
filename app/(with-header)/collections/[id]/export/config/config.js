@@ -1,3 +1,14 @@
+import { Slider as AntdSilder, InputNumber } from "antd";
+
+const DEFAULT_EXPORT_SIZE = 1000; //px
+const DEFAULT_IMG_SIZE = 128; //px
+const DEFAULT_FONT_SIZE = 2; // tailwind unit
+const DEFAULT_BG_COLOR = "#FFFFFF"; // px
+const DEFAULT_BORDER_RADIUS = 1.5; // tailwind unit
+
+const DEFAULT_CANVAS_BG = "#dbeafe"; // blue-100
+const DEFAULT_CANVAS_PADDING = 40; // px
+
 export const tailwindColors = [
   "#fef3c7",
   "#fde68a",
@@ -53,5 +64,167 @@ export const SizeMarks = [
   {
     value: 1000,
     label: "",
+  },
+];
+
+export const rowPropertyList = [
+  {
+    order: 1,
+    field: "image",
+    label: "Image",
+    property: [
+      {
+        id: 1,
+        alias: "size",
+        label: "Image Size",
+        size: DEFAULT_IMG_SIZE,
+        controller: InputNumber,
+        setting: { max: 500, min: 1 },
+      },
+    ],
+    display: true,
+  },
+  {
+    order: 2,
+    field: "term",
+    label: "Term",
+    property: [
+      {
+        id: 1,
+        label: "Font Size",
+        fontSize: DEFAULT_FONT_SIZE,
+        controller: InputNumber,
+        alias: "fontSize",
+        setting: { max: 8, min: 0.75, step: 0.125 },
+      },
+    ],
+    display: true,
+  },
+  {
+    order: 3,
+    field: "definition",
+    label: "Definition",
+    property: [
+      {
+        id: 1,
+        label: "Font Size",
+        fontSize: DEFAULT_FONT_SIZE,
+        controller: InputNumber,
+        alias: "fontSize",
+        setting: { max: 8, min: 0.75, step: 0.125 },
+      },
+    ],
+    display: true,
+  },
+  {
+    order: 4,
+    field: "pronunciation",
+    label: "Pronunciation",
+    property: [
+      {
+        id: 1,
+        label: "Font Size",
+        fontSize: DEFAULT_FONT_SIZE,
+        controller: InputNumber,
+        alias: "fontSize",
+        setting: { max: 8, min: 0.75, step: 0.125 },
+      },
+    ],
+    display: true,
+  },
+];
+
+export const defaultLayoutProperties = {
+  bgColor: DEFAULT_BG_COLOR,
+  exportSize: DEFAULT_EXPORT_SIZE,
+  imageSize: DEFAULT_IMG_SIZE,
+  borderRadius: DEFAULT_BORDER_RADIUS,
+  fontSize: DEFAULT_FONT_SIZE,
+  termFontSize: DEFAULT_FONT_SIZE,
+  definitionFontSize: DEFAULT_FONT_SIZE,
+  pronunciationFontSize: DEFAULT_FONT_SIZE,
+  canvasPadding: DEFAULT_CANVAS_PADDING,
+  canvasColor: DEFAULT_CANVAS_BG,
+};
+
+export const colorSettingList = [
+  {
+    labelName: "Bg color",
+    propertyAlias: "bgColor",
+    defaultColor: DEFAULT_BG_COLOR,
+  },
+  {
+    labelName: "Canvas color",
+    propertyAlias: "canvasColor",
+    defaultColor: DEFAULT_CANVAS_BG,
+  },
+];
+
+// Row properties
+
+export const settingPropertyList = [
+  {
+    labelName: "Size",
+    propertyAlias: "exportSize",
+    min: 800,
+    max: 1200,
+    step: 50,
+    Controller: AntdSilder,
+  },
+  {
+    labelName: "Image size",
+    propertyAlias: "imageSize",
+    min: 56,
+    max: 256,
+    step: 4,
+    Controller: AntdSilder,
+  },
+  {
+    labelName: "Font size",
+    propertyAlias: "fontSize",
+    min: 0.75,
+    max: 3,
+    step: 0.125,
+    Controller: AntdSilder,
+  },
+  {
+    labelName: "Term font-size",
+    propertyAlias: "termFontSize",
+    min: 0.75,
+    max: 3,
+    step: 0.125,
+    Controller: AntdSilder,
+  },
+  {
+    labelName: "Defi font-size",
+    propertyAlias: "definitionFontSize",
+    min: 0.75,
+    max: 3,
+    step: 0.125,
+    Controller: AntdSilder,
+  },
+  {
+    labelName: "Pronun font-size",
+    propertyAlias: "pronunciationFontSize",
+    min: 0.75,
+    max: 3,
+    step: 0.125,
+    Controller: AntdSilder,
+  },
+  {
+    labelName: "Border",
+    propertyAlias: "borderRadius",
+    min: 0,
+    max: 100,
+    step: 1,
+    Controller: InputNumber,
+  },
+  {
+    labelName: "Canvas padding",
+    propertyAlias: "canvasPadding",
+    min: 0,
+    max: 100,
+    step: 4,
+    Controller: AntdSilder,
   },
 ];
