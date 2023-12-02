@@ -4,6 +4,9 @@ class PublicCollectionServ extends BaseService {
   constructor() {
     super();
   }
+  getAllCollections() {
+    return this.get(`collections/all`);
+  }
   getCollectionDetail(id) {
     return this.get(`collections/${id}`);
   }

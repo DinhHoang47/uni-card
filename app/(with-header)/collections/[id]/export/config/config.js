@@ -164,7 +164,7 @@ export const colorSettingList = [
 
 export const settingPropertyList = [
   {
-    labelName: "Size",
+    labelName: "Image size",
     propertyAlias: "exportSize",
     min: 800,
     max: 1200,
@@ -172,40 +172,8 @@ export const settingPropertyList = [
     Controller: AntdSilder,
   },
   {
-    labelName: "Image size",
-    propertyAlias: "imageSize",
-    min: 56,
-    max: 256,
-    step: 4,
-    Controller: AntdSilder,
-  },
-  {
     labelName: "Font size",
     propertyAlias: "fontSize",
-    min: 0.75,
-    max: 3,
-    step: 0.125,
-    Controller: AntdSilder,
-  },
-  {
-    labelName: "Term font-size",
-    propertyAlias: "termFontSize",
-    min: 0.75,
-    max: 3,
-    step: 0.125,
-    Controller: AntdSilder,
-  },
-  {
-    labelName: "Defi font-size",
-    propertyAlias: "definitionFontSize",
-    min: 0.75,
-    max: 3,
-    step: 0.125,
-    Controller: AntdSilder,
-  },
-  {
-    labelName: "Pronun font-size",
-    propertyAlias: "pronunciationFontSize",
     min: 0.75,
     max: 3,
     step: 0.125,

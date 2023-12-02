@@ -53,9 +53,9 @@ export default function SettingTooltip({
         onClick={(e) => {
           e.stopPropagation();
         }}
-        className="absolute bg-white px-2 py-2 rounded top-3/4 border"
+        className="absolute bg-white px-4 py-2 rounded top-3/4 border"
       >
-        <ul className="space-y-1">
+        <ul className="space-y-2">
           <li
             onClick={() => {
               setIsOpenPopup(false);
