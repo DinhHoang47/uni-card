@@ -71,7 +71,7 @@ export default function CollectionDetail({ params }) {
                       key={`tag-${tag}-${index}`}
                       className=" px-2 rounded shadow-sm bg-blue-100 hover:text-blue-500 line-clamp-3"
                     >
-                      #{tag}
+                      <h2>#{tag}</h2>
                     </Link>
                   ))
                 : "No tags"}

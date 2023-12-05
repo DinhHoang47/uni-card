@@ -27,7 +27,7 @@ function generateSiteMap(collections) {
    `;
 }
 
-export default async function Sitemap() {
+export default async function sitemap() {
   const SiteMap = [
     {
       url: `${frontEndUrl}`,

@@ -44,7 +44,7 @@ export default function TermTable({
     return (
       <>
         <div className="flex items-center justify-between">
-          <h4 className="font-semibold">Cards</h4>
+          <p className="font-semibold">Terms</p>
           {isOwner && (
             <div className="flex space-x-4">
               <button

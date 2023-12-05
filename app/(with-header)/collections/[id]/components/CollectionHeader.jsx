@@ -55,7 +55,7 @@ export default function CollectionHeader({
         <div className=" flex flex-col space-y-1 justify-between pr-5 sm:pr-0">
           {/* Title */}
           <div className="relative flex items-center space-x-2">
-            <h4 className="font-semibold line-clamp-3">{title}</h4>
+            <h1 className="font-semibold line-clamp-3">{title}</h1>
             {/* Actions */}
             <div className="absolute  top-full right-0 -translate-x-10 sm:right-0 sm:top-0 sm:translate-x-10 sm:-translate-y-1">
               {isOwner && (
