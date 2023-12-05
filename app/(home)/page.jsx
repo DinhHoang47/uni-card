@@ -1,4 +1,3 @@
-"use client";
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@public/assets/images/unicard-logo.png";
@@ -16,6 +15,15 @@ import TwitterIcon from "@public/assets/icons/icon-twitter.svg";
 
 import AmberButton from "@components/Buttons/AmberButton";
 import Footer from "@components/Footer";
+
+export const metadata = {
+  alternates: {
+    canonical: "/",
+  },
+  title: "Unicard - Vocabulary Learning and Progress Tracking",
+  description:
+    "Enhance language skills with Unicard. Track progress, master new words through interactive flashcards. Start your language journey now!",
+};
 
 export default function Home() {
   return (
@@ -44,7 +52,7 @@ const Nav = () => {
           className="w-10"
           src={Logo}
         />
-        <h1 className="logo_text font-vina text-xl">UniCard</h1>
+        <p className="logo_text font-vina text-xl">UniCard</p>
       </div>
       <div className="">
         <Link href={"/auth"}>
@@ -111,10 +119,12 @@ const TopBanner = () => {
   return (
     <div className="w-full bg-white text-center">
       <div className="max-w-3xl w-full mx-auto flex justify-center items-center flex-col space-y-6 mt-10  px-4">
-        <h2 className="font-bold text-blue-600 text-4xl">A better flashcard</h2>
-        <h3 className="blue_gradient text-2xl font-bold">
+        <h1 className="font-bold text-blue-600 text-4xl">
+          Your better flashcard
+        </h1>
+        <h2 className="blue_gradient text-2xl font-bold">
           Effortlessly Memorize, Progress Tracking
-        </h3>
+        </h2>
         <p className="text-center font-serif text-lg">
           Unicard allows you to create decks of terms, quizzes to aid in
           memorization. It is particularly effective for language learning, test
@@ -136,7 +146,7 @@ const FeaturesSection = () => {
   return (
     <div className="bg-blue-50 w-full pb-10">
       <div className="max-w-3xl px-4 flex items-center flex-col justify-center mt-14 mx-auto w-full">
-        <h3 className="text-center text-4xl font-semibold">Features</h3>
+        <h2 className="text-center text-4xl font-semibold">Features</h2>
         <div className="mt-5 w-full space-y-10">
           {FeaturesContent.map((item) => {
             return (
@@ -161,7 +171,7 @@ const Feature = ({ number, title, description, image }) => {
       <div className="w-10 h-10 flex items-center justify-center font-semibold text-xl text-blue-600 rounded-full bg-blue-200">
         <span>{number}</span>
       </div>
-      <h4 className="font-semibold text-3xl text-center">{title}</h4>
+      <h3 className="font-semibold text-3xl text-center">{title}</h3>
       <p className="text-center max-w-md text-lg">{description}</p>
       <div className="relative w-[400px] h-[340px]">
         <Image
@@ -181,9 +191,9 @@ const OtherFeatures = () => {
   return (
     <div className="bg-white w-full pb-10">
       <div className="max-w-3xl px-4 mx-auto ">
-        <h4 className="font-semibold text-4xl text-center mt-5">
+        <h3 className="font-semibold text-4xl text-center mt-5">
           We Are Working On
-        </h4>
+        </h3>
         <div className="mt-5 w-full bg-blue-50 rounded-lg py-8 space-y-5 px-4 shadow-md">
           {OtherFeaturesContent.map((item) => {
             return (
@@ -216,7 +226,7 @@ const OtherFeatureItem = ({ image, title, description }) => {
         </div>
       </div>
       <div className="space-y-1">
-        <h4 className="font-semibold text-xl">{title}</h4>
+        <h3 className="font-semibold text-xl">{title}</h3>
         <p className="text-gray-400 text-lg">{description}</p>
       </div>
     </div>
@@ -264,7 +274,7 @@ const CTAButton = () => {
 const SocialSection = () => {
   return (
     <div className="w-full flex flex-col items-center space-y-4 py-10">
-      <h4 className="text-4xl font-semibold">Follow us</h4>
+      <h3 className="text-4xl font-semibold">Follow us</h3>
       <div className="flex space-x-8">
         <Link href={"https://www.facebook.com/uni.card.flashcard"}>
           <div className="relative w-8 h-8">

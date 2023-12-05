@@ -24,7 +24,7 @@ const Nav = () => {
           className="w-10"
           src={Logo}
         />
-        <h1 className="logo_text font-vina text-xl">UniCard</h1>
+        <p className="logo_text font-vina text-xl">UniCard</p>
       </Link>
       <nav className="">
         <Link href={"/auth"}>

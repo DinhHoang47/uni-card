@@ -29,6 +29,9 @@ const nextConfig = {
     ],
   },
   reactStrictMode: false,
+  experimental: {
+    serverActions: true,
+  },
 };
 
 module.exports = nextConfig;

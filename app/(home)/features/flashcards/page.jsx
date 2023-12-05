@@ -43,6 +43,15 @@ const Section2ItemsData = [
   },
 ];
 
+export const metadata = {
+  alternates: {
+    canonical: "/features/flashcards",
+  },
+  title: "Features - Unicard",
+  description:
+    "Enhance language skills with Unicard. Track progress, master new words through interactive flashcards. Start your language journey now!",
+};
+
 export default function page() {
   return (
     <>
@@ -61,9 +70,9 @@ const Header = () => {
       className={`${styles.sectionStyle} mx-auto max-w-4xl mt-10 px-4 py-10`}
     >
       <article className="text-center space-y-4">
-        <h2 className="text-blue-600 text-3xl font-semibold">
+        <h1 className="text-blue-600 text-3xl font-semibold">
           Master Your Vocabulary with Flashcards
-        </h2>
+        </h1>
         <p className="max-w-2xl mx-auto">
           Welcome to the world of efficient and personalized learning! If you're
           on a quest to expand your vocabulary, master new languages, or simply
