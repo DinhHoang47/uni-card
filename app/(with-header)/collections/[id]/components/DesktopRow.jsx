@@ -164,11 +164,13 @@ export default function DesktopRow({
             <div className="flex items-center justify-between w-full">
               <p className="break-all">{cardData.term}</p>
               {/* absolute right-0 top-1/2 -translate-y-1/2 -translate-x-full */}
-              <div className="hover:text-blue-500">
-                <TextToSpeech text={cardData.term} lang={languageRef}>
-                  <SpeakerWaveIcon className="h-5 w-5 text-gray-500 hover:text-blue-500 cursor-pointer" />
-                </TextToSpeech>
-              </div>
+              {languageRef && (
+                <div className="hover:text-blue-500">
+                  <TextToSpeech text={cardData.term} lang={languageRef}>
+                    <SpeakerWaveIcon className="h-5 w-5 text-gray-500 hover:text-blue-500 cursor-pointer" />
+                  </TextToSpeech>
+                </div>
+              )}
             </div>
           )}
         </li>

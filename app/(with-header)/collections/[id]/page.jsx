@@ -75,13 +75,13 @@ export default function CollectionDetail({ params }) {
               <div className="flex items-center space-x-2">
                 <p className="font-semibold">Tags</p>
               </div>
-              <ul className="flex space-x-2">
+              <ul className="flex space-x-2 overflow-hidden">
                 {tags?.length !== 0 && tags !== undefined
                   ? tags.map((tag, index) => (
                       <Link
                         href={"#"}
                         key={`tag-${tag}-${index}`}
-                        className=" px-2 rounded shadow-sm bg-blue-100 hover:text-blue-500 line-clamp-3"
+                        className=" px-2 rounded shadow-sm bg-blue-100 hover:text-blue-500 line-clamp-3 flex-shrink-0"
                       >
                         #{tag}
                       </Link>

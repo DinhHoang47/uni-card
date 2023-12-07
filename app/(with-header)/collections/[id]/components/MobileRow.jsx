@@ -15,6 +15,8 @@ import { useEffect, useState } from "react";
 import { TextareaAutosize } from "@mui/base";
 import { handleSelectedImage } from "@lib/handleSelectedImage";
 import Spinner from "@public/assets/icons/MySpinner";
+import TextToSpeech from "@components/TextToSpeech/TextToSpeech";
+import { SpeakerWaveIcon } from "@heroicons/react/24/outline";
 
 export default function MobileRow({
   cardData,
@@ -24,6 +26,7 @@ export default function MobileRow({
   onDeleteRow,
   onUpdateRow,
   isOwner,
+  languageRef,
 }) {
   // Local state
   const [editted, setEditted] = useState(false);
@@ -89,7 +92,7 @@ export default function MobileRow({
       } relative space-y-2 p-4`}
     >
       {/* Term */}
-      <div className="flex">
+      <div className="flex items-center justify-between">
         {editting && (
           <>
             <span className="mr-1 text-gray-300 w-14">Term:</span>
@@ -105,8 +108,17 @@ export default function MobileRow({
         )}
         {!editting && (
           <>
-            <span className="mr-1 text-gray-300 w-14">Term:</span>
-            <span className="font-semibold">{cardData.term}</span>
+            <div className="flex">
+              <span className="mr-1 text-gray-300 w-14">Term:</span>
+              <span className="font-semibold">{cardData.term}</span>
+            </div>
+            {languageRef && (
+              <div className="">
+                <TextToSpeech text={cardData.term} lang={languageRef}>
+                  <SpeakerWaveIcon className="h-5 w-5 text-gray-500 hover:text-blue-500 cursor-pointer" />
+                </TextToSpeech>
+              </div>
+            )}
           </>
         )}
       </div>

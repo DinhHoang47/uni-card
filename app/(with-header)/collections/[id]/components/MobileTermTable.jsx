@@ -9,6 +9,7 @@ export default function MobileTermTable({
   setTermModalOpen,
   onUpdateRow,
   isOwner,
+  languageRef,
 }) {
   return (
     <div className="">
@@ -25,6 +26,7 @@ export default function MobileTermTable({
               setTermModalOpen={setTermModalOpen}
               onDeleteRow={onDeleteRow}
               onUpdateRow={onUpdateRow}
+              languageRef={languageRef}
             />
           ))}
         </ul>

@@ -101,6 +101,7 @@ export default function TermTable({
                 displayDef2={displayDef2}
                 setTermModalOpen={setTermModalOpen}
                 onDeleteRow={onDeleteRow}
+                languageRef={languageRef}
               />
             </div>
           </>
