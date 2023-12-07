@@ -15,6 +15,7 @@ import ImportCardModal from "./components/ImportCardModal";
 import { useCard } from "@lib/useCard";
 import { open as openSignInModal } from "@redux/authModalSlice.js";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
 
 export default function CollectionDetail({ params }) {
   // Fetch data
@@ -28,10 +29,11 @@ export default function CollectionDetail({ params }) {
   const collectionHangerRef = useRef(null);
   const totalCard = cardData?.length;
   // Handler
+  const router = useRouter();
   const dispatch = useDispatch();
   const navigateToLearn = () => {
     if (currentUser?.isLoggedIn) {
-      router.push(`/learning/${collectionId}`);
+      router.push(`/learning/${params.id}`);
     } else {
       dispatch(openSignInModal());
     }
