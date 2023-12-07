@@ -13,6 +13,7 @@ export default function DesktopTermTable({
   onDeleteRow,
   onUpdateRow,
   isOwner,
+  languageRef,
 }) {
   // Fetched data
   // Local variable
@@ -88,6 +89,7 @@ export default function DesktopTermTable({
               setTermModalOpen={setTermModalOpen}
               onDeleteRow={onDeleteRow}
               onUpdateRow={onUpdateRow}
+              languageRef={languageRef}
             />
           ))}
         </ul>

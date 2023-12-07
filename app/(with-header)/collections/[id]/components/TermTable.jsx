@@ -21,6 +21,8 @@ export default function TermTable({
   setTermModalOpen,
   isOwner,
   setIsImportModalOpen,
+  currentUser,
+  languageRef,
 }) {
   // Fetched data
   const { error, data, loading, mutate } = useCard(collectionId);
@@ -85,6 +87,7 @@ export default function TermTable({
                 displayImg={displayImg}
                 displayDef2={displayDef2}
                 displayExample={displayExample}
+                languageRef={languageRef}
                 setTermModalOpen={setTermModalOpen}
               />
             </div>

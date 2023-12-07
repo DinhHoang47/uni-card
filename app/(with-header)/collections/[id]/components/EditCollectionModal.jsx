@@ -12,6 +12,7 @@ import StyledChips from "./StyledChips";
 import { getImageUrl } from "@utils/getImageUrl";
 import { handleSelectedImage } from "@lib/handleSelectedImage";
 import { generateUniqueName } from "@utils/generateUniqueName";
+import { LANGUAGE_REFERENCE } from "@utils/config";
 
 export default function EditCollectionModal({
   setIsOpen,
@@ -31,6 +32,7 @@ export default function EditCollectionModal({
   const [imageUrl, setImageUrl] = useState(data.imageUrl);
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileUrl, setSelectedFileUrl] = useState(null);
+  const [languageRef, setLanguageRef] = useState(data.language_ref || "");
   // Loading and Error message state
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
@@ -66,6 +68,7 @@ export default function EditCollectionModal({
         description: trimmedDescription,
         tags: chips,
         imageUrl: updatedUrl,
+        languageRef: languageRef,
       };
       const optimizeUIData = {
         id: data.id,
@@ -77,6 +80,7 @@ export default function EditCollectionModal({
         updatedAt: data.updatedAt,
         description: trimmedDescription,
         userId: data.userId,
+        language_ref: languageRef,
       };
       const mutateOptions = {
         optimisticData: optimizeUIData,
@@ -147,6 +151,27 @@ export default function EditCollectionModal({
             <label className="font-semibold">Tags</label>
             <StyledChips chips={chips} setChips={setChips} />
           </div>
+          {/* Language Reference */}
+          <div className="flex flex-col space-y-2">
+            <label className="font-semibold">Language Reference</label>
+            <select
+              value={languageRef}
+              onChange={(e) => {
+                setLanguageRef(e.target.value);
+              }}
+              name=""
+              id=""
+            >
+              <option value="">None</option>
+              {LANGUAGE_REFERENCE.map((item) => {
+                return (
+                  <option key={item.code} value={item.code}>
+                    {item.name}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
           {/* Image upload */}
           <div className="space-y-1 flex flex-col ">
             <label className="font-semibold">Image</label>
@@ -195,6 +220,7 @@ export default function EditCollectionModal({
               multiple={false}
             />
           </div>
+
           {/* Error Message */}
           <div className="">
             <p className="text-red-500 text-sm">{errMsg}</p>

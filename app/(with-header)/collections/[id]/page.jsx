@@ -13,6 +13,8 @@ import TermTable from "./components/TermTable";
 import useUser from "@lib/useUser";
 import ImportCardModal from "./components/ImportCardModal";
 import { useCard } from "@lib/useCard";
+import { open as openSignInModal } from "@redux/authModalSlice.js";
+import { useDispatch } from "react-redux";
 
 export default function CollectionDetail({ params }) {
   // Fetch data
@@ -25,6 +27,15 @@ export default function CollectionDetail({ params }) {
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const collectionHangerRef = useRef(null);
   const totalCard = cardData?.length;
+  // Handler
+  const dispatch = useDispatch();
+  const navigateToLearn = () => {
+    if (currentUser?.isLoggedIn) {
+      router.push(`/learning/${collectionId}`);
+    } else {
+      dispatch(openSignInModal());
+    }
+  };
   if (error) {
     return <div className="">Collection not found</div>;
   }
@@ -49,43 +60,55 @@ export default function CollectionDetail({ params }) {
         </div>
         {/* Section */}
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-8">
-          {/* Description */}
-          <div className="flex flex-col">
-            <div className="flex items-center space-x-2">
-              <p className="font-semibold">Description</p>
+          <div className="grid grid-cols-2">
+            {/* Description */}
+            <div className="flex flex-col">
+              <div className="flex items-center space-x-2">
+                <p className="font-semibold">Description</p>
+              </div>
+              <div className="grow">
+                <p>{description ? description : "No description"}</p>
+              </div>
             </div>
-            <div className="grow">
-              <p>{description ? description : "No description"}</p>
+            {/* Tags */}
+            <div className="">
+              <div className="flex items-center space-x-2">
+                <p className="font-semibold">Tags</p>
+              </div>
+              <ul className="flex space-x-2">
+                {tags?.length !== 0 && tags !== undefined
+                  ? tags.map((tag, index) => (
+                      <Link
+                        href={"#"}
+                        key={`tag-${tag}-${index}`}
+                        className=" px-2 rounded shadow-sm bg-blue-100 hover:text-blue-500 line-clamp-3"
+                      >
+                        #{tag}
+                      </Link>
+                    ))
+                  : "No tags"}
+              </ul>
             </div>
           </div>
-          {/* Tags */}
-          <div className="">
-            <div className="flex items-center space-x-2">
-              <p className="font-semibold">Tags</p>
-            </div>
-            <ul className="flex space-x-2">
-              {tags?.length !== 0 && tags !== undefined
-                ? tags.map((tag, index) => (
-                    <Link
-                      href={"#"}
-                      key={`tag-${tag}-${index}`}
-                      className=" px-2 rounded shadow-sm bg-blue-100 hover:text-blue-500 line-clamp-3"
-                    >
-                      #{tag}
-                    </Link>
-                  ))
-                : "No tags"}
-            </ul>
+          <div className="flex items-center justify-end">
+            <button
+              onClick={navigateToLearn}
+              className="px-4 h-10 w-full sm:w-24 rounded-md bg-blue-600 text-white flex items-center justify-center"
+            >
+              <p>Learn</p>
+            </button>
           </div>
         </div>
         {/* Section */}
         <div className="space-y-4">
           <TermTable
+            currentUser={currentUser}
             isOwner={isOwner}
             displayExample={data.display_example}
             displayImg={data.display_img}
             displayDef2={data.display_def_2}
             collectionId={data.id}
+            languageRef={data.language_ref}
             setTermModalOpen={setTermModalOpen}
             setIsImportModalOpen={setIsImportModalOpen}
           />

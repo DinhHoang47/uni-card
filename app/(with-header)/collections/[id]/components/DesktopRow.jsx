@@ -8,6 +8,8 @@ import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import { CloudArrowUpIcon } from "@heroicons/react/20/solid";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { FolderPlusIcon } from "@heroicons/react/24/solid";
+import { SpeakerWaveIcon } from "@heroicons/react/24/outline";
+
 import { TextareaAutosize } from "@mui/base";
 import { handleSelectedImage } from "@lib/handleSelectedImage";
 import Spinner from "@public/assets/icons/MySpinner";
@@ -21,6 +23,7 @@ import {
   getFlaticonToken,
   searchFlaticonImage,
 } from "@services/FlaticonService";
+import TextToSpeech from "@components/TextToSpeech/TextToSpeech";
 
 export default function DesktopRow({
   cardData,
@@ -31,6 +34,7 @@ export default function DesktopRow({
   onUpdateRow,
   rowIndex,
   isOwner,
+  languageRef,
 }) {
   // States
   // Fetched data
@@ -157,7 +161,15 @@ export default function DesktopRow({
               className={styles.autoSizeTextArea}
             />
           ) : (
-            <p className="break-all">{cardData.term}</p>
+            <div className="flex items-center justify-between w-full">
+              <p className="break-all">{cardData.term}</p>
+              {/* absolute right-0 top-1/2 -translate-y-1/2 -translate-x-full */}
+              <div className="hover:text-blue-500">
+                <TextToSpeech text={cardData.term} lang={languageRef}>
+                  <SpeakerWaveIcon className="h-5 w-5 text-gray-500 hover:text-blue-500 cursor-pointer" />
+                </TextToSpeech>
+              </div>
+            </div>
           )}
         </li>
         {/* Def 1 */}

@@ -89,15 +89,7 @@ export default function CollectionHeader({
           <UserLink id={userId} />
         </div>
       </div>
-      {/* Action Button */}
-      <div className="flex justify-end items-end">
-        <button
-          onClick={navigateToLearn}
-          className="px-4 h-10 w-full sm:w-24 rounded-md bg-blue-600 text-white flex items-center justify-center"
-        >
-          <p>Learn</p>
-        </button>
-      </div>
+      {/* Status indicator*/}
     </div>
   );
 }
