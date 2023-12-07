@@ -2,7 +2,7 @@ import { publicCollectionServ } from "@services/Public_CollectionService";
 
 const frontEndUrl = "https://www.my-flashcard.com";
 
-export default async function Sitemap() {
+export default async function sitemap() {
   const SiteMap = [
     {
       url: `${frontEndUrl}`,
