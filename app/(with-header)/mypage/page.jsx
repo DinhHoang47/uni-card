@@ -7,6 +7,9 @@ export async function generateMetadata({ params, searchParams }, parent) {
     title: "My page - Unicard",
     description:
       "Explore and review your study sets on My Page at Unicard. Enhance your vocabulary learning experience with interactive flashcards.",
+    alternates: {
+      canonical: `mypage`,
+    },
   };
 }
 
