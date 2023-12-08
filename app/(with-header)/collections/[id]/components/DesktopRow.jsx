@@ -143,7 +143,9 @@ export default function DesktopRow({
       >
         {/* Order */}
         <li
-          className={`${styles.rowItem} ${editting ? styles.edittingItem : ""}`}
+          className={`${styles.rowItem} ${
+            editting ? styles.edittingItem : ""
+          } text-gray-400`}
         >
           {order}
         </li>
@@ -162,7 +164,7 @@ export default function DesktopRow({
             />
           ) : (
             <div className="flex items-center justify-between w-full">
-              <p className="break-all">{cardData.term}</p>
+              <p className="break-all font-semibold">{cardData.term}</p>
               {/* absolute right-0 top-1/2 -translate-y-1/2 -translate-x-full */}
               {languageRef && (
                 <div className="hover:text-blue-500">

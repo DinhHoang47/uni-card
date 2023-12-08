@@ -155,6 +155,7 @@ export default function EditCollectionModal({
           <div className="flex flex-col space-y-2">
             <label className="font-semibold">Language Reference</label>
             <select
+              className="border-b-2 border-gray-300 pb-1 outline-none focus:border-blue-300"
               value={languageRef}
               onChange={(e) => {
                 setLanguageRef(e.target.value);

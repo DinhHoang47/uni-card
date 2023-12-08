@@ -50,7 +50,7 @@ export default function DesktopTermTable({
     <>
       <div className="mt-2">
         <ul
-          className={` rounded-t-md w-full ${styles.tableHeader} ${tableHeaderGridTemp}`}
+          className={` rounded-t-md w-full ${styles.tableHeader} ${tableHeaderGridTemp} text-gray-400`}
         >
           <li>
             <p className="text-center w-full">No</p>

@@ -14,7 +14,6 @@ export default function TestingGround({
   setOpenResultModal,
   collectionId,
 }) {
-  console.log("quizArr: ", quizArr);
   // Fetched data
   const totalQuiz = quizArr.length;
   const { data: learningStatus, mutate: mutateLearningStatus } =
@@ -318,10 +317,8 @@ const NextButton = ({
   answerArr,
   quizArr,
 }) => {
-  console.log("answerArr: ", answerArr);
   // Check if all quiz answer or not
   const notAllAnswered = answerArr?.some((ans) => ans["answerIndex"] === null);
-  console.log("notAllAnswered: ", notAllAnswered);
   // Find index of current quiz
   const currentQuizIndex = quizArr.findIndex((item) => item.id === currentQuiz);
   let nextQuizId;
