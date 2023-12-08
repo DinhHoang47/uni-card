@@ -1,4 +1,4 @@
-import { Slider as AntdSilder, InputNumber } from "antd";
+import { Slider as AntdSilder, InputNumber, Input } from "antd";
 
 const DEFAULT_EXPORT_SIZE = 1000; //px
 const DEFAULT_IMG_SIZE = 128; //px
@@ -8,7 +8,10 @@ const DEFAULT_BORDER_RADIUS = 1.5; // tailwind unit
 
 const DEFAULT_CANVAS_BG = "#dbeafe"; // blue-100
 const DEFAULT_CANVAS_PADDING = 40; // px
-const DEFAULT_QR_URL = "https://www.my-flashcard.com/"; // px
+const DEFAULT_QR_URL = "https://www.my-flashcard.com/";
+const DEFAULT_QR_LABEL = "Scan to learn";
+const DEFAULT_QR_LABEL_FONT_SIZE = 1;
+const DEFAULT_QR_SIZE = 64; // px
 
 export const tailwindColors = [
   "#fef3c7",
@@ -92,7 +95,7 @@ export const rowPropertyList = [
     property: [
       {
         id: 1,
-        label: "Font Size",
+        label: "Font size",
         fontSize: DEFAULT_FONT_SIZE,
         controller: InputNumber,
         alias: "fontSize",
@@ -147,6 +150,9 @@ export const defaultLayoutProperties = {
   canvasPadding: DEFAULT_CANVAS_PADDING,
   canvasColor: DEFAULT_CANVAS_BG,
   qrCodeUrl: DEFAULT_QR_URL,
+  qrCodeLabel: DEFAULT_QR_LABEL,
+  qrCodeLabelFontSize: DEFAULT_QR_LABEL_FONT_SIZE,
+  qrCodeSize: DEFAULT_QR_SIZE,
 };
 
 export const colorSettingList = [
@@ -174,7 +180,7 @@ export const settingPropertyList = [
     Controller: AntdSilder,
   },
   {
-    labelName: "Font size",
+    labelName: "Title font size",
     propertyAlias: "fontSize",
     min: 0.75,
     max: 3,
@@ -195,6 +201,25 @@ export const settingPropertyList = [
     min: 0,
     max: 100,
     step: 4,
+    Controller: AntdSilder,
+  },
+];
+
+export const qrPropertyList = [
+  {
+    labelName: "Image size",
+    propertyAlias: "qrCodeSize",
+    min: 40,
+    max: 144,
+    step: 8,
+    Controller: AntdSilder,
+  },
+  {
+    labelName: "Label font size",
+    propertyAlias: "qrCodeLabelFontSize",
+    min: 0.75,
+    max: 3,
+    step: 0.125,
     Controller: AntdSilder,
   },
 ];

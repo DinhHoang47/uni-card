@@ -1,6 +1,17 @@
 .exportRow {
   display: grid;
+}
+
+.exportRowCols4 {
   grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.exportRowCols3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.exportRowCols2 {
+  grid-template-columns: 1fr 1fr;
 }
 
 .exportRow > li {

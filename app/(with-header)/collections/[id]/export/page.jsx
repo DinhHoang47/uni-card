@@ -16,6 +16,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import {
   colorSettingList,
   defaultLayoutProperties,
+  qrPropertyList,
   rowPropertyList,
   settingPropertyList,
   tailwindColors,
@@ -123,11 +124,15 @@ const DataSelection = ({
 };
 
 const ExportContent = ({ exportData, collectionId, collectionData }) => {
+  // Fetched data
   const [rowProperty, setRowProperty] = useState(rowPropertyList);
   const [layoutProperties, setLayoutProperties] = useState(
     defaultLayoutProperties
   );
   const contentRef = useRef(null);
+  // Local state
+  const displayCols = rowProperty.filter((item) => item.display === true);
+  const totalCols = displayCols.length;
   return (
     <div className="mt-4">
       <div className="max-w-7xl mx-auto flex justify-between ">
@@ -136,6 +141,7 @@ const ExportContent = ({ exportData, collectionId, collectionData }) => {
           setRowProperty={setRowProperty}
         />
         <ContentContainer
+          totalCols={totalCols}
           layoutProperties={layoutProperties}
           collectionData={collectionData}
           collectionId={collectionId}
@@ -144,6 +150,7 @@ const ExportContent = ({ exportData, collectionId, collectionData }) => {
           rowProperty={rowProperty}
         />
         <StyleSetting
+          collectionData={collectionData}
           layoutProperties={layoutProperties}
           setLayoutProperties={setLayoutProperties}
           contentRef={contentRef}
@@ -153,12 +160,12 @@ const ExportContent = ({ exportData, collectionId, collectionData }) => {
   );
 };
 
-const ExportButton = ({ contentRef }) => {
+const ExportButton = ({ contentRef, collectionData }) => {
   return (
     <button
-      className="bg-blue-600 text-white h-10 px-4 rounded"
+      className="bg-blue-600 text-white h-10 px-4 rounded w-full"
       onClick={() => {
-        exportAsImage(contentRef.current, "filename");
+        exportAsImage(contentRef.current, collectionData.title);
       }}
     >
       Export
@@ -170,6 +177,7 @@ const StyleSetting = ({
   contentRef,
   layoutProperties,
   setLayoutProperties,
+  collectionData,
 }) => {
   return (
     <div className="w-60 shrink-0 bg-zinc-100 px-4 py-5 rounded-md ml-4">
@@ -181,7 +189,7 @@ const StyleSetting = ({
         setLayoutProperties={setLayoutProperties}
         layoutProperties={layoutProperties}
       />
-      <ExportButton contentRef={contentRef} />
+      <ExportButton contentRef={contentRef} collectionData={collectionData} />
     </div>
   );
 };
@@ -242,13 +250,18 @@ const FooterSetting = ({ layoutProperties, setLayoutProperties }) => {
         <span className="pr-1">
           <ChevronDownIcon className={`h-4 w-4 ${open ? "" : "-rotate-90"}`} />
         </span>
-        QR Code Setting
+        Footer setting
       </button>
       <div className={`pl-2 ${open ? "h-auto" : "h-0 overflow-hidden"} mt-2`}>
-        <div className="">
+        {/* URL setting */}
+        <div className="relative">
           <div className="">
+            <label htmlFor="" className="text-xs">
+              QR URL
+            </label>
             {edittingQR ? (
-              <input
+              <textarea
+                className="text-xs outline-none w-full p-1"
                 onChange={(e) => {
                   setUrl(e.target.value);
                 }}
@@ -256,19 +269,68 @@ const FooterSetting = ({ layoutProperties, setLayoutProperties }) => {
                 type="text"
               />
             ) : (
-              <p className="text-sm line-clamp-1">
+              <p className="text-xs p-1 text-blue-500">
                 {layoutProperties.qrCodeUrl}
               </p>
             )}
           </div>
           {edittingQR ? (
-            <div className="flex">
-              <CheckCircleIcon className="h-4 w-4 text-green-500" />
-              <XMarkIcon className="h-4 w-4 text-orange-500" />
+            <div className="flex space-x-2 cursor-pointer justify-end absolute top-0 right-0">
+              <CheckCircleIcon
+                onClick={() => {
+                  setEdittingQR(false);
+                  setLayoutProperties((pre) => {
+                    return { ...pre, qrCodeUrl: url };
+                  });
+                }}
+                className="h-5 w-5 text-green-500 hover:bg-green-100"
+              />
+              <XMarkIcon
+                onClick={() => {
+                  setEdittingQR(false);
+                  setUrl(layoutProperties.qrCodeUrl);
+                }}
+                className="h-5 w-5 text-orange-500 hover:bg-orange-100"
+              />
             </div>
           ) : (
-            <PencilSquareIcon className="h-4 w-4 text-blue-500" />
+            <div className="flex justify-end absolute right-0 top-0">
+              <PencilSquareIcon
+                onClick={() => {
+                  setEdittingQR(true);
+                }}
+                className="h-5 w-5 text-blue-500"
+              />
+            </div>
           )}
+        </div>
+        {/* Size setting */}
+        {qrPropertyList.map((data, index) => {
+          return (
+            <LayoutSettingItem
+              key={data.propertyAlias}
+              data={data}
+              layoutProperties={layoutProperties}
+              setLayoutProperties={setLayoutProperties}
+            />
+          );
+        })}
+        {/* Label setting */}
+        <div className="flex flex-col">
+          <label htmlFor="qrCodeLabel" className="text-xs py-1">
+            Label
+          </label>
+          <input
+            className="outline-none focus:border-b border-blue-400 text-xs p-1 mt-1"
+            id="qrCodeLabel"
+            type="text"
+            value={layoutProperties.qrCodeLabel}
+            onChange={(e) => {
+              setLayoutProperties((pre) => {
+                return { ...pre, qrCodeLabel: e.target.value };
+              });
+            }}
+          />
         </div>
       </div>
     </div>
@@ -332,6 +394,7 @@ const ContentContainer = ({
   layoutProperties,
   contentRef,
   rowProperty,
+  totalCols,
 }) => {
   return (
     <div className="relative flex-1 mx-auto border border-gray-200 rounded-lg shadow p-4 bg-white flex items-center justify-center overflow-scroll h-[620px]">
@@ -367,36 +430,50 @@ const ContentContainer = ({
           {/* Term rows */}
           {exportData?.map((item, index) => {
             return (
-              <ExportRow
-                rowProperty={rowProperty}
-                layoutProperties={layoutProperties}
-                key={item.id}
-                data={item}
-              />
+              <li key={item.id} className="">
+                <ExportRow
+                  totalCols={totalCols}
+                  rowProperty={rowProperty}
+                  layoutProperties={layoutProperties}
+                  data={item}
+                />
+              </li>
             );
           })}
           {/* Footer */}
           <li className={`flex justify-around`}>
             <div className="flex items-center justify-center space-x-5">
               <p className="text-sm text-center flex items-center justify-center w-full">
-                <span className="text-xs text-gray-500">Created with</span>
+                <span
+                  style={{
+                    fontSize: `${layoutProperties.qrCodeLabelFontSize}rem`,
+                  }}
+                  className="text-gray-500"
+                >
+                  Created with
+                </span>
               </p>
 
               <img
                 alt="Logo image"
-                style={{ height: "56px", width: "112px" }}
+                style={{ height: `${layoutProperties.qrCodeSize}px` }}
                 src={`/assets/images/logo-text.png`}
               />
             </div>
             <div className="flex justify-between space-x-5">
               <p className="text-sm text-center flex items-center justify-center w-full">
-                <span className="text-xs text-gray-500">
-                  Fb: unicard.japanese
+                <span
+                  style={{
+                    fontSize: `${layoutProperties.qrCodeLabelFontSize}rem`,
+                  }}
+                  className="text-xs text-gray-500"
+                >
+                  {layoutProperties.qrCodeLabel}
                 </span>
               </p>
               <QRCodeCanvas
-                size={64}
-                value={`https://www.facebook.com/unicard.japanese`}
+                size={layoutProperties.qrCodeSize}
+                value={layoutProperties.qrCodeUrl}
               />
               {/* ${process.env.NEXT_PUBLIC_FRONTEND_URL}/collections/${collectionId} */}
             </div>
@@ -407,7 +484,7 @@ const ContentContainer = ({
   );
 };
 
-const ExportRow = ({ data, layoutProperties, rowProperty }) => {
+const ExportRow = ({ data, layoutProperties, rowProperty, totalCols }) => {
   const ImageBlock = ({ property }) => {
     const style = property[0];
     return (
@@ -437,7 +514,7 @@ const ExportRow = ({ data, layoutProperties, rowProperty }) => {
     return (
       <li
         style={{ fontSize: `${style.fontSize}rem` }}
-        className="text-blue font-semibold"
+        className="text-blue font-semibold break-keep"
       >
         {data.term}
       </li>
@@ -446,7 +523,7 @@ const ExportRow = ({ data, layoutProperties, rowProperty }) => {
   const PronunciationBlock = ({ property }) => {
     const style = property[0];
     return (
-      <li style={{ fontSize: `${style.fontSize}rem` }} className="text-blue">
+      <li style={{ fontSize: `${style.fontSize}rem` }} className="break-keep">
         {data.definition_2}
       </li>
     );
@@ -454,10 +531,7 @@ const ExportRow = ({ data, layoutProperties, rowProperty }) => {
   const DefinitionBlock = ({ property }) => {
     const style = property[0];
     return (
-      <li
-        style={{ fontSize: `${style.fontSize}rem` }}
-        className="text-blue flex-1"
-      >
+      <li style={{ fontSize: `${style.fontSize}rem` }} className="break-keep">
         {data.definition_1}
       </li>
     );
@@ -478,8 +552,23 @@ const ExportRow = ({ data, layoutProperties, rowProperty }) => {
       renderElement.push({ ...elementToPush, ...element });
     }
   });
+  // Dynamic grid layout style
+  let gridStyle;
+  switch (totalCols) {
+    case 4:
+      gridStyle = styles.exportRowCols4;
+      break;
+    case 3:
+      gridStyle = styles.exportRowCols3;
+      break;
+    case 2:
+      gridStyle = styles.exportRowCols2;
+      break;
+  }
   return (
-    <ul className={`${styles.exportRow} pb-2 border-b border-slate-300`}>
+    <ul
+      className={`${styles.exportRow} ${gridStyle} pb-2 border-b border-slate-300 space-x-10`}
+    >
       {renderElement.map((item) => {
         const Component = item.Element;
         return <Component property={item.property} key={item.label} />;
