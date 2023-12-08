@@ -8,6 +8,7 @@ const DEFAULT_BORDER_RADIUS = 1.5; // tailwind unit
 
 const DEFAULT_CANVAS_BG = "#dbeafe"; // blue-100
 const DEFAULT_CANVAS_PADDING = 40; // px
+const DEFAULT_QR_URL = "https://www.my-flashcard.com/"; // px
 
 export const tailwindColors = [
   "#fef3c7",
@@ -145,6 +146,7 @@ export const defaultLayoutProperties = {
   pronunciationFontSize: DEFAULT_FONT_SIZE,
   canvasPadding: DEFAULT_CANVAS_PADDING,
   canvasColor: DEFAULT_CANVAS_BG,
+  qrCodeUrl: DEFAULT_QR_URL,
 };
 
 export const colorSettingList = [

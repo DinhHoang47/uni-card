@@ -9,6 +9,10 @@ import Link from "next/link";
 import { ColorPicker } from "antd";
 import { useCollection } from "@lib/useCollection";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import { CheckCircleIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+
 import {
   colorSettingList,
   defaultLayoutProperties,
@@ -173,6 +177,10 @@ const StyleSetting = ({
         setLayoutProperties={setLayoutProperties}
         layoutProperties={layoutProperties}
       />
+      <FooterSetting
+        setLayoutProperties={setLayoutProperties}
+        layoutProperties={layoutProperties}
+      />
       <ExportButton contentRef={contentRef} />
     </div>
   );
@@ -214,6 +222,54 @@ const LayoutSetting = ({ layoutProperties, setLayoutProperties }) => {
             />
           );
         })}
+      </div>
+    </div>
+  );
+};
+
+const FooterSetting = ({ layoutProperties, setLayoutProperties }) => {
+  const [open, setOpen] = useState(true);
+  const [url, setUrl] = useState(layoutProperties.qrCodeUrl);
+  const [edittingQR, setEdittingQR] = useState(false);
+  return (
+    <div className=" pb-5 min-w-min">
+      <button
+        onClick={() => {
+          setOpen((pre) => !pre);
+        }}
+        className="font-semibold text-sm flex items-center -ml-3"
+      >
+        <span className="pr-1">
+          <ChevronDownIcon className={`h-4 w-4 ${open ? "" : "-rotate-90"}`} />
+        </span>
+        QR Code Setting
+      </button>
+      <div className={`pl-2 ${open ? "h-auto" : "h-0 overflow-hidden"} mt-2`}>
+        <div className="">
+          <div className="">
+            {edittingQR ? (
+              <input
+                onChange={(e) => {
+                  setUrl(e.target.value);
+                }}
+                value={url}
+                type="text"
+              />
+            ) : (
+              <p className="text-sm line-clamp-1">
+                {layoutProperties.qrCodeUrl}
+              </p>
+            )}
+          </div>
+          {edittingQR ? (
+            <div className="flex">
+              <CheckCircleIcon className="h-4 w-4 text-green-500" />
+              <XMarkIcon className="h-4 w-4 text-orange-500" />
+            </div>
+          ) : (
+            <PencilSquareIcon className="h-4 w-4 text-blue-500" />
+          )}
+        </div>
       </div>
     </div>
   );
