@@ -9,6 +9,7 @@ module.exports = {
     extend: {
       fontFamily: {
         satoshi: ["Satoshi", "sans-serif"],
+        allura: ["Allura", "cursive"],
       },
       colors: {
         "primary-orange": "#FF5722",
