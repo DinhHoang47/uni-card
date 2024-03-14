@@ -1,6 +1,4 @@
-import { useLearningStatus } from "@lib/useLearningStatus";
 import CardLearn from "./CardLearn";
-import { useEffect, useState } from "react";
 
 export default function Desktop_Playground_FlipCard({
   currentCardArr,

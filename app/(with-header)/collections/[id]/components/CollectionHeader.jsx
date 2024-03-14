@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import useUser from "@lib/useUser";
 import { useDispatch } from "react-redux";
 import { open as openSignInModal } from "@redux/authModalSlice.js";
+import ProgressComponent from "./ProgressIndicator";
 
 export default function CollectionHeader({
   data,
@@ -90,6 +91,9 @@ export default function CollectionHeader({
         </div>
       </div>
       {/* Status indicator*/}
+      <div className="flex sm:justify-end items-end">
+        <ProgressComponent collectionId={collectionId} />
+      </div>
     </div>
   );
 }

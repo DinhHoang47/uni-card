@@ -26,6 +26,7 @@ export default function UserSettingModal({ hanger, user }) {
     <PortalModalWrapper mountTarget={hanger}>
       <div className="relative px-6 py-6 rounded-md bg-white space-y-4 w-min">
         <UserInfo user={user} />
+        <DisplayLanguageInput />
         <OpenAiKeyInput
           openAiKey={openAiKey}
           handleRemoveOpenAiKey={handleRemoveOpenAiKey}
@@ -150,4 +151,8 @@ const OpenAiKeyInput = ({
       </div>
     </div>
   );
+};
+
+const DisplayLanguageInput = () => {
+  return <div className="">Display language setting</div>;
 };

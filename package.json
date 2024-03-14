@@ -48,5 +48,8 @@
     "swr": "^2.2.4",
     "tailwindcss": "3.3.3",
     "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "20.11.25"
   }
 }

@@ -90,7 +90,7 @@ const PageSizeInput = ({ currentPageSize, setCurrentPageSize }) => {
   return (
     <div className="flex">
       <label className="flex space-x-2" htmlFor="page-size">
-        <Square3Stack3D className={`h-6 w-6`} />
+        <Square3Stack3D className={`h-6 w-6`} /> 
       </label>
       <select
         defaultValue={currentPageSize}

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import Square3Stack3D from "@public/assets/icons/Square3Stack3D";
 
+
 export default function DisplaySetting({
   setDisplayOptions,
   initOptions,
@@ -98,7 +99,7 @@ const PageSizeInput = () => {
   return (
     <div className="flex absolute sm:-translate-y-[36px] -translate-y-[72px] sm:relative">
       <label className="flex space-x-2" htmlFor="page-size">
-        <Square3Stack3D className={`h-6 w-6`} />
+         <Square3Stack3D className={`h-6 w-6`} /> 
       </label>
       <select
         value={cardPerPage}
