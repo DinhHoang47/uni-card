@@ -116,7 +116,7 @@ export default function Nav() {
         src="https://accounts.google.com/gsi/client"
       ></Script>
       <GoogleOneTap />
-      <nav className="flex-between h-16 w-full md:px-4 lg:px-8">
+      <nav className="flex-between h-16 w-full md:px-4 lg:px-8 mx-auto  max-w-[1440px]">
         {/* Destop Menu */}
         <div className="hidden lg:flex h-full ">
           <Link href="/" className="flex gap-2 items-center">

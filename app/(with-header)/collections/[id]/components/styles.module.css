@@ -177,6 +177,7 @@
   height: 20px;
   border-radius: 6px;
   background-color:  #E5E7EB;
+  overflow: hidden;
 }
 
 .progressBarContainer{
