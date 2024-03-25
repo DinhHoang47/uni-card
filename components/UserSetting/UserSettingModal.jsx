@@ -7,6 +7,8 @@ import ModalCloseButton from "@components/ModalCloseButton";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import { LANGUAGE_REFERENCE } from "@utils/config";
+import AmericanFlag from "@public/assets/icons/languageIcons/AmericanFlag";
 
 import Image from "next/image";
 import OpenAiLogo from "@public/assets/icons/IconOpenAi";
@@ -27,6 +29,7 @@ export default function UserSettingModal({ hanger, user }) {
       <div className="relative px-6 py-6 rounded-md bg-white space-y-4 w-min">
         <UserInfo user={user} />
         <DisplayLanguageInput />
+        <LearningLanguageInput />
         <OpenAiKeyInput
           openAiKey={openAiKey}
           handleRemoveOpenAiKey={handleRemoveOpenAiKey}
@@ -154,5 +157,49 @@ const OpenAiKeyInput = ({
 };
 
 const DisplayLanguageInput = () => {
-  return <div className="">Display language setting</div>;
+  const [languageRef, setLanguageRef] = useState();
+  return (
+    <div className="">
+      <label className="font-semibold">Language Reference</label>
+      <select
+        className="border-b-2 border-gray-300 pb-1 outline-none focus:border-blue-300"
+        value={languageRef}
+        onChange={(e) => {
+          setLanguageRef(e.target.value);
+        }}
+        name=""
+        id=""
+      >
+        <option value="">None</option>
+        {LANGUAGE_REFERENCE.map((item) => {
+          return (
+            <option key={item.code} value={item.code}>
+              {item.name}
+            </option>
+          );
+        })}
+      </select>
+    </div>
+  );
+};
+
+const LearningLanguageInput = () => {
+  const [languageRef, setLanguageRef] = useState();
+  const options = [{ label: "end", image: <AmericanFlag /> }, "jp"];
+  return (
+    <div className="">
+      {options.map((item) => (
+        <LanguageSelectButton data={item} />
+      ))}
+    </div>
+  );
+};
+
+const LanguageSelectButton = ({ data }) => {
+  return (
+    <div className="">
+      <input type="checkbox" id={data.label} />
+      <label htmlFor={data.label}>{() => data.image}</label>
+    </div>
+  );
 };
