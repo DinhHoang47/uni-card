@@ -5,7 +5,7 @@ import { Providers } from "@redux/provider";
 import Script from "next/script";
 
 export const metadata = {
-  metadataBase: new URL("https://my-flashcard.com"),
+  metadataBase: new URL("https://nihongo.click"),
   title: "Unicard - Vocabulary Learning and Progress Tracking",
   description:
     "Enhance language skills with Unicard. Track progress, master new words through interactive flashcards. Start your language journey now!",
@@ -15,7 +15,7 @@ export const metadata = {
     description:
       "Enhance language skills with Unicard. Track progress, master new words through interactive flashcards. Start your language journey now!",
     type: "website",
-    url: "https://www.my-flashcard.com",
+    url: "https://www.nihongo.click",
   },
 };
 

@@ -8,7 +8,7 @@ const DEFAULT_BORDER_RADIUS = 1.5; // tailwind unit
 
 const DEFAULT_CANVAS_BG = "#dbeafe"; // blue-100
 const DEFAULT_CANVAS_PADDING = 40; // px
-const DEFAULT_QR_URL = "https://www.my-flashcard.com/";
+const DEFAULT_QR_URL = "https://www.nihongo.click";
 const DEFAULT_QR_LABEL = "Scan to learn";
 const DEFAULT_QR_LABEL_FONT_SIZE = 1;
 const DEFAULT_QR_SIZE = 64; // px

@@ -63,7 +63,7 @@ const LinksModal = () => {
       <div className="mt-2">
         <SocialLink
           Icon={ChromeIcon}
-          url={"https://www.my-flashcard.com/"}
+          url={"https://www.nihongo.click/"}
           text={"Unicard App"}
         />
       </div>

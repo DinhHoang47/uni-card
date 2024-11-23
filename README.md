@@ -1,1 +1,1 @@
-This is the front end source code of https://www.my-flashcard.com
+This is the front end source code of https://www.nihongo.click

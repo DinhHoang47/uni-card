@@ -88,8 +88,8 @@ export default function page() {
           <p className="ml-2">
             If you have any questions or concerns about this Privacy Policy or
             our practices, please contact us at{" "}
-            <a className="text-blue-600" href="mailto:support@my-flashcard.com">
-              support@my-flashcard.com
+            <a className="text-blue-600" href="mailto:support@nihongo.click">
+              support@nihongo.click
             </a>
           </p>
         </div>
