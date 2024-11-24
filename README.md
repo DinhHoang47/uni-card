@@ -1,1 +1,1 @@
-This is the front end source code of https://www.nihongo.click
+This is the front end source code of https://nihongo.click

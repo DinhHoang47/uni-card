@@ -1,6 +1,6 @@
 import { publicCollectionServ } from "@services/Public_CollectionService";
 
-const frontEndUrl = "https://www.nihongo.click";
+const frontEndUrl = "https://nihongo.click";
 
 export default async function sitemap() {
   const SiteMap = [

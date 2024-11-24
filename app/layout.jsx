@@ -15,7 +15,7 @@ export const metadata = {
     description:
       "Enhance language skills with Unicard. Track progress, master new words through interactive flashcards. Start your language journey now!",
     type: "website",
-    url: "https://www.nihongo.click",
+    url: "https://nihongo.click",
   },
 };
 
