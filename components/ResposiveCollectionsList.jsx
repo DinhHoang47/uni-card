@@ -50,14 +50,14 @@ export default function ResponsiveCollectionsList() {
         </Link>
       </div>
       {/* Destop View */}
-      <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 sm:gap-10">
+      <div className=" sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 sm:gap-10">
         <CollectionCard />
         <CollectionCard />
         <CollectionCard />
         <CollectionCard />
       </div>
       {/* Mobile View */}
-      <div className="relative block sm:hidden">
+      <div className="relative block">
         <>
           <div className="navigation-wrapper">
             <div ref={sliderRef} className="keen-slider">

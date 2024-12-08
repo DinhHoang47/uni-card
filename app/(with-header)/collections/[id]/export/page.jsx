@@ -475,7 +475,8 @@ const ContentContainer = ({
                 size={layoutProperties.qrCodeSize}
                 value={layoutProperties.qrCodeUrl}
               />
-              {/* ${process.env.NEXT_PUBLIC_FRONTEND_URL}/collections/${collectionId} */}
+              ${process.env.NEXT_PUBLIC_FRONTEND_URL}/collections/$
+              {collectionId}
             </div>
           </li>
         </ul>
