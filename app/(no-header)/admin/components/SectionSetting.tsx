@@ -1,6 +1,8 @@
 // File: pages/admin.js
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { PrivateHomeSectionServ } from "@services/Private_HomeSectionService";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { PublicHomeSectionServ } from "@services/Public_HomeSectionService";
 
 export default function SectionSetting() {
   const [posts, setPosts] = useState([
@@ -9,32 +11,41 @@ export default function SectionSetting() {
     { id: "3", title: "Post 3" },
   ]);
 
-  const [newPostTitle, setNewPostTitle] = useState("");
+  const [addingSectionLoading, setaddingSectionLoading] = useState(false);
+
+  const [newSectionTitle, setNewSectionTitle] = useState("");
 
   // Handle reordering via drag-and-drop
   const handleDragEnd = (result) => {
     if (!result.destination) return;
-
     const reorderedPosts = Array.from(posts);
     const [movedPost] = reorderedPosts.splice(result.source.index, 1);
     reorderedPosts.splice(result.destination.index, 0, movedPost);
-
     setPosts(reorderedPosts);
   };
 
-  // Add a new post
-  const addPost = () => {
-    if (newPostTitle.trim() === "") return alert("Post title cannot be empty!");
-    const newPost = { id: Date.now().toString(), title: newPostTitle };
-    setPosts([...posts, newPost]);
-    setNewPostTitle("");
+  // Add a new section
+  const addNewSection = async () => {
+    if (newSectionTitle.trim() === "")
+      return alert("Post title cannot be empty!");
+    try {
+      const newSection = { title: newSectionTitle };
+      const response = await PrivateHomeSectionServ.create(newSection);
+      console.log("response: ", response);
+    } catch (error) {
+      console.log("error: ", error);
+    }
   };
 
   // Edit a post title
   const editPost = (id) => {
     const newTitle = prompt("Enter new title:");
     if (newTitle) {
-      setPosts(posts.map((post) => (post.id === id ? { ...post, title: newTitle } : post)));
+      setPosts(
+        posts.map((post) =>
+          post.id === id ? { ...post, title: newTitle } : post
+        )
+      );
     }
   };
 
@@ -55,11 +66,26 @@ export default function SectionSetting() {
     setPosts(reorderedPosts);
   };
 
+  // Side effect
+  // Get home sections
+  useEffect(() => {
+    const getHomeSections = async () => {
+      const result = await PublicHomeSectionServ.getHomeSections();
+      console.log("result: ", result);
+    };
+    getHomeSections();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
-        <h1 className="text-2xl font-bold mb-4">Manage Home <i className="fab fa-search-location fa-xs 
-        "></i></h1>
+        <h1 className="text-2xl font-bold mb-4">
+          Manage Home{" "}
+          <i
+            className="fab fa-search-location fa-xs 
+        "
+          ></i>
+        </h1>
 
         {/* Add Post Input */}
         <div className="flex items-center gap-4 mb-6">
@@ -67,11 +93,11 @@ export default function SectionSetting() {
             type="text"
             placeholder="Enter section title"
             className="border rounded px-4 py-2 w-full"
-            value={newPostTitle}
-            onChange={(e) => setNewPostTitle(e.target.value)}
+            value={newSectionTitle}
+            onChange={(e) => setNewSectionTitle(e.target.value)}
           />
           <button
-            onClick={addPost}
+            onClick={addNewSection}
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           >
             Add Section
@@ -96,7 +122,11 @@ export default function SectionSetting() {
                 </thead>
                 <tbody>
                   {posts.map((post, index) => (
-                    <Draggable key={post.id} draggableId={post.id} index={index}>
+                    <Draggable
+                      key={post.id}
+                      draggableId={post.id}
+                      index={index}
+                    >
                       {(provided) => (
                         <tr
                           ref={provided.innerRef}

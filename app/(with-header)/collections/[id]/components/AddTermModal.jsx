@@ -293,7 +293,7 @@ export default function AddTermModal({
                 mutateCardList,
                 cardList,
                 selectedFile,
-                collectionId,
+                collectionId,                                                                                                                                                                   
                 selectedFileUrl,
                 showInputSuccessMsg,
                 setTermModalOpen,
