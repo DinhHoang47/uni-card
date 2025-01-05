@@ -1,8 +1,7 @@
-export type HomeSectionInput = {
+export type HomeSection = {
+  id?: number;
   title: string;
-};
-
-export type HomeSection = HomeSectionInput & {
-  id: number;
-  position: number;
+  position?: number;
+  createdAt?: string;
+  updatedAt?: string;
 };

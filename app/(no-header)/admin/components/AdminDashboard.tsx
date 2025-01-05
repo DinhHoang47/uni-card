@@ -1,17 +1,25 @@
 import { useState } from "react";
-import TopContentTable from "./TopContentTable";
+import SectionContentSetting from "./SectionContentSetting";
 import SectionSetting from "./SectionSetting";
 
 const AdminDashboard = () => {
   // Define menu items and associated content
   const menuItems = [
     { id: "dashboard", label: "Dashboard", content: <DashboardContent /> },
-    { id: "home-sections", label: "Home Sections", content: <ManageHomeSection /> },
-    { id: "section-settings", label: "Section Setting", content: <ManagePostsContent /> },
+    {
+      id: "home-sections",
+      label: "Home Sections",
+      content: <ManageHomeSection />,
+    },
+    {
+      id: "section-settings",
+      label: "Section Setting",
+      content: <ManagePostsContent />,
+    },
     { id: "settings", label: "Settings", content: <SettingsContent /> },
   ];
 
-  const [activeMenu, setActiveMenu] = useState<string>("dashboard"); // Track active menu
+  const [activeMenu, setActiveMenu] = useState<string>("home-sections"); // Track active menu
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -25,9 +33,7 @@ const AdminDashboard = () => {
                 key={item.id}
                 onClick={() => setActiveMenu(item.id)}
                 className={`cursor-pointer p-3 ${
-                  activeMenu === item.id
-                    ? "bg-gray-700"
-                    : "hover:bg-gray-700"
+                  activeMenu === item.id ? "bg-gray-700" : "hover:bg-gray-700"
                 }`}
               >
                 {item.label}
@@ -55,15 +61,15 @@ const DashboardContent = () => (
 
 const ManagePostsContent = () => (
   <div>
-    <h1 className="text-2xl font-bold mb-4">Manage Posts</h1>
-    <TopContentTable/>
+    <h1 className="text-2xl font-bold mb-4">Manage Section's Post</h1>
+    <SectionContentSetting />
   </div>
 );
 
 const ManageHomeSection = () => (
   <div>
     <h1 className="text-2xl font-bold mb-4">Manage Home Section</h1>
-    <SectionSetting/>
+    <SectionSetting />
   </div>
 );
 
