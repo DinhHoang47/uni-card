@@ -7,6 +7,9 @@ class PublicHomeSectionService extends BaseService {
   getHomeSections() {
     return this.get(`homeSections`);
   }
+  getCollectionsBySectionId(sectionId) {
+    return this.get(`homeSectionCollections/${sectionId}/collections`);
+  }
 }
 
 export const PublicHomeSectionServ = new PublicHomeSectionService();

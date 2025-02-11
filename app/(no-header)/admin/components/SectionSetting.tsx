@@ -224,6 +224,17 @@ export default function SectionSetting() {
   );
 }
 
+// Add this function to fetch section settings
+export const fetchSectionSettings = async (): Promise<HomeSection[]> => {
+  try {
+    const { data } = await PublicHomeSectionServ.getHomeSections();
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch section settings", error);
+    return [];
+  }
+};
+
 interface TableRowProps {
   data: any;
   actions: any;

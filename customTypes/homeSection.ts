@@ -5,3 +5,10 @@ export type HomeSection = {
   createdAt?: string;
   updatedAt?: string;
 };
+
+export type HomeSectionCollection = {
+  sectionId: number;
+  collectionId: number;
+  createdAt?: string;
+  updatedAt?: string;
+};
