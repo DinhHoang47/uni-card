@@ -1,27 +1,37 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { fetchSectionSettings } from "./SectionSetting"; // Import the fetchSectionSettings function
-import { HomeSection } from "@customTypes/homeSection";
+import {
+  HomeSection,
+  HomeSectionCollectionResponse,
+} from "@customTypes/homeSection";
 import { publicCollectionServ } from "@services/Public_CollectionService"; // Import the publicCollectionServ
 import { PublicHomeSectionServ } from "@services/Public_HomeSectionService";
 import MySpinner from "@public/assets/icons/MySpinner";
 import { PrivateHomeSectionCollectionsServ } from "@services/Private_HomeSectionCollectionsService";
+import Pagination from "./PaginationButtons";
+import SectionContentTable from "./SectionContentTable"; // Import the new component
 
 type Collection = {
   id: number;
   title: string;
 };
 
-type HomeSectionCollection = {
-  id: number;
-  collection: Collection;
-  position: number;
-};
-
-// Replace the mock fetchCollections function with the actual search function
-const searchCollections = async (searchQuery = ""): Promise<Collection[]> => {
-  const { data } = await publicCollectionServ.searchCollection(searchQuery, 1);
-  return data.collections;
+const searchCollections = async (searchQuery = "", currentPage: number) => {
+  try {
+    const { data } = await publicCollectionServ.searchCollection(
+      searchQuery,
+      currentPage
+    );
+    return {
+      status: 200,
+      collections: data.collections,
+      totalPages: data.totalPages,
+      currentPage,
+    };
+  } catch (error) {
+    return { status: 500, collections: [], totalPages: 1 };
+  }
 };
 
 const addCollectionToSection = async (
@@ -49,9 +59,19 @@ const SectionContentSetting: React.FC = () => {
     null
   );
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [sectionData, setSectionData] = useState<HomeSectionCollection[]>([]);
+  const [sectionData, setSectionData] = useState<
+    HomeSectionCollectionResponse[]
+  >([]);
+  const [fetchedSectionData, setFetchedSectionData] = useState<
+    HomeSectionCollectionResponse[]
+  >([]);
+  const [sectionOrderChanged, setSectionOrderChanged] =
+    useState<boolean>(false);
   const [loadingCollections, setLoadingCollections] = useState<boolean>(false);
 
+  // Pagination state for collections search
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   useEffect(() => {
     const fetchSections = async () => {
       const sections = await fetchSectionSettings();
@@ -66,8 +86,26 @@ const SectionContentSetting: React.FC = () => {
     }
   }, [selectedSection]);
 
-  const handleSearch = () => {
-    searchCollections(searchQuery).then(setCollections);
+  const handleSearch = async () => {
+    if (!searchQuery) {
+      setCollections([]);
+      setCurrentPage(1);
+      setTotalPages(1);
+      return;
+    }
+    try {
+      const res = await searchCollections(searchQuery, currentPage);
+
+      if (res.status === 200) {
+        setCollections(res.collections);
+        setTotalPages(res.totalPages);
+        setCurrentPage(res.currentPage ?? 1);
+      }
+    } catch (error) {
+      setCollections([]);
+      setCurrentPage(1);
+      setTotalPages(1);
+    }
   };
 
   const handleAddCollectionToSection = async (collectionId: number) => {
@@ -82,6 +120,23 @@ const SectionContentSetting: React.FC = () => {
     }
   };
 
+  const handleSaveChanges = async () => {
+    if (sectionOrderChanged) {
+      const sectionPositionData = sectionData.map((section) => ({
+        id: section.id!,
+        position: section.position,
+      }));
+      const res =
+        await PrivateHomeSectionCollectionsServ.updateMultipleSectionData(
+          sectionPositionData
+        );
+      if (res.status === 200) {
+        setSectionOrderChanged(false);
+        fetchCollections(selectedSection!.id!);
+      }
+    }
+  };
+
   const fetchCollections = async (sectionId: number) => {
     try {
       setLoadingCollections(true);
@@ -90,6 +145,7 @@ const SectionContentSetting: React.FC = () => {
       );
       if (response.status === 200) {
         setSectionData(response.data);
+        setFetchedSectionData(response.data);
       }
     } catch (error) {
       console.error("Failed to fetch collections", error);
@@ -112,23 +168,38 @@ const SectionContentSetting: React.FC = () => {
     }
   };
 
-  // Move a section up or down
   const moveCollection = (index: number, direction: number) => {
     const newIndex = index + direction;
-    if (newIndex < 0 || newIndex >= sections.length) return;
+    if (newIndex < 0 || newIndex >= sectionData.length) return;
 
-    const reorderedCollections = Array.from(collections);
-    const [movedCollection] = reorderedCollections.splice(index, 1);
-    reorderedCollections.splice(newIndex, 0, movedCollection);
-    // Set new position by new index for local sections
-    const updatedPositionCollections = reorderedCollections.map(
-      (item: Collection, index) => ({
+    const toReorderSectionData = Array.from(sectionData);
+    const [toMoveCollection] = toReorderSectionData.splice(index, 1);
+    toReorderSectionData.splice(newIndex, 0, toMoveCollection);
+    const _reorderedSectionData = toReorderSectionData.map(
+      (item: HomeSectionCollectionResponse, index) => ({
         ...item,
         position: index + 1,
       })
     );
-    setCollections(updatedPositionCollections);
+    setSectionData(_reorderedSectionData);
   };
+
+  useEffect(() => {
+    const positionChanged = sectionData.some((section, index) => {
+      return section.id !== fetchedSectionData[index].id;
+    });
+    if (sectionData.length > 0) {
+      setSectionOrderChanged(positionChanged);
+    }
+  }, [sectionData]);
+
+  useEffect(() => {
+    handleSearch();
+  }, [currentPage]);
+  // Reset currentPage when searchQuery changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
 
   return (
     <div className="p-6 space-y-8 bg-gray-50">
@@ -164,73 +235,14 @@ const SectionContentSetting: React.FC = () => {
       </div>
 
       {/* Table displaying collections that belong to the selected section */}
-      <div>
-        <h3 className="mb-4 text-xl font-semibold text-gray-700">
-          Collections in Section
-        </h3>
-        <table className="min-w-full border bg-white">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="px-4 py-2 text-left text-gray-600">Order</th>
-              <th className="px-4 py-2 text-left text-gray-600">Title</th>
-              <th className="px-4 py-2 text-left text-gray-600">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loadingCollections && (
-              <tr>
-                <td className="px-4 py-2">
-                  <MySpinner className="animate-spin h-8 w-8 text-blue-600" />
-                </td>
-              </tr>
-            )}
-            {sectionData.length === 0 && !loadingCollections && (
-              <tr>
-                <td className="px-4 py-2">No collections.</td>
-              </tr>
-            )}
-            {sectionData.map((section, index) => {
-              return (
-                <tr key={section.id} className="border-t">
-                  <td className=" p-2 flex justify-between">
-                    {index !== 0 ? (
-                      <button
-                        onClick={() => moveCollection(index, -1)}
-                        className="bg-gray-300 text-black px-2 py-1 rounded hover:bg-gray-400"
-                      >
-                        ↑
-                      </button>
-                    ) : (
-                      <button className="invisible  px-2 py-1">↑</button>
-                    )}
-                    {index + 1 !== sectionData.length ? (
-                      <button
-                        onClick={() => moveCollection(index, 1)}
-                        className="bg-gray-300 text-black px-2 py-1 rounded hover:bg-gray-400"
-                      >
-                        ↓
-                      </button>
-                    ) : (
-                      <button className="invisible px-2 py-1">↓</button>
-                    )}
-                  </td>
-                  <td className="px-4 py-2">{section.collection.title}</td>
-                  <td className="px-4 py-2">
-                    <button
-                      className="px-4 py-2 text-white bg-red-500 rounded-md hover:bg-red-600"
-                      onClick={() =>
-                        handleRemoveCollectionFromSection(section.id)
-                      }
-                    >
-                      Remove
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+      <SectionContentTable
+        sectionData={sectionData}
+        loadingCollections={loadingCollections}
+        moveCollection={moveCollection}
+        handleRemoveCollectionFromSection={handleRemoveCollectionFromSection}
+        sectionOrderChanged={sectionOrderChanged}
+        handleSaveChanges={handleSaveChanges}
+      />
 
       {/* Search bar for searching collections */}
       <div className="space-y-2">
@@ -297,6 +309,15 @@ const SectionContentSetting: React.FC = () => {
             })}
           </tbody>
         </table>
+        <div className="">
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,8 @@
 import { PrivateService } from "./PrivateService";
-import { HomeSection, HomeSectionCollection } from "../customTypes/homeSection";
+import {
+  HomeSectionCollection,
+  SectionPositionData,
+} from "../customTypes/homeSection";
 import { AxiosResponse } from "@node_modules/axios";
 
 class PrivateHomeSectionCollectionsService extends PrivateService {
@@ -11,6 +14,9 @@ class PrivateHomeSectionCollectionsService extends PrivateService {
   };
   deleteSectionCollection = (id: number) => {
     return this.delete(`homeSectionCollections/${id}`);
+  };
+  updateMultipleSectionData = (data: SectionPositionData[]) => {
+    return this.post(`homeSectionCollections/multiple`, data);
   };
 }
 
