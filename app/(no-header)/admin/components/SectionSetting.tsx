@@ -3,9 +3,11 @@ import { useEffect, useRef, useState } from "react";
 import { PrivateHomeSectionServ } from "@services/Private_HomeSectionService";
 import { PublicHomeSectionServ } from "@services/Public_HomeSectionService";
 import { HomeSection } from "@customTypes/homeSection";
-
 import Spinner from "@public/assets/icons/MySpinner.jsx";
-import _, { update } from "lodash";
+import { handleSelectedImage } from "@lib/handleSelectedImage";
+
+import _, { set, update } from "lodash";
+import { getImageUrl } from "@utils/getImageUrl";
 
 export default function SectionSetting() {
   const [fetchedSections, setFetchedSections] = useState<HomeSection[]>([]);
@@ -174,6 +176,7 @@ export default function SectionSetting() {
             <tr className="bg-gray-100">
               <th className="w-20 border p-2 text-left">Order</th>
               <th className="border p-2 text-left">Title</th>
+              <th className="border p-2 text-left">Thumbnail</th>
               <th className="w-60 border p-2">Actions</th>
             </tr>
           </thead>
@@ -196,6 +199,7 @@ export default function SectionSetting() {
                     deleteSection,
                     moveSection,
                     switchEditStatus,
+                    setSections,
                   }}
                 />
               );
@@ -242,9 +246,20 @@ interface TableRowProps {
 
 const TableRow: React.FC<TableRowProps> = ({ data, actions }) => {
   const { section, index, sectionsLength, editing } = data;
-  const { editSection, deleteSection, moveSection, switchEditStatus } = actions;
+  const {
+    editSection,
+    deleteSection,
+    moveSection,
+    switchEditStatus,
+    setSections,
+  } = actions;
   const [input, setInput] = useState(section.title);
   const inputRef = useRef<HTMLInputElement>(null);
+  // State for uploaded file
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFileUrl, setSelectedFileUrl] = useState(null);
+  const [loadingImage, setLoadingImage] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
   const handleSave = () => {
     editSection({ ...section, title: input });
     switchEditStatus(section.id);
@@ -298,7 +313,47 @@ const TableRow: React.FC<TableRowProps> = ({ data, actions }) => {
       ) : (
         <td className="border p-2 h-10">{section.title}</td>
       )}
-
+      <td className="border p-2 h-10">
+        <img
+          src={section.imageUrl || "https://placehold.co/400"}
+          alt="Thumbnail"
+          className="w-20 h-20 object-contain"
+        />
+        <input
+          multiple={false}
+          type="file"
+          accept="image/*"
+          id={section.id.toString()}
+          onChange={(e) => {
+            handleSelectedImage({
+              selectedFile: e.target.files ? e.target.files[0] : null,
+              inputTarget: e.target.value,
+              setErrMsg,
+              setSelectedFile,
+              setSelectedFileUrl,
+              setLoadingImage,
+            });
+          }}
+        />
+        <button
+          disabled={selectedFile === null}
+          className={`btn-primary-blue ${
+            selectedFile === null ? "opacity-50" : ""
+          }`}
+          onClick={() => {
+            handleSaveSelectedImage(
+              section.imageUrl,
+              selectedFile,
+              setSections,
+              section.id,
+              setSelectedFileUrl,
+              setSelectedFile
+            );
+          }}
+        >
+          Save
+        </button>
+      </td>
       <td className="border p-2 text-center space-x-2">
         {editing ? (
           <button
@@ -340,4 +395,36 @@ const TableRow: React.FC<TableRowProps> = ({ data, actions }) => {
       </td>
     </tr>
   );
+};
+
+const handleSaveSelectedImage = async (
+  currentImageUrl: string,
+  selectedFile: any,
+  setSections: any,
+  sectionId: number,
+  setSelectedFileUrl: any,
+  setSelectedFile: any
+) => {
+  const preset = "section_image";
+  try {
+    // Get image url from selected file
+    const imageUrl = await getImageUrl(currentImageUrl, selectedFile, preset);
+    if (!imageUrl) {
+      throw new Error("Fail to save image");
+    } else {
+      // Update section image url
+      setSections((pre: HomeSection[]) =>
+        pre.map((item) =>
+          item.id === sectionId ? { ...item, imageUrl } : item
+        )
+      );
+      // Reset file state
+      setSelectedFile(null);
+      setSelectedFileUrl(null);
+    }
+  } catch (error) {
+    setSelectedFile(null);
+    setSelectedFileUrl(null);
+    window.alert((error as Error).message || "Fail to save image");
+  }
 };
