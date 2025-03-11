@@ -38,7 +38,7 @@ export default function MyCollections() {
   );
 }
 
-function CollectionsList({ data, isLoading }) {
+export function CollectionsList({ data, isLoading }) {
   if (data?.length === 0) {
     return <p className="text-gray-400">No items</p>;
   }
@@ -60,7 +60,7 @@ function CollectionsList({ data, isLoading }) {
   }
 }
 
-const GridLayout = ({ children }) => {
+export const GridLayout = ({ children }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 sm:gap-10">
       {children}
