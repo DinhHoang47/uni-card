@@ -1,3 +1,4 @@
+"use client";
 import SkeletionLoading from "@components/Spinner/SkeletionLoading";
 import CollectionCard from "@components/CollectionCard";
 import { CollectionsListProps, CollectionItem } from "../../types";
