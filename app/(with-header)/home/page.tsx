@@ -1,3 +1,5 @@
+"use client";
+
 import CollectionsList from "@components/Collections/CollectionsList";
 
 export default function HomePage() {
