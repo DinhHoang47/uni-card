@@ -263,9 +263,8 @@ const CTAButton = () => {
   return (
     <Link
       className="h-12 bg-blue-600 hover:bg-blue-700 transition-all shadow-lg font-semibold text-white rounded px-4 flex items-center"
-      href={"/auth"}
+      href={"/home"}
     >
-      {" "}
       Start using now (for Free)
     </Link>
   );

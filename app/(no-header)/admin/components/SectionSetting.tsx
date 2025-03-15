@@ -246,6 +246,7 @@ interface TableRowProps {
 
 const TableRow: React.FC<TableRowProps> = ({ data, actions }) => {
   const { section, index, sectionsLength, editing } = data;
+  console.log("section: ", section);
   const {
     editSection,
     deleteSection,
@@ -323,7 +324,7 @@ const TableRow: React.FC<TableRowProps> = ({ data, actions }) => {
           multiple={false}
           type="file"
           accept="image/*"
-          id={section.id.toString()}
+          id={section.title + index}
           onChange={(e) => {
             handleSelectedImage({
               selectedFile: e.target.files ? e.target.files[0] : null,
