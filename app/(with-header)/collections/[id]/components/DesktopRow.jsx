@@ -255,7 +255,7 @@ export default function DesktopRow({
                 <Image
                   sizes="80px"
                   fill
-                  style={{ objectFit: "contain" }}
+                  style={{ objectFit: "fill", borderRadius: "8px" }}
                   alt="card-image"
                   src={cardData.image_url}
                 />
@@ -266,7 +266,7 @@ export default function DesktopRow({
                 <Image
                   sizes="40px"
                   fill
-                  style={{ objectFit: "contain" }}
+                  style={{ objectFit: "fill", borderRadius: "8px" }}
                   alt="card-image"
                   src={"/assets/images/uni-placeholder-image.png"}
                 />
@@ -279,7 +279,7 @@ export default function DesktopRow({
                     <Image
                       sizes="40px"
                       fill
-                      style={{ objectFit: "contain" }}
+                      style={{ objectFit: "fill", borderRadius: "8px" }}
                       alt="card-image"
                       src={selectedFileUrl}
                     />
@@ -290,7 +290,7 @@ export default function DesktopRow({
                     <Image
                       fill
                       sizes="40px"
-                      style={{ objectFit: "contain" }}
+                      style={{ objectFit: "fill", borderRadius: "8px" }}
                       alt="card-image"
                       src={cardData.image_url}
                     />
@@ -301,7 +301,7 @@ export default function DesktopRow({
                     <Image
                       sizes="40px"
                       fill
-                      style={{ objectFit: "contain" }}
+                      style={{ objectFit: "fill", borderRadius: "8px" }}
                       alt="card-image"
                       src={"/assets/images/uni-placeholder-image.png"}
                     />
@@ -513,7 +513,7 @@ const MagicPrompInput = ({
               alt="Illustration Image"
               src={imageUrl}
               fill
-              style={{ objectFit: "contain" }}
+              style={{ objectFit: "fill", borderRadius: "8px" }}
             />
           )}
           {!imageUrl && (
@@ -522,7 +522,7 @@ const MagicPrompInput = ({
               alt="No image placeholder"
               src={NoImageAi}
               fill
-              style={{ objectFit: "contain" }}
+              style={{ objectFit: "fill", borderRadius: "8px" }}
             />
           )}
         </div>
