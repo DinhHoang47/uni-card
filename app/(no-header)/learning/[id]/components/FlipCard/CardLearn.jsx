@@ -60,9 +60,7 @@ const FrontSide = ({ data, setIsFlipped, currentStatus, isDisplayStatus }) => {
       }}
       className={`w-full bg-white relative rounded-lg h-full  flex items-center justify-center p-2 border-2 border-slate-400 overflow-hidden `}
     >
-      <p className="w-full text-lg break-words text-center font-medium">
-        {term}
-      </p>
+      <p className="w-full text-lg break-words text-center font-bold">{term}</p>
       {/* Testing status tag */}
       {isDisplayStatus && (
         <div

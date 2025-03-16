@@ -88,105 +88,96 @@ export default function MobileRow({
   return (
     <li
       className={`${styles.mobileRow} ${
-        editting && styles.mobileRowEditting
+        editting ? styles.mobileRowEditting : ""
       } relative space-y-2 p-4`}
     >
-      {/* Term */}
-      <div className="flex items-center justify-between">
-        {editting && (
-          <>
-            <span className="mr-1 text-gray-300 w-14">Term:</span>
-            <TextareaAutosize
-              maxLength={225}
-              value={term}
-              onChange={(e) => {
-                setTerm(e.target.value);
-              }}
-              className={styles.autoSizeTextArea}
-            />
-          </>
-        )}
-        {!editting && (
-          <>
-            <div className="flex">
-              <span className="mr-1 text-gray-300 w-14">Term:</span>
-              <span className="font-semibold">{cardData.term}</span>
-            </div>
-            {languageRef && (
-              <div className="">
-                <TextToSpeech text={cardData.term} lang={languageRef}>
-                  <SpeakerWaveIcon className="h-5 w-5 text-gray-500 hover:text-blue-500 cursor-pointer" />
-                </TextToSpeech>
+      {/* Layout: image, right content */}
+      <div className="flex">
+        {/* Image */}
+        <div className="mr-2">
+          {/* Image */}
+          {displayImg &&
+            (cardData.image_url || selectedFileUrl || editting) && (
+              <div className={`relative flex items-center`}>
+                <div className={`relative w-32 h-32`}>
+                  {selectedFileUrl && editting && (
+                    <Image
+                      priority={false}
+                      fill
+                      sizes="128px"
+                      alt="card-image"
+                      className="object-contain"
+                      src={selectedFileUrl}
+                    />
+                  )}
+                  {cardData.image_url && !selectedFileUrl && (
+                    <Image
+                      priority={false}
+                      fill
+                      sizes="128px"
+                      alt="card-image"
+                      className="object-contain"
+                      src={cardData.image_url}
+                    />
+                  )}
+                  {!cardData.image_url && !selectedFileUrl && (
+                    <Image
+                      priority={false}
+                      fill
+                      sizes="128px"
+                      alt="card-image"
+                      className="object-contain"
+                      src={"/assets/images/uni-placeholder-image.png"}
+                    />
+                  )}
+                  {loadingImage && (
+                    <label className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                      <Spinner className="animate-spin h-5 w-5 text-blue-700" />
+                    </label>
+                  )}
+                </div>
+                {editting && (
+                  <>
+                    <input
+                      hidden
+                      id={cardData.id}
+                      onChange={(e) => {
+                        handleSelectedImage({
+                          selectedFile: e.target.files[0],
+                          inputTarget: e.target.value,
+                          setErrMsg,
+                          setSelectedFile,
+                          setSelectedFileUrl,
+                          setLoadingImage,
+                        });
+                      }}
+                      multiple={false}
+                      className="ml-4"
+                      accept="image/*"
+                      type="file"
+                    />
+                    <label
+                      className="obsolute cursor-pointer"
+                      htmlFor={cardData.id}
+                    >
+                      <DocumentArrowUpIcon className="h-6 w-6 text-blue-600" />
+                    </label>
+                  </>
+                )}
               </div>
             )}
-          </>
-        )}
-      </div>
-      {/* Definition & Example */}
-      <div
-        className={`space-y-1 ${
-          editting && (!displayImg || (!cardData.image_url && !selectedFileUrl))
-            ? "pb-5"
-            : ""
-        } `}
-      >
-        {/* Definition */}
-        <div className="flex">
-          {editting && (
-            <>
-              <span className="mr-1 text-gray-300 w-14">Def:</span>
-              <TextareaAutosize
-                maxLength={225}
-                value={definition1}
-                onChange={(e) => {
-                  setDefition1(e.target.value);
-                }}
-                className={styles.autoSizeTextArea}
-              />
-            </>
-          )}
-          {!editting && (
-            <>
-              <span className="mr-1 text-gray-300 w-14">Def:</span>
-              <span>{cardData.definition_1}</span>
-            </>
-          )}
         </div>
-        {/* Definition 2*/}
-        {displayDef2 && (
-          <div className="flex">
+        {/* Content */}
+        <div className="flex-1 flex flex-col justify-between">
+          {/* Term */}
+          <div className="flex items-center justify-between">
             {editting && (
               <>
-                <span className="mr-1 text-gray-300 w-14">Def 2:</span>
                 <TextareaAutosize
                   maxLength={225}
+                  value={term}
                   onChange={(e) => {
-                    setDefition2(e.target.value);
-                  }}
-                  value={definition2}
-                  className={styles.autoSizeTextArea}
-                />
-              </>
-            )}
-            {!editting && (
-              <>
-                <span className="mr-1 text-gray-300 w-14">Def 2:</span>
-                <span>{cardData.definition_2}</span>
-              </>
-            )}
-          </div>
-        )}
-        {/* Example*/}
-        {displayExample && (
-          <div className="flex">
-            {editting && (
-              <>
-                <span className="mr-1 text-gray-300 w-14">Ex:</span>
-                <TextareaAutosize
-                  maxLength={225}
-                  value={example}
-                  onChange={(e) => {
-                    setExample(e.target.value);
+                    setTerm(e.target.value);
                   }}
                   className={styles.autoSizeTextArea}
                 />
@@ -194,13 +185,96 @@ export default function MobileRow({
             )}
             {!editting && (
               <>
-                <span className="mr-1 text-gray-300 w-14">Ex:</span>
-                <span>{cardData.example}</span>
+                <div className="flex flex-wrap justify-between w-full mr-2">
+                  <span className="font-semibold text-2xl flex-auto min-w-0">
+                    {cardData.term}
+                  </span>
+                  <span>{cardData.definition_2}</span>
+                </div>
+                {languageRef && (
+                  <div className="">
+                    <TextToSpeech text={cardData.term} lang={languageRef}>
+                      <SpeakerWaveIcon className="h-5 w-5 text-gray-500 hover:text-blue-500 cursor-pointer" />
+                    </TextToSpeech>
+                  </div>
+                )}
               </>
             )}
           </div>
-        )}
+          {/* Definition & Example */}
+          <div
+            className={`flex-1 space-y-1 ${
+              editting &&
+              (!displayImg || (!cardData.image_url && !selectedFileUrl))
+                ? "pb-5"
+                : ""
+            } `}
+          >
+            {/* Definition */}
+            <div className="flex">
+              {editting && (
+                <>
+                  <TextareaAutosize
+                    maxLength={225}
+                    value={definition1}
+                    onChange={(e) => {
+                      setDefition1(e.target.value);
+                    }}
+                    className={styles.autoSizeTextArea}
+                  />
+                </>
+              )}
+              {!editting && (
+                <>
+                  <span className="text-blue-600 text-xl">
+                    {cardData.definition_1}
+                  </span>
+                </>
+              )}
+            </div>
+            {/* Definition 2*/}
+            {displayDef2 && (
+              <div className="flex">
+                {editting && (
+                  <>
+                    <TextareaAutosize
+                      maxLength={225}
+                      onChange={(e) => {
+                        setDefition2(e.target.value);
+                      }}
+                      value={definition2}
+                      className={styles.autoSizeTextArea}
+                    />
+                  </>
+                )}
+              </div>
+            )}
+            {/* Example*/}
+            {displayExample && (
+              <div className="flex">
+                {editting && (
+                  <>
+                    <TextareaAutosize
+                      maxLength={225}
+                      value={example}
+                      onChange={(e) => {
+                        setExample(e.target.value);
+                      }}
+                      className={styles.autoSizeTextArea}
+                    />
+                  </>
+                )}
+                {!editting && (
+                  <>
+                    <span>{cardData.example}</span>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
+
       {/* Error message */}
       {errMsg && (
         <div className="">
@@ -208,74 +282,6 @@ export default function MobileRow({
         </div>
       )}
 
-      {/* Image */}
-      {displayImg && (cardData.image_url || selectedFileUrl || editting) && (
-        <div className={`relative flex items-center`}>
-          <span className="mr-1 text-gray-300 w-14">Img:</span>
-          <div className={`relative w-14 h-14`}>
-            {selectedFileUrl && editting && (
-              <Image
-                priority={false}
-                fill
-                sizes="56px"
-                alt="card-image"
-                className="object-contain"
-                src={selectedFileUrl}
-              />
-            )}
-            {cardData.image_url && !selectedFileUrl && (
-              <Image
-                priority={false}
-                fill
-                sizes="56px"
-                alt="card-image"
-                className="object-contain"
-                src={cardData.image_url}
-              />
-            )}
-            {!cardData.image_url && !selectedFileUrl && (
-              <Image
-                priority={false}
-                fill
-                sizes="56px"
-                alt="card-image"
-                className="object-contain"
-                src={"/assets/images/uni-placeholder-image.png"}
-              />
-            )}
-            {loadingImage && (
-              <label className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <Spinner className="animate-spin h-5 w-5 text-blue-700" />
-              </label>
-            )}
-          </div>
-          {editting && (
-            <>
-              <input
-                hidden
-                id={cardData.id}
-                onChange={(e) => {
-                  handleSelectedImage({
-                    selectedFile: e.target.files[0],
-                    inputTarget: e.target.value,
-                    setErrMsg,
-                    setSelectedFile,
-                    setSelectedFileUrl,
-                    setLoadingImage,
-                  });
-                }}
-                multiple={false}
-                className="ml-4"
-                accept="image/*"
-                type="file"
-              />
-              <label className="obsolute cursor-pointer" htmlFor={cardData.id}>
-                <DocumentArrowUpIcon className="h-6 w-6 text-blue-600" />
-              </label>
-            </>
-          )}
-        </div>
-      )}
       {/* Actions */}
       {isOwner && (
         <div className="absolute top-full right-0 !mt-0 -translate-y-8  flex items-center space-x-4 mr-6">

@@ -21,7 +21,7 @@ const Admin = () => {
       }
     };
 
-    // checkPassword();
+    checkPassword();
   }, [router]);
 
   if (!authenticated) {
