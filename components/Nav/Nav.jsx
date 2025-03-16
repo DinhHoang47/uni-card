@@ -77,12 +77,15 @@ export default function Nav() {
   // Underline current tab base on URL
   useEffect(() => {
     const collection = "/collections";
+    const home = "/home";
     const mypage = "/mypage";
     const search = "/search";
     if (pathname.startsWith(collection) || pathname.startsWith(search)) {
       setCurrentPath(collection);
     } else if (pathname.startsWith(mypage)) {
       setCurrentPath(mypage);
+    } else if (pathname.startsWith(home)) {
+      setCurrentPath(home);
     } else {
       setCurrentPath("");
     }
@@ -348,14 +351,14 @@ const MobileMenuIcon = ({ dispatch, openSidebar }) => {
 const DesktopNavList = ({ currentPath }) => {
   return (
     <div className="flex ml-5 space-x-4 font-semibold">
-      {/* <Link
+      <Link
         className={`flex items-center menu_item ${
-          currentPath === "/collections" ? "active" : ""
+          currentPath === "/home" ? "active" : ""
         }`}
-        href="#"
+        href="/home"
       >
-        <p className=" ">Collections</p>
-      </Link> */}
+        <p className=" ">Home</p>
+      </Link>
       {
         <>
           <Link

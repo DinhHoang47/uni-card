@@ -41,10 +41,11 @@ export default function AddNewCollectionModal({ hanger, router }) {
   const [errMsg, setErrMsg] = useState("");
   let reachedMaxCollection = false;
   let allowInputImage = true;
-  if (user.type === FREE_USER_CODE) {
-    reachedMaxCollection = usersCollectionNum >= FREE_USER_MAX_COLLECTION_NUM;
-    allowInputImage = false;
-  }
+  // Check if user is free user - temporary disbale this function
+  // if (user.type === FREE_USER_CODE) {
+  //   reachedMaxCollection = usersCollectionNum >= FREE_USER_MAX_COLLECTION_NUM;
+  //   allowInputImage = false;
+  // }
   // Handler add new collection   -------------------------------
   const dispatch = useDispatch();
   const { mutate } = useSWRConfig();

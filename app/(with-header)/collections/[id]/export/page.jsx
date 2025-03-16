@@ -395,6 +395,7 @@ const ContentContainer = ({
   contentRef,
   rowProperty,
   totalCols,
+  collectionId,
 }) => {
   return (
     <div className="relative flex-1 mx-auto border border-gray-200 rounded-lg shadow p-4 bg-white flex items-center justify-center overflow-scroll h-[620px]">
@@ -475,7 +476,6 @@ const ContentContainer = ({
                 size={layoutProperties.qrCodeSize}
                 value={layoutProperties.qrCodeUrl}
               />
-              {/* ${process.env.NEXT_PUBLIC_FRONTEND_URL}/collections/${collectionId} */}
             </div>
           </li>
         </ul>

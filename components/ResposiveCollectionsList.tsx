@@ -3,8 +3,12 @@ import Link from "next/link";
 import CollectionCard from "./CollectionCard";
 import { useKeenSlider } from "keen-slider/react";
 import { useEffect, useState } from "react";
+import { CollectionsListProps, CollectionItem } from "@types";
+import { GridLayout } from "@components/Collections/GridLayout";
 
-export default function ResponsiveCollectionsList() {
+export default function ResponsiveCollectionsList({
+  data,
+}: CollectionsListProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [sliderRef, instanceRef] = useKeenSlider(
@@ -20,7 +24,7 @@ export default function ResponsiveCollectionsList() {
     []
   );
 
-  function Arrow(props) {
+  function Arrow(props: any) {
     const disabeld = props.disabled ? " arrow--disabled" : "";
     return (
       <svg
@@ -50,48 +54,40 @@ export default function ResponsiveCollectionsList() {
         </Link>
       </div>
       {/* Destop View */}
-      <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 sm:gap-10">
-        <CollectionCard />
-        <CollectionCard />
-        <CollectionCard />
-        <CollectionCard />
+      <div className=" sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 sm:gap-10">
+        <GridLayout>
+          {data.map((item: CollectionItem) => {
+            return <CollectionCard key={item.id} data={item} />;
+          })}
+        </GridLayout>
       </div>
       {/* Mobile View */}
-      <div className="relative block sm:hidden">
+      <div className="relative block">
         <>
           <div className="navigation-wrapper">
             <div ref={sliderRef} className="keen-slider">
-              <div className="keen-slider__slide number-slide1">
-                <CollectionCard />
-              </div>
-              <div className="keen-slider__slide number-slide2">
-                <CollectionCard />
-              </div>
-              <div className="keen-slider__slide number-slide3">
-                <CollectionCard />
-              </div>
-              <div className="keen-slider__slide number-slide4">
-                <CollectionCard />
-              </div>
-              <div className="keen-slider__slide number-slide5">
-                <CollectionCard />
-              </div>
-              <div className="keen-slider__slide number-slide6">
-                <CollectionCard />
-              </div>
+              {data.map((item: CollectionItem, index) => {
+                return (
+                  <div
+                    className={`keen-slider__slide number-slide${index + 1}`}
+                  >
+                    <CollectionCard key={item.id} data={item} />
+                  </div>
+                );
+              })}
             </div>
             {loaded && instanceRef.current && (
               <>
                 <Arrow
                   left
-                  onClick={(e) =>
+                  onClick={(e: any) =>
                     e.stopPropagation() || instanceRef.current?.prev()
                   }
                   disabled={currentSlide === 0}
                 />
 
                 <Arrow
-                  onClick={(e) =>
+                  onClick={(e: any) =>
                     e.stopPropagation() || instanceRef.current?.next()
                   }
                   disabled={
@@ -125,7 +121,7 @@ export default function ResponsiveCollectionsList() {
           )}
           {!loaded && (
             <div className="absolute top-0 rounded w-full h-full">
-              <CollectionCard />
+              <CollectionCard data={data} />
             </div>
           )}
         </>

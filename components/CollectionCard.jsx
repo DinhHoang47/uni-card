@@ -14,7 +14,7 @@ export default function CollectionCard({ data }) {
               <p className="text_secondary">{`${data?.total_card} cards`}</p>
             </div>
             <div className="">
-              <div className="relative w-14 h-14 rounded border border-gray-200">
+              <div className="relative w-16 h-16 rounded border border-gray-200">
                 <Image
                   fill
                   alt={`collection-default-img`}

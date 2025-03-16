@@ -439,3 +439,11 @@ html {
   max-height: 0px;
   transition: all 300ms;
 }
+
+/* Custome CSS for admin */
+.btn-primary-blue {
+  background-color: #2563eb;
+  border-radius: 4px;
+  color: white;
+  padding: 2px 4px;
+}

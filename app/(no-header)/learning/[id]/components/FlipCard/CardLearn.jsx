@@ -27,7 +27,7 @@ export default function CardLearn({
   };
   updateStatus();
   return (
-    <div className="h-40 rounded-lg cursor-pointer ">
+    <div className="h-[270px] rounded-lg cursor-pointer ">
       <ReactCardFlip
         flipDirection="vertical"
         isFlipped={isFlipped}
@@ -89,12 +89,12 @@ const BackSide = ({ data, setIsFlipped, displayOptions }) => {
       {/* Back side background */}
       {/* Show image */}
       {imageUrl && displayImg && (
-        <div className="absolute top-0 right-0 w-10 h-10 mr-2 mt-2 flex items-center justify-center mb-4">
+        <div className="absolute top-[60%] right-1/2 translate-x-1/2 -translate-y-full w-32 h-32 flex items-center justify-center">
           <Image
             fill
             sizes={"80px"}
             alt={`card-image`}
-            style={{ objectFit: "contain" }}
+            style={{ objectFit: "fill", borderRadius: "8px" }}
             src={imageUrl}
           />
         </div>
@@ -104,43 +104,21 @@ const BackSide = ({ data, setIsFlipped, displayOptions }) => {
         onClick={() => {
           setIsFlipped((pre) => !pre);
         }}
-        className={`absolute top-0 left-0 h-full w-full flex flex-col rounded ${
-          (!imageUrl || !displayImg) && (!displayDef2 || !definition2)
-            ? "justify-center"
-            : "justify-around"
-        } items-center p-2 `}
+        className="absolute top-0 left-0 h-full w-full"
       >
-        {definition2 && displayDef2 ? (
-          // break-words
-          <p
-            className={`${definition2 !== "" ? "" : "text-gray-300 "} ${
-              displayImg && imageUrl ? "" : ""
-            } text-lg break-words line-clamp-3 bg-transparent-white-07 text-center`}
-          >
-            {definition2 !== "" ? definition2 : "Definition 2"}
+        {displayDef2 && (
+          <p className="absolute top-0 left-0 right-0 py-1 text-center">
+            {definition2}
           </p>
-        ) : (
-          <>{displayImg && imageUrl && <div></div>}</>
         )}
-
-        <div className="w-full text-center space-y-2">
-          <p
-            className={`max-w-full break-words line-clamp-4 bg-transparent-white-07`}
-          >
-            {definition1}
+        <p className="absolute top-[60%] left-0 right-0 pt-2 text-center text-blue-600 font-semibold">
+          {definition1}
+        </p>
+        {displayExample && (
+          <p className="absolute top-[80%] left-0 right-0 text-center">
+            {example}
           </p>
-          {example && displayExample ? (
-            <p
-              className={`${
-                example !== "" ? "" : "text-gray-300"
-              } max-w-full break-words line-clamp-3 text-xs bg-transparent-white-07 italic`}
-            >
-              {example !== "" ? example : "Example"}
-            </p>
-          ) : (
-            <>{imageUrl && <div className="mb-3"></div>}</>
-          )}
-        </div>
+        )}
       </div>
     </div>
   );

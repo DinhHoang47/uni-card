@@ -97,6 +97,12 @@ export default function DesktopRow({
       dispatch(openAPIKeyInput());
     }
   };
+  // Enable admin flaticon input
+  useEffect(() => {
+    if (isAdmin) {
+      setOpenFlaticonInput(true);
+    }
+  }, [isAdmin]);
   //Set editting if info changed
   useEffect(() => {
     if (
@@ -143,7 +149,7 @@ export default function DesktopRow({
       >
         {/* Order */}
         <li
-          className={`${styles.rowItem} ${
+          className={` ${styles.rowItem} ${
             editting ? styles.edittingItem : ""
           } text-gray-400`}
         >
@@ -151,7 +157,9 @@ export default function DesktopRow({
         </li>
         {/* Term */}
         <li
-          className={`${styles.rowItem} ${editting ? styles.edittingItem : ""}`}
+          className={` ${styles.rowItem} ${
+            editting ? styles.edittingItem : ""
+          }`}
         >
           {editting ? (
             <TextareaAutosize
@@ -164,7 +172,7 @@ export default function DesktopRow({
             />
           ) : (
             <div className="flex items-center justify-between w-full">
-              <p className="break-all font-semibold">{cardData.term}</p>
+              <p className="break-all font-semibold text-xl">{cardData.term}</p>
               {/* absolute right-0 top-1/2 -translate-y-1/2 -translate-x-full */}
               {languageRef && (
                 <div className="hover:text-blue-500">
@@ -178,7 +186,9 @@ export default function DesktopRow({
         </li>
         {/* Def 1 */}
         <li
-          className={`${styles.rowItem} ${editting ? styles.edittingItem : ""}`}
+          className={` ${styles.rowItem} ${
+            editting ? styles.edittingItem : ""
+          } text-blue-600 font-semibold`}
         >
           {editting && (
             <TextareaAutosize
@@ -197,7 +207,7 @@ export default function DesktopRow({
         {/* Def 2 */}
         {displayDef2 && (
           <li
-            className={`${styles.rowItem} ${
+            className={` ${styles.rowItem} ${
               editting ? styles.edittingItem : ""
             }`}
           >
@@ -241,22 +251,22 @@ export default function DesktopRow({
             className={`${styles.rowItem} relative !overflow-visible`}
           >
             {!editting && cardData.image_url && (
-              <div className="relative w-12 h-12">
+              <div className="relative w-[100px] h-[100px]">
                 <Image
                   sizes="80px"
                   fill
-                  style={{ objectFit: "contain" }}
+                  style={{ objectFit: "fill", borderRadius: "8px" }}
                   alt="card-image"
                   src={cardData.image_url}
                 />
               </div>
             )}
             {!editting && !cardData.image_url && (
-              <div className="relative w-12 h-12">
+              <div className="relative w-[100px] h-[100px]">
                 <Image
                   sizes="40px"
                   fill
-                  style={{ objectFit: "contain" }}
+                  style={{ objectFit: "fill", borderRadius: "8px" }}
                   alt="card-image"
                   src={"/assets/images/uni-placeholder-image.png"}
                 />
@@ -265,33 +275,33 @@ export default function DesktopRow({
             {editting && (
               <>
                 {selectedFileUrl && (
-                  <div className="relative w-12 h-12">
+                  <div className="relative w-[100px] h-[100px]">
                     <Image
                       sizes="40px"
                       fill
-                      style={{ objectFit: "contain" }}
+                      style={{ objectFit: "fill", borderRadius: "8px" }}
                       alt="card-image"
                       src={selectedFileUrl}
                     />
                   </div>
                 )}
                 {!selectedFileUrl && cardData.image_url && (
-                  <div className="relative w-12 h-12">
+                  <div className="relative w-[100px] h-[100px]">
                     <Image
                       fill
                       sizes="40px"
-                      style={{ objectFit: "contain" }}
+                      style={{ objectFit: "fill", borderRadius: "8px" }}
                       alt="card-image"
                       src={cardData.image_url}
                     />
                   </div>
                 )}
                 {!selectedFileUrl && !cardData.image_url && (
-                  <div className="relative w-12 h-12">
+                  <div className="relative w-[100px] h-[100px]">
                     <Image
                       sizes="40px"
                       fill
-                      style={{ objectFit: "contain" }}
+                      style={{ objectFit: "fill", borderRadius: "8px" }}
                       alt="card-image"
                       src={"/assets/images/uni-placeholder-image.png"}
                     />
@@ -382,7 +392,7 @@ export default function DesktopRow({
         {/* Edit button */}
         {isOwner && (
           <li
-            className={`${styles.rowItem} flex items-center justify-center space-x-4`}
+            className={` ${styles.rowItem} flex items-center justify-center space-x-4`}
           >
             {!editting && (
               <>
@@ -503,7 +513,7 @@ const MagicPrompInput = ({
               alt="Illustration Image"
               src={imageUrl}
               fill
-              style={{ objectFit: "contain" }}
+              style={{ objectFit: "fill", borderRadius: "8px" }}
             />
           )}
           {!imageUrl && (
@@ -512,7 +522,7 @@ const MagicPrompInput = ({
               alt="No image placeholder"
               src={NoImageAi}
               fill
-              style={{ objectFit: "contain" }}
+              style={{ objectFit: "fill", borderRadius: "8px" }}
             />
           )}
         </div>
