@@ -121,7 +121,7 @@ export default function ResponsiveCollectionsList({
           )}
           {!loaded && (
             <div className="absolute top-0 rounded w-full h-full">
-              <CollectionCard data={data} />
+              <CollectionCard data={data[0]} />
             </div>
           )}
         </>
