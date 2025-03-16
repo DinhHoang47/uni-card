@@ -3,7 +3,10 @@ import { StarIcon } from "@heroicons/react/24/outline";
 import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import StarButton from "./StarButton/StarButton";
-export default function CollectionCard({ data }) {
+interface CollectionCardProps {
+  data: any;
+}
+const CollectionCard: React.FC<CollectionCardProps> = ({ data }) => {
   if (data) {
     return (
       <Link href={`/collections/${data?.id}`}>
@@ -49,11 +52,17 @@ export default function CollectionCard({ data }) {
               }}
               className="px-2"
             >
-              <StarButton collectionId={data?.id} likes={data.total_like} />
+              <StarButton
+                collectionId={data?.id}
+                userId={data.user?.id}
+                likes={data.total_like}
+              />
             </div>
           </div>
         </div>
       </Link>
     );
   }
-}
+};
+
+export default CollectionCard;
