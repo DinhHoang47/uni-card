@@ -3,8 +3,9 @@ import { StarIcon } from "@heroicons/react/24/outline";
 import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import StarButton from "./StarButton/StarButton";
+import { CollectionItem } from "@types";
 interface CollectionCardProps {
-  data: any;
+  data: CollectionItem;
 }
 const CollectionCard: React.FC<CollectionCardProps> = ({ data }) => {
   if (data) {
