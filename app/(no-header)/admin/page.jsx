@@ -5,7 +5,7 @@ import useUser from "@lib/useUser";
 import AdminDashboard from "./components/AdminDashboard";
 
 const Admin = () => {
-  const [authenticated, setAuthenticated] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
   const router = useRouter();
   const PASSWORD = "1234"; // Replace this with your password
   const { user } = useUser("/auth");
@@ -13,24 +13,20 @@ const Admin = () => {
 
   useEffect(() => {
     const checkPassword = () => {
-      const inputPassword = window.prompt("ようこそ！");
-      if (inputPassword === PASSWORD) {
+      let inputPassword = "";
+      if (isAdmin) {
+        inputPassword = window.prompt("ようこそ！");
+      }
+      if (inputPassword === PASSWORD && isAdmin) {
         setAuthenticated(true);
       } else {
-        alert("Incorrect password. Redirecting to home page.");
-        router.push("/"); // Redirect to homepage or another route
+        alert("Not found");
       }
     };
 
     checkPassword();
-  }, [router]);
-  useEffect(() => {
-    if (user) {
-      if (user.type !== process.env.NEXT_PUBLIC_ADMIN_CODE * 1) {
-        router.push("/");
-      }
-    }
-  }, [user, router]);
+  }, [router, user]);
+
   if (!authenticated) {
     return null; // Render nothing until authenticated
   }
@@ -38,8 +34,7 @@ const Admin = () => {
   return (
     <div style={{ padding: "20px" }}>
       <a href="/mypage">← My page</a>
-      <AdminDashboard />
-      {/* Add your admin components below */}
+      {authenticated && <AdminDashboard />}
     </div>
   );
 };
